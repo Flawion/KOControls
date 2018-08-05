@@ -1,0 +1,421 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED26021162FAB0016ABC4 /* AppDelegate.swift */; };
+		053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26721162FAC0016ABC4 /* Assets.xcassets */; };
+		053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */; };
+		053ED27C211631270016ABC4 /* KOControls_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053ED2782116304A0016ABC4 /* KOControls_iOS.framework */; };
+		053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED27F211631B10016ABC4 /* MenuViewController.swift */; };
+		053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED280211631B10016ABC4 /* MenuViewController.xib */; };
+		053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */; };
+		053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */; };
+		053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED289211632EA0016ABC4 /* MenuItemTypes.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		053ED2772116304A0016ABC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 053ED2732116304A0016ABC4 /* KOControls.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 053ED24521162C2E0016ABC4;
+			remoteInfo = KOControls_iOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		053ED25D21162FAB0016ABC4 /* KOControlsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KOControlsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		053ED26021162FAB0016ABC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		053ED26721162FAC0016ABC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		053ED26A21162FAC0016ABC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		053ED26C21162FAC0016ABC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		053ED2732116304A0016ABC4 /* KOControls.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KOControls.xcodeproj; path = ../KOControls.xcodeproj; sourceTree = "<group>"; };
+		053ED27F211631B10016ABC4 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		053ED280211631B10016ABC4 /* MenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
+		053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
+		053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldsViewController.xib; sourceTree = "<group>"; };
+		053ED289211632EA0016ABC4 /* MenuItemTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemTypes.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		053ED25A21162FAB0016ABC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				053ED27C211631270016ABC4 /* KOControls_iOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		053ED25421162FAB0016ABC4 = {
+			isa = PBXGroup;
+			children = (
+				053ED25F21162FAB0016ABC4 /* KOControlsExample */,
+				053ED25E21162FAB0016ABC4 /* Products */,
+				053ED272211630490016ABC4 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		053ED25E21162FAB0016ABC4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				053ED25D21162FAB0016ABC4 /* KOControlsExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		053ED25F21162FAB0016ABC4 /* KOControlsExample */ = {
+			isa = PBXGroup;
+			children = (
+				053ED288211632DB0016ABC4 /* Models */,
+				053ED27D211631900016ABC4 /* ViewControllers */,
+				053ED26021162FAB0016ABC4 /* AppDelegate.swift */,
+				053ED26721162FAC0016ABC4 /* Assets.xcassets */,
+				053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */,
+				053ED26C21162FAC0016ABC4 /* Info.plist */,
+			);
+			path = KOControlsExample;
+			sourceTree = "<group>";
+		};
+		053ED272211630490016ABC4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				053ED2732116304A0016ABC4 /* KOControls.xcodeproj */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		053ED2742116304A0016ABC4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				053ED2782116304A0016ABC4 /* KOControls_iOS.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		053ED27D211631900016ABC4 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				053ED283211632680016ABC4 /* TextFieldsViewController */,
+				053ED27E211631990016ABC4 /* MenuViewController */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		053ED27E211631990016ABC4 /* MenuViewController */ = {
+			isa = PBXGroup;
+			children = (
+				053ED27F211631B10016ABC4 /* MenuViewController.swift */,
+				053ED280211631B10016ABC4 /* MenuViewController.xib */,
+			);
+			path = MenuViewController;
+			sourceTree = "<group>";
+		};
+		053ED283211632680016ABC4 /* TextFieldsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */,
+				053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */,
+			);
+			path = TextFieldsViewController;
+			sourceTree = "<group>";
+		};
+		053ED288211632DB0016ABC4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				053ED289211632EA0016ABC4 /* MenuItemTypes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		053ED25C21162FAB0016ABC4 /* KOControlsExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 053ED26F21162FAC0016ABC4 /* Build configuration list for PBXNativeTarget "KOControlsExample" */;
+			buildPhases = (
+				053ED25921162FAB0016ABC4 /* Sources */,
+				053ED25A21162FAB0016ABC4 /* Frameworks */,
+				053ED25B21162FAB0016ABC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KOControlsExample;
+			productName = KOControlsExample;
+			productReference = 053ED25D21162FAB0016ABC4 /* KOControlsExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		053ED25521162FAB0016ABC4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0940;
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = "Kuba Ostrowski";
+				TargetAttributes = {
+					053ED25C21162FAB0016ABC4 = {
+						CreatedOnToolsVersion = 9.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 053ED25821162FAB0016ABC4 /* Build configuration list for PBXProject "KOControlsExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 053ED25421162FAB0016ABC4;
+			productRefGroup = 053ED25E21162FAB0016ABC4 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 053ED2742116304A0016ABC4 /* Products */;
+					ProjectRef = 053ED2732116304A0016ABC4 /* KOControls.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				053ED25C21162FAB0016ABC4 /* KOControlsExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		053ED2782116304A0016ABC4 /* KOControls_iOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KOControls_iOS.framework;
+			remoteRef = 053ED2772116304A0016ABC4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		053ED25B21162FAB0016ABC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */,
+				053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */,
+				053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */,
+				053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		053ED25921162FAB0016ABC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */,
+				053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */,
+				053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */,
+				053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				053ED26A21162FAC0016ABC4 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		053ED26D21162FAC0016ABC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		053ED26E21162FAC0016ABC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		053ED27021162FAC0016ABC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = KOControlsExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.KO.KOControlsExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		053ED27121162FAC0016ABC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = KOControlsExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pl.KO.KOControlsExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		053ED25821162FAB0016ABC4 /* Build configuration list for PBXProject "KOControlsExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				053ED26D21162FAC0016ABC4 /* Debug */,
+				053ED26E21162FAC0016ABC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		053ED26F21162FAC0016ABC4 /* Build configuration list for PBXNativeTarget "KOControlsExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				053ED27021162FAC0016ABC4 /* Debug */,
+				053ED27121162FAC0016ABC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 053ED25521162FAB0016ABC4 /* Project object */;
+}

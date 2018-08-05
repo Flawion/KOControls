@@ -4,15 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>KOControls.xcscheme</key>
+		<key>KOControlsExample.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>053ED24421162C2E0016ABC4</key>
+		<key>053ED25C21162FAB0016ABC4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
