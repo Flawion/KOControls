@@ -30,11 +30,29 @@
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pJ8-H1-bBy" customClass="KOTextField" customModule="KOControls">
+                            <rect key="frame" x="12" y="50" width="351" height="30"/>
+                            <nil key="textColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtM-bG-YAA">
+                            <rect key="frame" x="12" y="88" width="85" height="30"/>
+                            <state key="normal" title="On/Off Error"/>
+                            <connections>
+                                <action selector="onOffErrorClick:" destination="-1" eventType="touchUpInside" id="val-Qm-GwP"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="pJ8-H1-bBy" secondAttribute="trailing" constant="12" id="9HR-c2-MW5"/>
+                        <constraint firstItem="pJ8-H1-bBy" firstAttribute="top" secondItem="EYl-nM-YGt" secondAttribute="bottom" constant="8" id="G3K-G5-fBd"/>
                         <constraint firstAttribute="trailing" secondItem="EYl-nM-YGt" secondAttribute="trailing" constant="12" id="eYK-FH-BhK"/>
                         <constraint firstItem="EYl-nM-YGt" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" constant="12" id="pLW-Mr-6MI"/>
+                        <constraint firstItem="vtM-bG-YAA" firstAttribute="top" secondItem="pJ8-H1-bBy" secondAttribute="bottom" constant="8" id="r9u-uI-W1y"/>
+                        <constraint firstItem="vtM-bG-YAA" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" constant="12" id="vPr-gg-JLi"/>
+                        <constraint firstItem="pJ8-H1-bBy" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" constant="12" id="vR5-aF-O74"/>
                         <constraint firstItem="EYl-nM-YGt" firstAttribute="top" secondItem="E85-SF-JHs" secondAttribute="top" constant="12" id="ynS-hk-Tbd"/>
                     </constraints>
                 </view>

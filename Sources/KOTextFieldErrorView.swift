@@ -9,11 +9,18 @@
 import UIKit
 
 public class KOTextFieldErrorView: UIView {
+    //MARK: Variables
+    public private(set) weak var contentView : UIView!
+    
     //description variables
     public private(set) weak var descriptionLabel : UILabel!
     public private(set) weak var descriptionRightConst : NSLayoutConstraint!
     public private(set) weak var descriptionTopConst : NSLayoutConstraint!
     public private(set) weak var descriptionBottomConst : NSLayoutConstraint!
+    
+    public var defaultDescriptionInsets : UIEdgeInsets{
+        return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+    }
     
     //image variables
     public private(set) weak var imageView : UIImageView!
@@ -23,9 +30,17 @@ public class KOTextFieldErrorView: UIView {
     public private(set) weak var imageBottomConst : NSLayoutConstraint!
     public private(set) weak var imageWidthConst : NSLayoutConstraint!
     
+    public var defaultImageInsets : UIEdgeInsets{
+        return UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+    }
+    
     //marker line variables
     private weak var markerLineView : UIView!
     public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
+    
+    public var defaultMarkerLineHeight : CGFloat{
+        return 2
+    }
     
     //marker variables
     private weak var markerView : UIView!
@@ -33,17 +48,18 @@ public class KOTextFieldErrorView: UIView {
     private weak var markerWidthConst : NSLayoutConstraint!
     private weak var markerHeightConst : NSLayoutConstraint!
     
-    var markerWidth : CGFloat = 12 {
+    public var markerWidth : CGFloat = 12 {
         didSet{
             recreateMarkerShape()
         }
     }
-    var markerHeight : CGFloat = 9 {
+    public var markerHeight : CGFloat = 9 {
         didSet{
             recreateMarkerShape()
         }
     }
     
+    //MARK: Functions
     public convenience init() {
         self.init(frame: CGRect.zero)
     }
@@ -66,21 +82,26 @@ public class KOTextFieldErrorView: UIView {
 
     private func initializeViewAndConstraints(){
         //create views
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(contentView)
+        self.contentView = contentView
+        
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(imageView)
+        contentView.addSubview(imageView)
         self.imageView = imageView
  
         let descriptionLabel = UILabel()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(descriptionLabel)
+        contentView.addSubview(descriptionLabel)
         self.descriptionLabel = descriptionLabel
         
         let markerLineView = UIView()
         markerLineView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(markerLineView)
+        contentView.addSubview(markerLineView)
         self.markerLineView = markerLineView
         
         let markerView = UIView()
@@ -89,6 +110,13 @@ public class KOTextFieldErrorView: UIView {
         self.markerView = markerView
 
         //create constraints
+        //for content
+        addConstraints([
+            contentView.leftAnchor.constraint(equalTo: leftAnchor),
+            contentView.rightAnchor.constraint(equalTo: rightAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+        
         //for marker
         let markerWidthConst = markerView.widthAnchor.constraint(equalToConstant: markerWidth)
         let markerHeightConst = markerView.heightAnchor.constraint(equalToConstant: markerHeight)
@@ -100,27 +128,28 @@ public class KOTextFieldErrorView: UIView {
         self.markerHeightConst = markerHeightConst
         recreateMarkerShape()
         addConstraints([
-            markerView.rightAnchor.constraint(equalTo: rightAnchor),
-            markerView.bottomAnchor.constraint(equalTo: topAnchor),
+            markerView.rightAnchor.constraint(equalTo: rightAnchor, constant: -12),
+            markerView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
+            markerView.topAnchor.constraint(equalTo: topAnchor)
             ])
         
         //for marker line
-        let markerLineHeightConst = markerLineView.heightAnchor.constraint(equalToConstant: 2)
-        addConstraints([
-            markerLineView.leftAnchor.constraint(equalTo: leftAnchor),
-            markerLineView.topAnchor.constraint(equalTo: markerView.bottomAnchor),
-            markerLineView.rightAnchor.constraint(equalTo: rightAnchor),
+        let markerLineHeightConst = markerLineView.heightAnchor.constraint(equalToConstant: defaultMarkerLineHeight)
+        contentView.addConstraints([
+            markerLineView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            markerLineView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            markerLineView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             markerLineHeightConst
         ])
         self.markerLineView = markerLineView
         
         //for image view
-        let imageLeftConst = imageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 0)
-        let imageRightToDescriptionLeftConst = imageView.rightAnchor.constraint(equalTo: descriptionLabel.leftAnchor, constant: -4)
-        let imageTopConst = imageView.topAnchor.constraint(equalTo: topAnchor, constant: 4)
-        let imageBottomConst = imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
+        let imageLeftConst = imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: defaultImageInsets.left)
+        let imageRightToDescriptionLeftConst = imageView.rightAnchor.constraint(equalTo: descriptionLabel.leftAnchor, constant:  (-defaultImageInsets.right) + (-defaultDescriptionInsets.left))
+        let imageTopConst = imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: defaultImageInsets.top)
+        let imageBottomConst = imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -defaultImageInsets.bottom)
         let imageWidthConst = imageView.widthAnchor.constraint(equalToConstant: 0)
-        addConstraints([
+        contentView.addConstraints([
             imageLeftConst,
             imageRightToDescriptionLeftConst,
             imageTopConst,
@@ -133,10 +162,10 @@ public class KOTextFieldErrorView: UIView {
         self.imageBottomConst = imageBottomConst
 
         //for description
-        let descriptionRightConst = descriptionLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -4)
-        let descriptionTopConst = descriptionLabel.topAnchor.constraint(equalTo: markerLineView.bottomAnchor, constant: 4)
-        let descriptionBottomConst = descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
-        addConstraints([
+        let descriptionRightConst = descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -defaultDescriptionInsets.right)
+        let descriptionTopConst = descriptionLabel.topAnchor.constraint(equalTo: markerLineView.bottomAnchor, constant: defaultDescriptionInsets.top)
+        let descriptionBottomConst = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -defaultDescriptionInsets.bottom)
+        contentView.addConstraints([
             descriptionRightConst,
             descriptionTopConst,
             descriptionBottomConst
@@ -147,7 +176,10 @@ public class KOTextFieldErrorView: UIView {
     }
     
     private func initializeAppearance(){
-        backgroundColor = UIColor.gray
+        backgroundColor = UIColor.clear
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = 4
+        contentView.backgroundColor = UIColor.gray
         descriptionLabel.textColor = UIColor.white
         markerLineView.backgroundColor = UIColor.red
     }

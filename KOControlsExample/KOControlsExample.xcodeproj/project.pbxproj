@@ -10,7 +10,7 @@
 		053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED26021162FAB0016ABC4 /* AppDelegate.swift */; };
 		053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26721162FAC0016ABC4 /* Assets.xcassets */; };
 		053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */; };
-		053ED27C211631270016ABC4 /* KOControls_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053ED2782116304A0016ABC4 /* KOControls_iOS.framework */; };
+		053ED27C211631270016ABC4 /* KOControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053ED2782116304A0016ABC4 /* KOControls.framework */; };
 		053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED27F211631B10016ABC4 /* MenuViewController.swift */; };
 		053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED280211631B10016ABC4 /* MenuViewController.xib */; };
 		053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */; };
@@ -47,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				053ED27C211631270016ABC4 /* KOControls_iOS.framework in Frameworks */,
+				053ED27C211631270016ABC4 /* KOControls.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +95,7 @@
 		053ED2742116304A0016ABC4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				053ED2782116304A0016ABC4 /* KOControls_iOS.framework */,
+				053ED2782116304A0016ABC4 /* KOControls.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,10 +195,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		053ED2782116304A0016ABC4 /* KOControls_iOS.framework */ = {
+		053ED2782116304A0016ABC4 /* KOControls.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = KOControls_iOS.framework;
+			path = KOControls.framework;
 			remoteRef = 053ED2772116304A0016ABC4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

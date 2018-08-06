@@ -21,6 +21,15 @@ class TextFieldsViewController: UIViewController {
     }
 
     private func initialize(){
-        emailTextField.errorView.descriptionLabel.text = "Email is incorrect"
+        emailTextField.errorInfoView.descriptionLabel.text = "Email is incorrect"
+        emailTextField.errorIconView.image = UIImage(named: "field_error")
+        emailTextField.errorIconView.contentMode = .center
+        emailTextField.errorIconWidth = 32
+        
     }
+    
+    @IBAction func onOffErrorClick(_ sender: Any) {
+        emailTextField.isShowingError = !emailTextField.isShowingError
+    }
+    
 }
