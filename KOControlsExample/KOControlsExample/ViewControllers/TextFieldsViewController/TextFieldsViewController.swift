@@ -24,8 +24,8 @@ class TextFieldsViewController: UIViewController {
         emailTextField.errorInfoView.descriptionLabel.text = "Email is incorrect"
         emailTextField.errorIconView.image = UIImage(named: "field_error")
         emailTextField.errorIconView.contentMode = .center
-        emailTextField.errorIconWidth = 32
-        
+        emailTextField.errorWidth = 32
+        emailTextField.borderSettings = KOTextFieldBorderSettings(color: UIColor.black.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
     }
     
     @IBAction func onOffErrorClick(_ sender: Any) {

@@ -36,8 +36,8 @@ public class KOTextFieldErrorView: UIView {
     
     //marker line variables
     private weak var markerLineView : UIView!
-    public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
     
+    public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
     public var defaultMarkerLineHeight : CGFloat{
         return 2
     }
@@ -73,7 +73,6 @@ public class KOTextFieldErrorView: UIView {
         super.init(coder: aDecoder)
         initialize()
     }
-    
     
     private func initialize(){
         initializeViewAndConstraints()
@@ -127,8 +126,10 @@ public class KOTextFieldErrorView: UIView {
         self.markerWidthConst = markerWidthConst
         self.markerHeightConst = markerHeightConst
         recreateMarkerShape()
+        let markerViewRightConst = markerView.rightAnchor.constraint(equalTo: rightAnchor, constant: -12)
+        markerViewRightConst.priority = UILayoutPriority(rawValue: 500)
         addConstraints([
-            markerView.rightAnchor.constraint(equalTo: rightAnchor, constant: -12),
+            markerViewRightConst,
             markerView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
             markerView.topAnchor.constraint(equalTo: topAnchor)
             ])
@@ -202,5 +203,9 @@ public class KOTextFieldErrorView: UIView {
         
         markerHeightConst.constant = markerHeight
         markerWidthConst.constant = markerWidth
+    }
+    
+    internal func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint{
+        return markerView.centerXAnchor.constraint(equalTo: constraint)
     }
 }
