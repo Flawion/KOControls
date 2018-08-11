@@ -26,6 +26,7 @@ class TextFieldsViewController: UIViewController {
         emailTextField.errorIconView.contentMode = .center
         emailTextField.errorWidth = 32
         emailTextField.borderSettings = KOTextFieldBorderSettings(color: UIColor.black.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
+        emailTextField.errorInfoInsets = UIEdgeInsets(top: -5, left: 0, bottom: 0, right: 0)
     }
     
     @IBAction func onOffErrorClick(_ sender: Any) {

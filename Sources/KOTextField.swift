@@ -10,8 +10,9 @@ import UIKit
 
 public enum KOTextFieldShowErrorInfoModes{
     case onFocus
-    case onTapAtErrorIcon
+    case onTapAtErrorView
     case always
+    case manual
 }
 
 public enum KOTextFieldHideErrorModes{
@@ -57,7 +58,7 @@ public class KOTextField : UITextField{
         }
     }
     
-    //MARK: Error variables
+    //MARK: Error
     private weak var errorView : UIView!
     private weak var containerForCustomErrorView: UIView!
     private weak var errorWidthConst : NSLayoutConstraint!
@@ -78,9 +79,14 @@ public class KOTextField : UITextField{
         }
     }
     
-    //MARK: Error info variables
-    private var errorInfoViewConsts : [NSLayoutConstraint] = []
+    //MARK: Error info
+    private var containerForErrorInfoView: UIView!
+    private var containerForErrorInfoConsts : [NSLayoutConstraint] = []
+    private var customErrorInfoMarkerCenterXConst : NSLayoutConstraint?
     private weak var errorInfoShowedInView : UIView!
+    private weak var containerForCustomErrorInfoView: UIView!
+    private var isShowedErrorInfo : Bool = false
+    
     private var isShowingErrorInfo : Bool = false{
         didSet{
             refreshShowingErrorInfo()
@@ -88,13 +94,19 @@ public class KOTextField : UITextField{
     }
     
     //public
-    public private(set) var errorInfoView : KOTextFieldErrorView!
+    public private(set) weak var errorInfoView : KOTextFieldErrorView!
     public weak var showErrorInfoInView : UIView?
     public var showErrorInfoMode : KOTextFieldShowErrorInfoModes = .onFocus{
         didSet{
             refreshShowErrorInfoMode()
         }
     }
+    public var customErrorInfoView : (UIView & KOTextFieldErrorInterface)?{
+        didSet{
+            refreshCustomErrorInfoView()
+        }
+    }
+    public var errorInfoInsets : UIEdgeInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
    
     //MARK: - Functions
     //MARK: Overridden rects to avoid intersection with the error icon view
@@ -120,7 +132,7 @@ public class KOTextField : UITextField{
         return editingRect
     }
     
-    //MARK: Initialization functions
+    //MARK: Initialization
     public convenience init() {
         self.init(frame: CGRect.zero)
     }
@@ -138,12 +150,14 @@ public class KOTextField : UITextField{
     private func initialize(){
         initializeErrorView()
         initializeErrorInfoView()
+        addTarget(self, action: #selector(textChanged), for: .editingChanged)
     }
     
     private func initializeErrorView(){
         //create views
         //error view
         let errorView = UIView()
+        errorView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(errorViewTap)))
         errorView.backgroundColor = UIColor.clear
         errorView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(errorView)
@@ -159,8 +173,6 @@ public class KOTextField : UITextField{
         //error icon view
         let errorIconView = UIImageView()
         errorIconView.translatesAutoresizingMaskIntoConstraints = false
-        errorIconView.isUserInteractionEnabled = true
-        errorIconView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(errorIconViewTap)))
         errorView.addSubview(errorIconView)
         self.errorIconView = errorIconView
         
@@ -193,16 +205,44 @@ public class KOTextField : UITextField{
     }
     
     private func initializeErrorInfoView(){
-        errorInfoView = KOTextFieldErrorView()
+        //create views
+        containerForErrorInfoView = UIView()
+        containerForErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let containerForCustomErrorInfoView = UIView()
+        containerForCustomErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
+        containerForCustomErrorInfoView.isHidden = true
+        self.containerForCustomErrorView = containerForCustomErrorInfoView
+        
+        let errorInfoView = KOTextFieldErrorView()
         errorInfoView.translatesAutoresizingMaskIntoConstraints = false
-        errorInfoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(errorViewTap)))
+        self.errorInfoView = errorInfoView
+        
+        //create constraints
+        //for containerForCustomErrorInfoView
+        containerForErrorInfoView.addSubview(containerForCustomErrorInfoView)
+        containerForErrorInfoView.addConstraints([
+            containerForCustomErrorInfoView.leftAnchor.constraint(equalTo: containerForErrorInfoView.leftAnchor),
+            containerForCustomErrorInfoView.rightAnchor.constraint(equalTo: containerForErrorInfoView.rightAnchor),
+            containerForCustomErrorInfoView.topAnchor.constraint(equalTo: containerForErrorInfoView.topAnchor),
+            containerForCustomErrorInfoView.bottomAnchor.constraint(equalTo: containerForErrorInfoView.bottomAnchor)
+            ])
+        
+        //for errorInfoView
+        containerForErrorInfoView.addSubview(errorInfoView)
+        containerForErrorInfoView.addConstraints([
+            errorInfoView.leftAnchor.constraint(equalTo: containerForErrorInfoView.leftAnchor),
+            errorInfoView.rightAnchor.constraint(equalTo: containerForErrorInfoView.rightAnchor),
+            errorInfoView.topAnchor.constraint(equalTo: containerForErrorInfoView.topAnchor),
+            errorInfoView.bottomAnchor.constraint(equalTo: containerForErrorInfoView.bottomAnchor)
+            ])
     }
     
     override public func didMoveToSuperview() {
         refreshShowingErrorInfo()
     }
     
-    //MARK: Responder functions
+    //MARK: Responder
     override public func becomeFirstResponder() -> Bool {
         let becomeFirstResponder = super.becomeFirstResponder()
         if becomeFirstResponder{
@@ -281,27 +321,46 @@ public class KOTextField : UITextField{
         guard let showInView = showErrorInfoInView ?? self.superview else{
             return
         }
-        showInView.addSubview(errorInfoView)
-        showInView.addConstraints([
-            errorInfoView.rightAnchor.constraint(equalTo: rightAnchor),
-            errorInfoView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor),
-            errorInfoView.topAnchor.constraint(equalTo: bottomAnchor, constant: 2),
-            errorInfoView.markerCenterXEqualTo(errorView.centerXAnchor)
-            ])
+        
+        //checks if error info currently shown on screen
+        if isShowedErrorInfo{
+            //if error info is showing in the other superview than needs, it will be removed from old parent before add
+            guard showInView != errorInfoShowedInView else{
+                return
+            }
+            hideErrorInfo()
+        }
+        
+        showInView.addSubview(containerForErrorInfoView)
+        containerForErrorInfoConsts = [
+            containerForErrorInfoView.rightAnchor.constraint(equalTo: rightAnchor, constant: -errorInfoInsets.right),
+            containerForErrorInfoView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: errorInfoInsets.left),
+            containerForErrorInfoView.topAnchor.constraint(equalTo: bottomAnchor, constant: (errorInfoInsets.top - errorInfoInsets.bottom)),
+            errorInfoView.markerCenterXEqualTo(errorView.centerXAnchor)!
+        ]
+        showInView.addConstraints(containerForErrorInfoConsts)
         errorInfoShowedInView = showInView
+        addCustomErrorInfoMarkerCenterXConst()
+        isShowedErrorInfo = true
     }
     
     private func hideErrorInfo(){
+        guard isShowedErrorInfo else{
+            return
+        }
+        
         defer {
-            errorInfoView.removeFromSuperview()
-            errorInfoViewConsts = []
+            containerForErrorInfoView.removeFromSuperview()
+            containerForErrorInfoConsts = []
+            removeCustomErrorInfoMarkerCenterXConst()
             errorInfoShowedInView = nil
+            isShowedErrorInfo = false
         }
         
         guard let errorViewShowedInView = errorInfoShowedInView else{
             return
         }
-        errorViewShowedInView.removeConstraints(errorInfoViewConsts)
+        errorViewShowedInView.removeConstraints(containerForErrorInfoConsts)
     }
     
     private func refreshShowErrorInfoMode(){
@@ -319,6 +378,67 @@ public class KOTextField : UITextField{
         default:
             break
         }
+    }
+    
+    //MARK: Custom error info view
+    private func refreshCustomErrorInfoMarkerCenterXConst(){
+        isShowingErrorInfo ? addCustomErrorInfoMarkerCenterXConst() : removeCustomErrorInfoMarkerCenterXConst()
+    }
+    
+    private func removeCustomErrorInfoMarkerCenterXConst(){
+        guard let errorInfoShowedInView = errorInfoShowedInView, let customErrorInfoMarkerCenterXConst = customErrorInfoMarkerCenterXConst else{
+            return
+        }
+        errorInfoShowedInView.removeConstraint(customErrorInfoMarkerCenterXConst)
+    }
+    
+    private func addCustomErrorInfoMarkerCenterXConst(){
+        guard let errorInfoShowedInView = errorInfoShowedInView, let customErrorInfoView = customErrorInfoView else{
+            return
+        }
+        
+        //removes old one if need
+        if let customErrorInfoMarkerCenterXConst = customErrorInfoMarkerCenterXConst{
+            errorInfoShowedInView.removeConstraint(customErrorInfoMarkerCenterXConst)
+        }
+        
+        //adds new one
+        if let customErrorInfoMarkerCenterXConst = customErrorInfoView.markerCenterXEqualTo(errorView.centerXAnchor){
+            errorInfoShowedInView.addConstraint(customErrorInfoMarkerCenterXConst)
+        }
+    }
+    
+    private func refreshCustomErrorInfoView(){
+        defer {
+            let result = customErrorInfoView != nil
+            containerForCustomErrorInfoView.isHidden = !result
+            errorInfoView.isHidden = result
+        }
+        
+        guard containerForCustomErrorInfoView.subviews.first != customErrorInfoView else{
+            //nothing changed
+            return
+        }
+        
+        //delete old ones
+        containerForCustomErrorInfoView.removeConstraints(containerForCustomErrorInfoView.constraints)
+        for subview in containerForCustomErrorInfoView.subviews{
+            subview.removeFromSuperview()
+        }
+        
+        //add new one if need
+        if let customErrorInfoView = self.customErrorInfoView{
+            customErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
+            containerForCustomErrorInfoView.addSubview(customErrorInfoView)
+            containerForCustomErrorInfoView.addConstraints([
+                customErrorInfoView.leftAnchor.constraint(equalTo: containerForCustomErrorInfoView.leftAnchor),
+                customErrorInfoView.topAnchor.constraint(equalTo: containerForCustomErrorInfoView.topAnchor),
+                customErrorInfoView.rightAnchor.constraint(equalTo: containerForCustomErrorInfoView.rightAnchor),
+                customErrorInfoView.bottomAnchor.constraint(equalTo: containerForCustomErrorInfoView.bottomAnchor)
+                ])
+        }
+        refreshCustomErrorInfoMarkerCenterXConst()
+        layoutIfNeeded()
     }
     
     private func refreshBorder(isFirstResponder : Bool? = nil){
@@ -346,13 +466,30 @@ public class KOTextField : UITextField{
         refreshBorder()
     }
     
-    //MARK: Actions
-    @objc private func errorViewTap(){
-        
+    public func showErrorInfoIfCan(){
+        guard isShowingError else{
+            return
+        }
+        isShowingErrorInfo = true
     }
     
-    @objc private func errorIconViewTap(){
-        guard isShowingError, showErrorInfoMode == .onTapAtErrorIcon else{
+    public func hideErrorInfoIfCan(){
+        guard isShowingError else{
+            return
+        }
+        isShowingErrorInfo = false
+    }
+    
+    //MARK: Actions
+    @objc private func textChanged(){
+        guard isShowingError && hideErrorMode == .onTextChanged else{
+            return
+        }
+        isShowingError = false
+    }
+    
+    @objc private func errorViewTap(){
+        guard isShowingError, showErrorInfoMode == .onTapAtErrorView else{
             return
         }
         isShowingErrorInfo = !isShowingErrorInfo

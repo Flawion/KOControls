@@ -8,7 +8,11 @@
 
 import UIKit
 
-public class KOTextFieldErrorView: UIView {
+public protocol KOTextFieldErrorInterface{
+    func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?
+}
+
+public class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     //MARK: Variables
     public private(set) weak var contentView : UIView!
     
@@ -47,6 +51,8 @@ public class KOTextFieldErrorView: UIView {
     private weak var markerShapeLayer : CAShapeLayer!
     private weak var markerWidthConst : NSLayoutConstraint!
     private weak var markerHeightConst : NSLayoutConstraint!
+    private weak var markerLeftConst : NSLayoutConstraint!
+    private weak var markerRightConst : NSLayoutConstraint!
     
     public var markerWidth : CGFloat = 12 {
         didSet{
@@ -56,6 +62,27 @@ public class KOTextFieldErrorView: UIView {
     public var markerHeight : CGFloat = 9 {
         didSet{
             recreateMarkerShape()
+        }
+    }
+    
+    public var markerColor : UIColor = UIColor.red{
+        didSet{
+            markerShapeLayer.fillColor = markerColor.cgColor
+            markerLineView.backgroundColor = markerColor
+        }
+    }
+    
+    public var markerMinLeftMargin : CGFloat = 4{
+        didSet{
+            markerLeftConst.constant = markerMinLeftMargin
+            layoutIfNeeded()
+        }
+    }
+    
+    public var markerMinRightMargin : CGFloat = 4{
+        didSet{
+            markerRightConst.constant = -markerMinRightMargin
+            layoutIfNeeded()
         }
     }
     
@@ -126,13 +153,17 @@ public class KOTextFieldErrorView: UIView {
         self.markerWidthConst = markerWidthConst
         self.markerHeightConst = markerHeightConst
         recreateMarkerShape()
-        let markerViewRightConst = markerView.rightAnchor.constraint(equalTo: rightAnchor, constant: -12)
-        markerViewRightConst.priority = UILayoutPriority(rawValue: 500)
+        
+        let markerLeftConst = markerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: markerMinLeftMargin)
+        let markerRightConst = markerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -markerMinRightMargin)
         addConstraints([
-            markerViewRightConst,
+            markerRightConst,
+            markerLeftConst,
             markerView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
             markerView.topAnchor.constraint(equalTo: topAnchor)
             ])
+        self.markerLeftConst = markerLeftConst
+        self.markerRightConst = markerRightConst
         
         //for marker line
         let markerLineHeightConst = markerLineView.heightAnchor.constraint(equalToConstant: defaultMarkerLineHeight)
@@ -182,7 +213,7 @@ public class KOTextFieldErrorView: UIView {
         contentView.layer.cornerRadius = 4
         contentView.backgroundColor = UIColor.gray
         descriptionLabel.textColor = UIColor.white
-        markerLineView.backgroundColor = UIColor.red
+        markerLineView.backgroundColor = markerColor
     }
     
     private func recreateMarkerShape(){
@@ -197,7 +228,7 @@ public class KOTextFieldErrorView: UIView {
         }
         let markerShapeLayer = CAShapeLayer()
         markerShapeLayer.path = bezierPath.cgPath
-        markerShapeLayer.fillColor = UIColor.red.cgColor
+        markerShapeLayer.fillColor = markerColor.cgColor
         markerView.layer.addSublayer(markerShapeLayer)
         self.markerShapeLayer = markerShapeLayer
         
@@ -205,7 +236,9 @@ public class KOTextFieldErrorView: UIView {
         markerWidthConst.constant = markerWidth
     }
     
-    internal func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint{
-        return markerView.centerXAnchor.constraint(equalTo: constraint)
+    public func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?{
+        let const = markerView.centerXAnchor.constraint(equalTo: constraint)
+        const.priority = UILayoutPriority(rawValue: 900)
+        return const
     }
 }
