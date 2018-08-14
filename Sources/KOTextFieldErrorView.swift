@@ -12,7 +12,7 @@ public protocol KOTextFieldErrorInterface{
     func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?
 }
 
-public class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
+open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     //MARK: Variables
     public private(set) weak var contentView : UIView!
     
@@ -22,7 +22,7 @@ public class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     public private(set) weak var descriptionTopConst : NSLayoutConstraint!
     public private(set) weak var descriptionBottomConst : NSLayoutConstraint!
     
-    public var defaultDescriptionInsets : UIEdgeInsets{
+    open var defaultDescriptionInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
     }
     
@@ -34,7 +34,7 @@ public class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     public private(set) weak var imageBottomConst : NSLayoutConstraint!
     public private(set) weak var imageWidthConst : NSLayoutConstraint!
     
-    public var defaultImageInsets : UIEdgeInsets{
+    open var defaultImageInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
     }
     
@@ -42,7 +42,8 @@ public class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     private weak var markerLineView : UIView!
     
     public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
-    public var defaultMarkerLineHeight : CGFloat{
+    
+    open var defaultMarkerLineHeight : CGFloat{
         return 2
     }
     
@@ -236,7 +237,7 @@ public class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
         markerWidthConst.constant = markerWidth
     }
     
-    public func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?{
+    open func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?{
         let const = markerView.centerXAnchor.constraint(equalTo: constraint)
         const.priority = UILayoutPriority(rawValue: 900)
         return const

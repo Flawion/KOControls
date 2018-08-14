@@ -8,16 +8,19 @@
 
 import UIKit
 
+//MARK: - Settings
 public enum KOTextFieldShowErrorInfoModes{
-    case onFocus
+    case manual
+    case onFocus //by default
     case onTapAtErrorView
     case always
-    case manual
 }
 
-public enum KOTextFieldHideErrorModes{
-    case none
-    case onTextChanged
+public enum KOTextFieldValidateModes{
+    case manual
+    case validateOnTextChanged //by default
+    case validateOnLostFocus //and hide error on text changed
+    case clearErrorOnTextChanged
 }
 
 public struct KOTextFieldBorderSettings{
@@ -43,13 +46,63 @@ public struct KOTextFieldBorderSettings{
     }
 }
 
-public class KOTextField : UITextField{
+//MARK: - Validators
+public protocol KOTextValidatorInterface : AnyObject{
+    func validate(text : String)->Bool
+}
+
+public class KORegexTextValidator : KOTextValidatorInterface{
+    private let regex : NSPredicate
+    
+    public static var mailValidator : KORegexTextValidator{
+        return KORegexTextValidator(regexPattern: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}")
+    }
+    
+    public init(regexPattern : String){
+        regex = NSPredicate(format: "SELF MATCHES %@", regexPattern)
+    }
+    
+    public func validate(text : String)->Bool{
+        return regex.evaluate(with: text)
+    }
+}
+
+public class KOFunctionTextValidator : KOTextValidatorInterface{
+    private let function : (String)->Bool
+    
+    public init(function : @escaping (String)->Bool){
+        self.function = function
+    }
+    
+    public func validate(text : String)->Bool{
+        return function(text)
+    }
+}
+
+@objc public protocol KOTextFieldDelegate : NSObjectProtocol{
+    @objc optional func textFieldDidShowError(_ textField: UITextField)
+    @objc optional func textFieldDidHideError(_ textField: UITextField)
+    
+    @objc optional func textFieldStartingErrorInfoShowAnimation(_ textField: UITextField)
+    @objc optional func textFieldStartingErrorInfoHideAnimation(_ textField: UITextField)
+    
+    @objc optional func textFieldDidShowErrorInfo(_ textField: UITextField)
+    @objc optional func textFieldDidHideErrorInfo(_ textField: UITextField)
+}
+
+//MARK: - KOTextField
+open class KOTextField : UITextField{
     //MARK: - Variables
+    
     //public
-    public var hideErrorMode : KOTextFieldHideErrorModes = .none
+    @IBOutlet public weak var koDelegate : KOTextFieldDelegate?
+    public private(set) var validators : [KOTextValidatorInterface] = []
+    public var validateMode : KOTextFieldValidateModes = .validateOnLostFocus
     public var isShowingError : Bool = false{
         didSet{
-            refreshShowingError()
+            if oldValue != isShowingError{
+                refreshShowingError()
+            }
         }
     }
     public var borderSettings : KOTextFieldBorderSettings?{
@@ -63,20 +116,22 @@ public class KOTextField : UITextField{
     private weak var containerForCustomErrorView: UIView!
     private weak var errorWidthConst : NSLayoutConstraint!
     
-    //public
-    public var defaultErrorWidth : CGFloat{
-        return  0
-    }
-    public var errorWidth : CGFloat = 0{
-        didSet{
-            refreshShowingError()
-        }
-    }
+    //public / open
     public private(set) weak var errorIconView : UIImageView!
     public var customErrorView : UIView?{
         didSet{
             refreshCustomErrorView()
         }
+    }
+    public var errorWidth : CGFloat = 0{
+        didSet{
+            if oldValue != errorWidth{
+                refreshShowingError()
+            }
+        }
+    }
+    open var defaultErrorWidth : CGFloat{
+        return  0
     }
     
     //MARK: Error info
@@ -91,7 +146,9 @@ public class KOTextField : UITextField{
     
     private var isShowingErrorInfo : Bool = false{
         didSet{
-            refreshShowingErrorInfo()
+            if oldValue != isShowingErrorInfo{
+                refreshShowingErrorInfo()
+            }
         }
     }
     
@@ -114,23 +171,23 @@ public class KOTextField : UITextField{
    
     //MARK: - Functions
     //MARK: Overridden rects to avoid intersection with the error icon view
-    override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+    override open func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         let rightViewRect = super.rightViewRect(forBounds: bounds)
         return rightViewRect.offsetBy(dx: -errorWidthConst.constant, dy: 0)
     }
     
-    override public func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+    override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
         let clearButtonRect = super.clearButtonRect(forBounds: bounds)
         return clearButtonRect.offsetBy(dx: -errorWidthConst.constant, dy: 0)
     }
     
-    override public func textRect(forBounds bounds: CGRect) -> CGRect {
+    override open func textRect(forBounds bounds: CGRect) -> CGRect {
         var textRect = super.textRect(forBounds: bounds)
         textRect.size.width -= errorWidthConst.constant
         return textRect
     }
     
-    override public func editingRect(forBounds bounds: CGRect) -> CGRect {
+    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         var editingRect = super.editingRect(forBounds: bounds)
         editingRect.size.width -= errorWidthConst.constant
         return editingRect
@@ -216,7 +273,7 @@ public class KOTextField : UITextField{
         let containerForCustomErrorInfoView = UIView()
         containerForCustomErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
         containerForCustomErrorInfoView.isHidden = true
-        self.containerForCustomErrorView = containerForCustomErrorInfoView
+        self.containerForCustomErrorInfoView = containerForCustomErrorInfoView
         
         let errorInfoView = KOTextFieldErrorView()
         errorInfoView.translatesAutoresizingMaskIntoConstraints = false
@@ -246,12 +303,12 @@ public class KOTextField : UITextField{
             ])
     }
     
-    override public func didMoveToSuperview() {
+    override open func didMoveToSuperview() {
         refreshShowingErrorInfo()
     }
     
     //MARK: Responder
-    override public func becomeFirstResponder() -> Bool {
+    override open func becomeFirstResponder() -> Bool {
         let becomeFirstResponder = super.becomeFirstResponder()
         if becomeFirstResponder{
             if isShowingError && showErrorInfoMode == .onFocus{
@@ -262,11 +319,14 @@ public class KOTextField : UITextField{
         return becomeFirstResponder
     }
     
-    override public func resignFirstResponder() -> Bool {
+    override open func resignFirstResponder() -> Bool {
         let resignFirstResponder = super.resignFirstResponder()
         if resignFirstResponder{
             if isShowingError && showErrorInfoMode == .onFocus{
                 isShowingErrorInfo = false
+            }
+            if validateMode == .validateOnLostFocus{
+                validate()
             }
         }
         refreshBorder(isFirstResponder: !resignFirstResponder)
@@ -284,6 +344,7 @@ public class KOTextField : UITextField{
         errorView.isHidden = false
         refreshShowErrorInfoMode()
         layoutIfNeeded()
+        koDelegate?.textFieldDidShowError?(self)
     }
     
     private func hideError(){
@@ -293,6 +354,7 @@ public class KOTextField : UITextField{
         isShowingErrorInfo = false
         isErrorInfoAnimationBlocked = false
         layoutIfNeeded()
+        koDelegate?.textFieldDidHideError?(self)
     }
     
     private func refreshCustomErrorView(){
@@ -333,6 +395,7 @@ public class KOTextField : UITextField{
     
     private func showErrorInfoAnimated(){
         showErrorInfo()
+        koDelegate?.textFieldStartingErrorInfoHideAnimation?(self)
         errorInfoShowAnimation?.animate(view: containerForErrorInfoView, completionHandler: nil)
     }
     
@@ -361,6 +424,7 @@ public class KOTextField : UITextField{
         errorInfoShowedInView = showInView
         addCustomErrorInfoMarkerCenterXConst()
         isShowedErrorInfo = true
+        koDelegate?.textFieldDidShowErrorInfo?(self)
     }
 
     private func hideErrorInfoAnimated(){
@@ -368,6 +432,7 @@ public class KOTextField : UITextField{
             hideErrorInfo()
             return
         }
+        koDelegate?.textFieldStartingErrorInfoHideAnimation?(self)
         isErrorInfoHideAnimationRunning = true
         hideErrorInfoAnimation.animate(view: containerForErrorInfoView) {
             [weak self] _ in
@@ -395,6 +460,7 @@ public class KOTextField : UITextField{
             return
         }
         errorViewShowedInView.removeConstraints(containerForErrorInfoConsts)
+        koDelegate?.textFieldDidHideErrorInfo?(self)
     }
     
     private func refreshShowErrorInfoMode(){
@@ -495,19 +561,52 @@ public class KOTextField : UITextField{
         }
     }
     
-    //MARK: Public functions
-    public func refreshBorderSettings(){
+    private func index(validator : KOTextValidatorInterface)->Int?{
+        return validators.index(where: {$0 === validator})
+    }
+    
+    //MARK: Open functions
+    open func add(validator : KOTextValidatorInterface){
+        guard index(validator: validator) == nil else{
+            return
+        }
+        validators.append(validator)
+    }
+    
+    open func remove(validator : KOTextValidatorInterface){
+        guard let index = index(validator: validator) else{
+            return
+        }
+        validators.remove(at: index)
+    }
+
+    open func validate(){
+        guard validators.count > 0 else{
+            isShowingError = false
+            return
+        }
+        let text = self.text ?? ""
+        for validator in validators{
+            if !validator.validate(text: text){
+                isShowingError = true
+                return
+            }
+        }
+        isShowingError = false
+    }
+    
+    open func refreshBorderSettings(){
         refreshBorder()
     }
     
-    public func showErrorInfoIfCan(){
+    open func showErrorInfoIfCan(){
         guard isShowingError else{
             return
         }
         isShowingErrorInfo = true
     }
     
-    public func hideErrorInfoIfCan(){
+    open func hideErrorInfoIfCan(){
         guard isShowingError else{
             return
         }
@@ -516,10 +615,16 @@ public class KOTextField : UITextField{
     
     //MARK: Actions
     @objc private func textChanged(){
-        guard isShowingError && hideErrorMode == .onTextChanged else{
-            return
+        switch validateMode {
+        case .validateOnLostFocus, .clearErrorOnTextChanged:
+            isShowingError = false
+            
+        case .validateOnTextChanged:
+            validate()
+            
+        default:
+            break
         }
-        isShowingError = false
     }
     
     @objc private func errorViewTap(){

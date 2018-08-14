@@ -12,7 +12,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextFieldsViewController" customModule="KOControlsExample" customModuleProvider="target">
             <connections>
-                <outlet property="emailTextField" destination="EYl-nM-YGt" id="8Hw-6X-f2R"/>
+                <outlet property="emailField" destination="ERV-n0-aKZ" id="c2L-nl-UiV"/>
+                <outlet property="passwordField" destination="GZC-1u-kNn" id="Gbk-oa-6Ou"/>
+                <outlet property="userNameField" destination="N6S-qD-hyl" id="xuA-Cg-pyu"/>
+                <outlet property="userNameShowHideErrorBtt" destination="c4M-64-fMj" id="Mbw-T6-qtW"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,36 +27,98 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E85-SF-JHs">
                     <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                     <subviews>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EYl-nM-YGt" customClass="KOTextField" customModule="KOControls">
-                            <rect key="frame" x="12" y="12" width="351" height="30"/>
-                            <nil key="textColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pJ8-H1-bBy" customClass="KOTextField" customModule="KOControls">
-                            <rect key="frame" x="12" y="50" width="351" height="30"/>
-                            <nil key="textColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtM-bG-YAA">
-                            <rect key="frame" x="12" y="88" width="85" height="30"/>
-                            <state key="normal" title="On/Off Error"/>
-                            <connections>
-                                <action selector="onOffErrorClick:" destination="-1" eventType="touchUpInside" id="val-Qm-GwP"/>
-                            </connections>
-                        </button>
+                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZZ-Yo-zvj">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b9y-GP-JW3">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="270"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Field will be validated on lost focus, and error will be removed after text changed." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L55-hS-pRD">
+                                            <rect key="frame" x="12" y="12" width="351" height="41"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ERV-n0-aKZ" customClass="KOTextField" customModule="KOControls">
+                                            <rect key="frame" x="12" y="57" width="351" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Field will be validated on text changed" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uml-pW-Ut1">
+                                            <rect key="frame" x="12" y="99" width="351" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GZC-1u-kNn" customClass="KOTextField" customModule="KOControls">
+                                            <rect key="frame" x="12" y="123.5" width="351" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Field will be validated manual" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9V5-Mw-1q2">
+                                            <rect key="frame" x="12" y="165.5" width="351" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="N6S-qD-hyl" customClass="KOTextField" customModule="KOControls">
+                                            <rect key="frame" x="12" y="190.5" width="351" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4M-64-fMj">
+                                            <rect key="frame" x="12" y="228" width="351" height="30"/>
+                                            <state key="normal" title="Show / hide user name error"/>
+                                            <connections>
+                                                <action selector="showHideUserNameBttClick:" destination="-1" eventType="touchUpInside" id="mSN-3p-Wan"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="ERV-n0-aKZ" secondAttribute="trailing" constant="12" id="1w4-fi-U7f"/>
+                                        <constraint firstAttribute="trailing" secondItem="9V5-Mw-1q2" secondAttribute="trailing" constant="12" id="68A-re-HiH"/>
+                                        <constraint firstItem="ERV-n0-aKZ" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="6to-Yb-oNS"/>
+                                        <constraint firstItem="GZC-1u-kNn" firstAttribute="top" secondItem="uml-pW-Ut1" secondAttribute="bottom" constant="4" id="CfB-7R-Shp"/>
+                                        <constraint firstItem="c4M-64-fMj" firstAttribute="top" secondItem="N6S-qD-hyl" secondAttribute="bottom" constant="8" id="FiY-5w-evO"/>
+                                        <constraint firstItem="L55-hS-pRD" firstAttribute="top" secondItem="b9y-GP-JW3" secondAttribute="top" constant="12" id="NnA-MJ-BfW"/>
+                                        <constraint firstAttribute="trailing" secondItem="uml-pW-Ut1" secondAttribute="trailing" constant="12" id="O3I-gh-esQ"/>
+                                        <constraint firstItem="uml-pW-Ut1" firstAttribute="top" secondItem="ERV-n0-aKZ" secondAttribute="bottom" constant="12" id="R4s-0w-CmK"/>
+                                        <constraint firstAttribute="trailing" secondItem="N6S-qD-hyl" secondAttribute="trailing" constant="12" id="UKh-5F-oN8"/>
+                                        <constraint firstItem="9V5-Mw-1q2" firstAttribute="top" secondItem="GZC-1u-kNn" secondAttribute="bottom" constant="12" id="WsI-GW-kRA"/>
+                                        <constraint firstItem="9V5-Mw-1q2" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="X8Z-Tm-dfL"/>
+                                        <constraint firstAttribute="trailing" secondItem="L55-hS-pRD" secondAttribute="trailing" constant="12" id="aVz-Pl-9LO"/>
+                                        <constraint firstItem="N6S-qD-hyl" firstAttribute="top" secondItem="9V5-Mw-1q2" secondAttribute="bottom" constant="4" id="dqp-rL-l6I"/>
+                                        <constraint firstItem="uml-pW-Ut1" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="fUj-He-9jG"/>
+                                        <constraint firstAttribute="trailing" secondItem="c4M-64-fMj" secondAttribute="trailing" constant="12" id="oN0-GE-eUs"/>
+                                        <constraint firstItem="L55-hS-pRD" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="sfH-jK-dPO"/>
+                                        <constraint firstAttribute="bottom" secondItem="c4M-64-fMj" secondAttribute="bottom" constant="12" id="tgW-uw-7gZ"/>
+                                        <constraint firstAttribute="trailing" secondItem="GZC-1u-kNn" secondAttribute="trailing" constant="12" id="viW-wg-Uj5"/>
+                                        <constraint firstItem="c4M-64-fMj" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="wa1-Od-MuJ"/>
+                                        <constraint firstItem="GZC-1u-kNn" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="xJm-u5-hLR"/>
+                                        <constraint firstItem="N6S-qD-hyl" firstAttribute="leading" secondItem="b9y-GP-JW3" secondAttribute="leading" constant="12" id="xL9-yf-k7o"/>
+                                        <constraint firstItem="ERV-n0-aKZ" firstAttribute="top" secondItem="L55-hS-pRD" secondAttribute="bottom" constant="4" id="xS4-kk-Zsw"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="b9y-GP-JW3" secondAttribute="trailing" id="3yj-Do-Bcd"/>
+                                <constraint firstItem="b9y-GP-JW3" firstAttribute="top" secondItem="wZZ-Yo-zvj" secondAttribute="top" id="Eyk-uT-p50"/>
+                                <constraint firstItem="b9y-GP-JW3" firstAttribute="leading" secondItem="wZZ-Yo-zvj" secondAttribute="leading" id="FuR-bj-5RW"/>
+                                <constraint firstAttribute="bottom" secondItem="b9y-GP-JW3" secondAttribute="bottom" id="Vwq-t9-mZl"/>
+                            </constraints>
+                        </scrollView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="pJ8-H1-bBy" secondAttribute="trailing" constant="12" id="9HR-c2-MW5"/>
-                        <constraint firstItem="pJ8-H1-bBy" firstAttribute="top" secondItem="EYl-nM-YGt" secondAttribute="bottom" constant="8" id="G3K-G5-fBd"/>
-                        <constraint firstAttribute="trailing" secondItem="EYl-nM-YGt" secondAttribute="trailing" constant="12" id="eYK-FH-BhK"/>
-                        <constraint firstItem="EYl-nM-YGt" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" constant="12" id="pLW-Mr-6MI"/>
-                        <constraint firstItem="vtM-bG-YAA" firstAttribute="top" secondItem="pJ8-H1-bBy" secondAttribute="bottom" constant="8" id="r9u-uI-W1y"/>
-                        <constraint firstItem="vtM-bG-YAA" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" constant="12" id="vPr-gg-JLi"/>
-                        <constraint firstItem="pJ8-H1-bBy" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" constant="12" id="vR5-aF-O74"/>
-                        <constraint firstItem="EYl-nM-YGt" firstAttribute="top" secondItem="E85-SF-JHs" secondAttribute="top" constant="12" id="ynS-hk-Tbd"/>
+                        <constraint firstItem="b9y-GP-JW3" firstAttribute="width" secondItem="E85-SF-JHs" secondAttribute="width" id="BE3-X3-ebL"/>
+                        <constraint firstAttribute="trailing" secondItem="wZZ-Yo-zvj" secondAttribute="trailing" id="EiQ-b3-3Pp"/>
+                        <constraint firstAttribute="bottom" secondItem="wZZ-Yo-zvj" secondAttribute="bottom" id="PqQ-Qb-WzR"/>
+                        <constraint firstItem="wZZ-Yo-zvj" firstAttribute="top" secondItem="E85-SF-JHs" secondAttribute="top" id="nlM-pW-zw7"/>
+                        <constraint firstItem="wZZ-Yo-zvj" firstAttribute="leading" secondItem="E85-SF-JHs" secondAttribute="leading" id="zK4-0J-XoN"/>
                     </constraints>
                 </view>
             </subviews>
@@ -65,6 +130,7 @@
                 <constraint firstItem="E85-SF-JHs" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ocI-h3-wA2"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="34.5" y="53.5"/>
         </view>
     </objects>
 </document>

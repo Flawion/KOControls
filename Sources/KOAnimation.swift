@@ -18,13 +18,13 @@ public struct KOAnimationSpringSettings{
     public var velocity : CGFloat = 1.0
 }
 
-public class KOViewAnimator{
+open class KOViewAnimator{
     public var duration : TimeInterval = 0.5
     public var delay : TimeInterval = 0
     public var options : UIViewAnimationOptions = []
     public var springSettings : KOAnimationSpringSettings? = nil
     
-    public func runAnimation(onView : UIView, animationBlock : (()->Void)?, completionHandler : ((Bool)->Void)?){
+    open func runAnimation(onView : UIView, animationBlock : (()->Void)?, completionHandler : ((Bool)->Void)?){
         guard let springSettings = springSettings else{
             UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
                 animationBlock?()
