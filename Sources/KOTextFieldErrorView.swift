@@ -13,7 +13,7 @@ public protocol KOTextFieldErrorInterface{
 }
 
 open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
-    //MARK: Variables
+    //MARK: - Variables
     public private(set) weak var contentView : UIView!
     
     //description variables
@@ -87,7 +87,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
         }
     }
     
-    //MARK: Functions
+    //MARK: - Functions
     public convenience init() {
         self.init(frame: CGRect.zero)
     }

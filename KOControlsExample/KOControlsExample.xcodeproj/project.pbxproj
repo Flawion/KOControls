@@ -16,6 +16,11 @@
 		053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */; };
 		053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */; };
 		053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED289211632EA0016ABC4 /* MenuItemTypes.swift */; };
+		05DC48A92124AE8E00D0E7F6 /* HeaderedScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48A72124AE8E00D0E7F6 /* HeaderedScrollViewController.swift */; };
+		05DC48AA2124AE8E00D0E7F6 /* HeaderedScrollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05DC48A82124AE8E00D0E7F6 /* HeaderedScrollViewController.xib */; };
+		05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */; };
+		05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05DC48AD2124AEBF00D0E7F6 /* PresentationQueueViewController.xib */; };
+		9F45914085E1F01861D130BF /* Pods_KOControlsExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +45,13 @@
 		053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
 		053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldsViewController.xib; sourceTree = "<group>"; };
 		053ED289211632EA0016ABC4 /* MenuItemTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemTypes.swift; sourceTree = "<group>"; };
+		05DC48A72124AE8E00D0E7F6 /* HeaderedScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderedScrollViewController.swift; sourceTree = "<group>"; };
+		05DC48A82124AE8E00D0E7F6 /* HeaderedScrollViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderedScrollViewController.xib; sourceTree = "<group>"; };
+		05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationQueueViewController.swift; sourceTree = "<group>"; };
+		05DC48AD2124AEBF00D0E7F6 /* PresentationQueueViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PresentationQueueViewController.xib; sourceTree = "<group>"; };
+		225CD39FF36CAF788AEED0CF /* Pods-KOControlsExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KOControlsExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KOControlsExample/Pods-KOControlsExample.debug.xcconfig"; sourceTree = "<group>"; };
+		38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KOControlsExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB2D0AEFF12A205491FE6B09 /* Pods-KOControlsExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KOControlsExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-KOControlsExample/Pods-KOControlsExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				053ED27C211631270016ABC4 /* KOControls.framework in Frameworks */,
+				9F45914085E1F01861D130BF /* Pods_KOControlsExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +73,7 @@
 				053ED25F21162FAB0016ABC4 /* KOControlsExample */,
 				053ED25E21162FAB0016ABC4 /* Products */,
 				053ED272211630490016ABC4 /* Frameworks */,
+				977A688CDC886985E5159D6B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				053ED2732116304A0016ABC4 /* KOControls.xcodeproj */,
+				38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -103,6 +118,8 @@
 		053ED27D211631900016ABC4 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				05DC48AB2124AE9A00D0E7F6 /* PresentationQueueViewController */,
+				05DC48A52124AE7700D0E7F6 /* HeaderedScrollViewController */,
 				053ED283211632680016ABC4 /* TextFieldsViewController */,
 				053ED27E211631990016ABC4 /* MenuViewController */,
 			);
@@ -135,6 +152,33 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		05DC48A52124AE7700D0E7F6 /* HeaderedScrollViewController */ = {
+			isa = PBXGroup;
+			children = (
+				05DC48A72124AE8E00D0E7F6 /* HeaderedScrollViewController.swift */,
+				05DC48A82124AE8E00D0E7F6 /* HeaderedScrollViewController.xib */,
+			);
+			path = HeaderedScrollViewController;
+			sourceTree = "<group>";
+		};
+		05DC48AB2124AE9A00D0E7F6 /* PresentationQueueViewController */ = {
+			isa = PBXGroup;
+			children = (
+				05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */,
+				05DC48AD2124AEBF00D0E7F6 /* PresentationQueueViewController.xib */,
+			);
+			path = PresentationQueueViewController;
+			sourceTree = "<group>";
+		};
+		977A688CDC886985E5159D6B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				225CD39FF36CAF788AEED0CF /* Pods-KOControlsExample.debug.xcconfig */,
+				AB2D0AEFF12A205491FE6B09 /* Pods-KOControlsExample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,9 +186,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 053ED26F21162FAC0016ABC4 /* Build configuration list for PBXNativeTarget "KOControlsExample" */;
 			buildPhases = (
+				10AE8525CE9C5778470C6D06 /* [CP] Check Pods Manifest.lock */,
 				053ED25921162FAB0016ABC4 /* Sources */,
 				053ED25A21162FAB0016ABC4 /* Frameworks */,
 				053ED25B21162FAB0016ABC4 /* Resources */,
+				8978A039642240129207158B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -209,23 +255,66 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */,
 				053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */,
 				053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */,
 				053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */,
 				053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */,
+				05DC48AA2124AE8E00D0E7F6 /* HeaderedScrollViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		10AE8525CE9C5778470C6D06 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KOControlsExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8978A039642240129207158B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-KOControlsExample/Pods-KOControlsExample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KOControlsExample/Pods-KOControlsExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		053ED25921162FAB0016ABC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05DC48A92124AE8E00D0E7F6 /* HeaderedScrollViewController.swift in Sources */,
 				053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */,
 				053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */,
 				053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */,
+				05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */,
 				053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,6 +449,7 @@
 		};
 		053ED27021162FAC0016ABC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 225CD39FF36CAF788AEED0CF /* Pods-KOControlsExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -378,6 +468,7 @@
 		};
 		053ED27121162FAC0016ABC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB2D0AEFF12A205491FE6B09 /* Pods-KOControlsExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

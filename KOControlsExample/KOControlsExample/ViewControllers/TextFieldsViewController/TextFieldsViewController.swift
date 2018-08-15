@@ -81,7 +81,7 @@ class TextFieldsViewController: UIViewController {
     private func initializeUserNameField(){
         //- user name field
         userNameField.borderSettings = borderSettings
-        userNameField.validateMode = .validateOnTextChanged
+        userNameField.validateMode = .manual
         userNameField.add(validator: KOFunctionTextValidator(function: {
             (password) -> Bool in
             return password.count >= 8 && password.count <= 20

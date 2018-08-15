@@ -14,7 +14,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     private let menuItemReuseIdentifier : String = "menuItemReuseIdentifier"
     private let menuItemTypes : [MenuItemTypes] = [
-        .textFields
+        .presentationQueue,
+        .textFields,
+        .headeredScroll
     ]
     
     override func viewDidLoad() {
@@ -38,8 +40,16 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let menuItemType = menuItemTypes[indexPath.row]
         switch menuItemType {
+        
+        case .presentationQueue:
+            navigationController?.pushViewController(PresentationQueueViewController(), animated: true)
+            
         case .textFields:
             navigationController?.pushViewController(TextFieldsViewController(), animated: true)
+            
+        case .headeredScroll:
+            navigationController?.pushViewController(HeaderedScrollViewController(), animated: true)
+            
         }
         menuTableView.deselectRow(at: indexPath, animated: true)
     }

@@ -12,6 +12,7 @@
 		053ED28C211638950016ABC4 /* KOTextFieldErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */; };
 		05B464032121B474005C6091 /* KOAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B464022121B474005C6091 /* KOAnimation.swift */; };
 		05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */; };
+		05DC48A42124ADEC00D0E7F6 /* KOHeaderedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48A32124ADEC00D0E7F6 /* KOHeaderedScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextFieldErrorView.swift; sourceTree = "<group>"; };
 		05B464022121B474005C6091 /* KOAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimation.swift; sourceTree = "<group>"; };
 		05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPresentationQueuesService.swift; sourceTree = "<group>"; };
+		05DC48A32124ADEC00D0E7F6 /* KOHeaderedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOHeaderedScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */,
 				053ED27A211630EE0016ABC4 /* KOTextField.swift */,
 				053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */,
+				05DC48A32124ADEC00D0E7F6 /* KOHeaderedScrollView.swift */,
 				05B464022121B474005C6091 /* KOAnimation.swift */,
 				053ED24821162C2E0016ABC4 /* KOControls.h */,
 				053ED24921162C2E0016ABC4 /* Info.plist */,
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05DC48A42124ADEC00D0E7F6 /* KOHeaderedScrollView.swift in Sources */,
 				053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */,
 				05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */,
 				05B464032121B474005C6091 /* KOAnimation.swift in Sources */,

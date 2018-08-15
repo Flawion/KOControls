@@ -9,6 +9,8 @@
 import Foundation
 
 enum MenuItemTypes : String{
+    case presentationQueue = "KOPresentationQueuesService"
     case textFields = "KOTextField"
+    case headeredScroll = "KOHeaderedScrollView"
 }
 
