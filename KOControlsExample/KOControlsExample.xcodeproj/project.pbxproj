@@ -16,8 +16,8 @@
 		053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */; };
 		053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */; };
 		053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED289211632EA0016ABC4 /* MenuItemTypes.swift */; };
-		05DC48A92124AE8E00D0E7F6 /* HeaderedScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48A72124AE8E00D0E7F6 /* HeaderedScrollViewController.swift */; };
-		05DC48AA2124AE8E00D0E7F6 /* HeaderedScrollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05DC48A82124AE8E00D0E7F6 /* HeaderedScrollViewController.xib */; };
+		05CCFDD321256BE800208BD5 /* ScrollOffsetBasedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDD121256BE800208BD5 /* ScrollOffsetBasedViewController.swift */; };
+		05CCFDD421256BE800208BD5 /* ScrollOffsetBasedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05CCFDD221256BE800208BD5 /* ScrollOffsetBasedViewController.xib */; };
 		05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */; };
 		05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05DC48AD2124AEBF00D0E7F6 /* PresentationQueueViewController.xib */; };
 		9F45914085E1F01861D130BF /* Pods_KOControlsExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */; };
@@ -45,8 +45,8 @@
 		053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
 		053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldsViewController.xib; sourceTree = "<group>"; };
 		053ED289211632EA0016ABC4 /* MenuItemTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemTypes.swift; sourceTree = "<group>"; };
-		05DC48A72124AE8E00D0E7F6 /* HeaderedScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderedScrollViewController.swift; sourceTree = "<group>"; };
-		05DC48A82124AE8E00D0E7F6 /* HeaderedScrollViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderedScrollViewController.xib; sourceTree = "<group>"; };
+		05CCFDD121256BE800208BD5 /* ScrollOffsetBasedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollOffsetBasedViewController.swift; sourceTree = "<group>"; };
+		05CCFDD221256BE800208BD5 /* ScrollOffsetBasedViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScrollOffsetBasedViewController.xib; sourceTree = "<group>"; };
 		05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationQueueViewController.swift; sourceTree = "<group>"; };
 		05DC48AD2124AEBF00D0E7F6 /* PresentationQueueViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PresentationQueueViewController.xib; sourceTree = "<group>"; };
 		225CD39FF36CAF788AEED0CF /* Pods-KOControlsExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KOControlsExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KOControlsExample/Pods-KOControlsExample.debug.xcconfig"; sourceTree = "<group>"; };
@@ -119,8 +119,8 @@
 			isa = PBXGroup;
 			children = (
 				05DC48AB2124AE9A00D0E7F6 /* PresentationQueueViewController */,
-				05DC48A52124AE7700D0E7F6 /* HeaderedScrollViewController */,
 				053ED283211632680016ABC4 /* TextFieldsViewController */,
+				05CCFDCF21256BB700208BD5 /* ScrollOffsetBasedViewController */,
 				053ED27E211631990016ABC4 /* MenuViewController */,
 			);
 			path = ViewControllers;
@@ -152,13 +152,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		05DC48A52124AE7700D0E7F6 /* HeaderedScrollViewController */ = {
+		05CCFDCF21256BB700208BD5 /* ScrollOffsetBasedViewController */ = {
 			isa = PBXGroup;
 			children = (
-				05DC48A72124AE8E00D0E7F6 /* HeaderedScrollViewController.swift */,
-				05DC48A82124AE8E00D0E7F6 /* HeaderedScrollViewController.xib */,
+				05CCFDD121256BE800208BD5 /* ScrollOffsetBasedViewController.swift */,
+				05CCFDD221256BE800208BD5 /* ScrollOffsetBasedViewController.xib */,
 			);
-			path = HeaderedScrollViewController;
+			path = ScrollOffsetBasedViewController;
 			sourceTree = "<group>";
 		};
 		05DC48AB2124AE9A00D0E7F6 /* PresentationQueueViewController */ = {
@@ -255,12 +255,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05CCFDD421256BE800208BD5 /* ScrollOffsetBasedViewController.xib in Resources */,
 				05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */,
 				053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */,
 				053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */,
 				053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */,
 				053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */,
-				05DC48AA2124AE8E00D0E7F6 /* HeaderedScrollViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,9 +310,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05DC48A92124AE8E00D0E7F6 /* HeaderedScrollViewController.swift in Sources */,
 				053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */,
 				053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */,
+				05CCFDD321256BE800208BD5 /* ScrollOffsetBasedViewController.swift in Sources */,
 				053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */,
 				05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */,
 				053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */,

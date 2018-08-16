@@ -396,7 +396,7 @@ open class KOTextField : UITextField{
     private func showErrorInfoAnimated(){
         showErrorInfo()
         koDelegate?.textFieldStartingErrorInfoHideAnimation?(self)
-        errorInfoShowAnimation?.animate(view: containerForErrorInfoView, completionHandler: nil)
+        errorInfoShowAnimation?.animate(view: containerForErrorInfoView, progress: 1.0, completionHandler: nil)
     }
     
     private func showErrorInfo(){
@@ -434,7 +434,7 @@ open class KOTextField : UITextField{
         }
         koDelegate?.textFieldStartingErrorInfoHideAnimation?(self)
         isErrorInfoHideAnimationRunning = true
-        hideErrorInfoAnimation.animate(view: containerForErrorInfoView) {
+        hideErrorInfoAnimation.animate(view: containerForErrorInfoView, progress: 1.0) {
             [weak self] _ in
             guard let sSelf = self, sSelf.isErrorInfoHideAnimationRunning else{
                 return

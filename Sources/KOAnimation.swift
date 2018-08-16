@@ -10,7 +10,7 @@ import UIKit
 
 
 public protocol KOAnimationInterface {
-    func animate(view : UIView, completionHandler : ((Bool)->Void)?)
+    func animate(view : UIView, progress : CGFloat, completionHandler : ((Bool)->Void)?)
 }
 
 public struct KOAnimationSpringSettings{
@@ -47,7 +47,7 @@ public class KOFadeAnimation : KOViewAnimator, KOAnimationInterface{
         self.fromValue = fromValue
     }
     
-    public func animate(view : UIView, completionHandler : ((Bool)->Void)? = nil){
+    public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
         if let fromValue = fromValue{
             view.alpha = fromValue
         }
@@ -56,7 +56,7 @@ public class KOFadeAnimation : KOViewAnimator, KOAnimationInterface{
             guard let sSelf = self else{
                 return
             }
-            view.alpha = sSelf.toValue
+            view.alpha = sSelf.toValue * progress
         }, completionHandler: completionHandler)
     }
 }
