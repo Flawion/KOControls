@@ -16,7 +16,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     private let menuItemTypes : [MenuItemTypes] = [
         .presentationQueueService,
         .textFields,
-        .scrollOffsetBasedView
+        .scrollOffsetProgressController
     ]
     
     override func viewDidLoad() {
@@ -47,8 +47,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         case .textFields:
             navigationController?.pushViewController(TextFieldsViewController(), animated: true)
             
-        case .scrollOffsetBasedView:
-            navigationController?.pushViewController(ScrollOffsetBasedViewController(), animated: true)
+        case .scrollOffsetProgressController:
+            navigationController?.pushViewController(ScrollOffsetProgressViewController(), animated: true)
         }
         menuTableView.deselectRow(at: indexPath, animated: true)
     }

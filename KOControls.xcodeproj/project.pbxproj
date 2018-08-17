@@ -11,7 +11,7 @@
 		053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED27A211630EE0016ABC4 /* KOTextField.swift */; };
 		053ED28C211638950016ABC4 /* KOTextFieldErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */; };
 		05B464032121B474005C6091 /* KOAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B464022121B474005C6091 /* KOAnimation.swift */; };
-		05CCFDCE21256B4F00208BD5 /* KOScrollOffsetBasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDCD21256B4E00208BD5 /* KOScrollOffsetBasedView.swift */; };
+		05CCFDCE21256B4F00208BD5 /* KOScrollOffsetProgressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */; };
 		05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,7 +22,7 @@
 		053ED27A211630EE0016ABC4 /* KOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextField.swift; sourceTree = "<group>"; };
 		053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextFieldErrorView.swift; sourceTree = "<group>"; };
 		05B464022121B474005C6091 /* KOAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimation.swift; sourceTree = "<group>"; };
-		05CCFDCD21256B4E00208BD5 /* KOScrollOffsetBasedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOScrollOffsetBasedView.swift; sourceTree = "<group>"; };
+		05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOScrollOffsetProgressController.swift; sourceTree = "<group>"; };
 		05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPresentationQueuesService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,7 +59,7 @@
 				05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */,
 				053ED27A211630EE0016ABC4 /* KOTextField.swift */,
 				053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */,
-				05CCFDCD21256B4E00208BD5 /* KOScrollOffsetBasedView.swift */,
+				05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */,
 				05B464022121B474005C6091 /* KOAnimation.swift */,
 				053ED24821162C2E0016ABC4 /* KOControls.h */,
 				053ED24921162C2E0016ABC4 /* Info.plist */,
@@ -149,7 +149,7 @@
 				053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */,
 				05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */,
 				05B464032121B474005C6091 /* KOAnimation.swift in Sources */,
-				05CCFDCE21256B4F00208BD5 /* KOScrollOffsetBasedView.swift in Sources */,
+				05CCFDCE21256B4F00208BD5 /* KOScrollOffsetProgressController.swift in Sources */,
 				053ED28C211638950016ABC4 /* KOTextFieldErrorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

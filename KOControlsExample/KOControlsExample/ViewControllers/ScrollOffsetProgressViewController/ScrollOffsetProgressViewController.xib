@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScrollOffsetBasedViewController" customModule="KOControlsExample" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScrollOffsetProgressViewController" customModule="KOControlsExample" customModuleProvider="target">
             <connections>
                 <outlet property="offsetBasedContentTopConst" destination="vxE-Md-Vpr" id="dO5-Tn-lO8"/>
-                <outlet property="scrollOffsetBasedView" destination="lSn-Du-gnb" id="HBP-9H-atQ"/>
+                <outlet property="scrollView" destination="1Bp-Lb-4wC" id="1Mh-pU-8SO"/>
                 <outlet property="userImageHeightConst" destination="2iy-nb-9a0" id="NKx-gN-Oby"/>
                 <outlet property="userImageLeftConst" destination="ldr-gT-F9w" id="KtD-i4-EhR"/>
                 <outlet property="userImageTopConst" destination="w1e-sw-aDU" id="8Kz-a7-qHH"/>
@@ -33,7 +33,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZMZ-7a-cLd">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lSn-Du-gnb" customClass="KOScrollOffsetBasedView" customModule="KOControls">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lSn-Du-gnb">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="242.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fhf-cG-Oon" userLabel="OffsetBasedContentView">
@@ -102,10 +102,6 @@
                                 <constraint firstItem="fhf-cG-Oon" firstAttribute="leading" secondItem="lSn-Du-gnb" secondAttribute="leading" id="s90-7J-eYx"/>
                                 <constraint firstAttribute="trailing" secondItem="fhf-cG-Oon" secondAttribute="trailing" id="zus-Q0-ZUX"/>
                             </constraints>
-                            <connections>
-                                <outlet property="koDelegate" destination="-1" id="0X1-yX-l8B"/>
-                                <outlet property="scrollView" destination="1Bp-Lb-4wC" id="ao6-i8-7RX"/>
-                            </connections>
                         </view>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="1Bp-Lb-4wC">
                             <rect key="frame" x="0.0" y="242.5" width="375" height="424.5"/>
@@ -115,7 +111,7 @@
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QkV-rV-NfE">
                                             <rect key="frame" x="12" y="12" width="351" height="674"/>
-                                            <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda. Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda. Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>

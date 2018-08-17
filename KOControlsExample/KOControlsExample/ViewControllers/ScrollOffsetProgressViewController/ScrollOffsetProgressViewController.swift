@@ -1,5 +1,5 @@
 //
-//  ScrollOffsetBasedViewController.swift
+//  ScrollOffsetProgressViewController.swift
 //  KOControlsExample
 //
 //  Created by Kuba Ostrowski on 16.08.2018.
@@ -9,10 +9,12 @@
 import UIKit
 import KOControls
 
-class ScrollOffsetBasedViewController: UIViewController, KOScrollOffsetBasedViewDelegate{
+class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgressControllerDelegate{
     //MARK: - Variables
+    private var scrollOffsetProgressController: KOScrollOffsetProgressController!
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var offsetBasedContentTopConst: NSLayoutConstraint!
-    @IBOutlet weak var scrollOffsetBasedView: KOScrollOffsetBasedView!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userPointsLabel: UILabel!
     
@@ -47,7 +49,7 @@ class ScrollOffsetBasedViewController: UIViewController, KOScrollOffsetBasedView
     //MARK: - Functions
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollOffsetBasedView(scrollOffsetBasedView, offsetProgress: scrollOffsetBasedView.offsetProgress)
+        scrollOffsetProgressController(scrollOffsetProgressController, offsetProgress: scrollOffsetProgressController.progress)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,10 +85,14 @@ class ScrollOffsetBasedViewController: UIViewController, KOScrollOffsetBasedView
     }
     
     private func initializeScrollOffsetBasedView(){
-        scrollOffsetBasedView.maxOffset = 150
+        scrollOffsetProgressController = KOScrollOffsetProgressController()
+        scrollOffsetProgressController.koDelegate = self
+        scrollOffsetProgressController.scrollView = scrollView
+        scrollOffsetProgressController.maxOffset = 150
+        scrollOffsetProgressController.mode = .translationOffsetBased
     }
     
-    func scrollOffsetBasedView(_: KOScrollOffsetBasedView, offsetProgress: CGFloat) {
+    func scrollOffsetProgressController(_: KOScrollOffsetProgressController, offsetProgress: CGFloat) {
         let defaultValueProgress = (1.0 - offsetProgress)
         
         let userImageMaxLeft : CGFloat = ((view.bounds.width / 2.0) - backBttWidth) - (userImageMaxSize.width / 2.0)

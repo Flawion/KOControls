@@ -11,6 +11,6 @@ import Foundation
 enum MenuItemTypes : String{
     case presentationQueueService = "KOPresentationQueuesService"
     case textFields = "KOTextField"
-    case scrollOffsetBasedView = "KOScrollOffsetBasedView"
+    case scrollOffsetProgressController = "KOScrollOffsetProgressController"
 }
 
