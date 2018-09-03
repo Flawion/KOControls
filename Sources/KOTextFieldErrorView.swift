@@ -40,7 +40,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     
     //marker line variables
     private weak var markerLineView : UIView!
-    
+
     public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
     
     open var defaultMarkerLineHeight : CGFloat{

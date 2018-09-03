@@ -16,6 +16,8 @@
 		053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */; };
 		053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */; };
 		053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED289211632EA0016ABC4 /* MenuItemTypes.swift */; };
+		05CBB2BC213D311F00EE6264 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBB2BA213D311F00EE6264 /* PickerViewController.swift */; };
+		05CBB2BD213D311F00EE6264 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05CBB2BB213D311F00EE6264 /* PickerViewController.xib */; };
 		05CCFDD321256BE800208BD5 /* ScrollOffsetProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDD121256BE800208BD5 /* ScrollOffsetProgressViewController.swift */; };
 		05CCFDD421256BE800208BD5 /* ScrollOffsetProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05CCFDD221256BE800208BD5 /* ScrollOffsetProgressViewController.xib */; };
 		05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */; };
@@ -45,6 +47,8 @@
 		053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
 		053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldsViewController.xib; sourceTree = "<group>"; };
 		053ED289211632EA0016ABC4 /* MenuItemTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemTypes.swift; sourceTree = "<group>"; };
+		05CBB2BA213D311F00EE6264 /* PickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
+		05CBB2BB213D311F00EE6264 /* PickerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PickerViewController.xib; sourceTree = "<group>"; };
 		05CCFDD121256BE800208BD5 /* ScrollOffsetProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollOffsetProgressViewController.swift; sourceTree = "<group>"; };
 		05CCFDD221256BE800208BD5 /* ScrollOffsetProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScrollOffsetProgressViewController.xib; sourceTree = "<group>"; };
 		05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationQueueViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 				05DC48AB2124AE9A00D0E7F6 /* PresentationQueueViewController */,
 				053ED283211632680016ABC4 /* TextFieldsViewController */,
 				05CCFDCF21256BB700208BD5 /* ScrollOffsetProgressViewController */,
+				05CBB2B8213D307500EE6264 /* PickerViewController */,
 				053ED27E211631990016ABC4 /* MenuViewController */,
 			);
 			path = ViewControllers;
@@ -150,6 +155,15 @@
 				053ED289211632EA0016ABC4 /* MenuItemTypes.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		05CBB2B8213D307500EE6264 /* PickerViewController */ = {
+			isa = PBXGroup;
+			children = (
+				05CBB2BA213D311F00EE6264 /* PickerViewController.swift */,
+				05CBB2BB213D311F00EE6264 /* PickerViewController.xib */,
+			);
+			path = PickerViewController;
 			sourceTree = "<group>";
 		};
 		05CCFDCF21256BB700208BD5 /* ScrollOffsetProgressViewController */ = {
@@ -260,6 +274,7 @@
 				053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */,
 				053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */,
 				053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */,
+				05CBB2BD213D311F00EE6264 /* PickerViewController.xib in Resources */,
 				053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,6 +330,7 @@
 				05CCFDD321256BE800208BD5 /* ScrollOffsetProgressViewController.swift in Sources */,
 				053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */,
 				05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */,
+				05CBB2BC213D311F00EE6264 /* PickerViewController.swift in Sources */,
 				053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

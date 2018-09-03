@@ -88,7 +88,7 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
         scrollOffsetProgressController = KOScrollOffsetProgressController()
         scrollOffsetProgressController.koDelegate = self
         scrollOffsetProgressController.scrollView = scrollView
-        scrollOffsetProgressController.maxOffset = 150
+        scrollOffsetProgressController.maxOffset = 50
         scrollOffsetProgressController.mode = .translationOffsetBased
     }
     
