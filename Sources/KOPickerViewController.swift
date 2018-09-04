@@ -18,8 +18,12 @@ open class KOPickerBarView : UIView{
     //MARK: - Variables
     private weak var containerView : UIView!
     private weak var containerForCustomView : UIView!
-    private weak var leftButtonsPanel : UIStackView!
-    private weak var rightButtonsPanel : UIStackView!
+    
+    private weak var leftContainerForView : UIView!
+    private weak var leftContainerForViewWidthConst : NSLayoutConstraint!
+    
+    private weak var rightContainerForView : UIView!
+    private weak var rightContainerForViewWidthConst : NSLayoutConstraint!
     
     //public
     public private(set) weak var titleLabel : UILabel!
@@ -29,6 +33,33 @@ open class KOPickerBarView : UIView{
             refreshCustomView()
         }
     }
+    
+    public var leftView : UIView?{
+        didSet{
+            refreshLeftView()
+        }
+    }
+    
+    public var leftViewWidth : CGFloat = 0{
+        didSet{
+            leftContainerForViewWidthConst.constant = leftViewWidth
+            layoutIfNeeded()
+        }
+    }
+    
+    public var rightView : UIView?{
+        didSet{
+            refreshRightView()
+        }
+    }
+    
+    public var rightViewWidth : CGFloat = 0{
+        didSet{
+            rightContainerForViewWidthConst.constant = rightViewWidth
+            layoutIfNeeded()
+        }
+    }
+    
     
     //MARK: - Functions
     //MARK: Initialization
@@ -69,18 +100,18 @@ open class KOPickerBarView : UIView{
         //create constraints
         //for container
         addConstraints([
-            containerView.leftAnchor.constraint(equalTo: containerForCustomView.leftAnchor),
-            containerView.topAnchor.constraint(equalTo: containerForCustomView.topAnchor),
-            containerView.rightAnchor.constraint(equalTo: containerForCustomView.rightAnchor),
-            containerView.bottomAnchor.constraint(equalTo: containerForCustomView.bottomAnchor)
+            containerView.leftAnchor.constraint(equalTo: leftAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.rightAnchor.constraint(equalTo: rightAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
             ])
         
         //for container for custom view
         addConstraints([
-            containerForCustomView.leftAnchor.constraint(equalTo: containerForCustomView.leftAnchor),
-            containerForCustomView.topAnchor.constraint(equalTo: containerForCustomView.topAnchor),
-            containerForCustomView.rightAnchor.constraint(equalTo: containerForCustomView.rightAnchor),
-            containerForCustomView.bottomAnchor.constraint(equalTo: containerForCustomView.bottomAnchor)
+            containerForCustomView.leftAnchor.constraint(equalTo: leftAnchor),
+            containerForCustomView.topAnchor.constraint(equalTo: topAnchor),
+            containerForCustomView.rightAnchor.constraint(equalTo: rightAnchor),
+            containerForCustomView.bottomAnchor.constraint(equalTo: bottomAnchor)
             ])
     }
     
@@ -91,70 +122,60 @@ open class KOPickerBarView : UIView{
         titleLabel.backgroundColor = UIColor.red
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
-        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 900), for: .horizontal)
-        //titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        addSubview(titleLabel)
+        titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 100), for: .horizontal)
+        containerView.addSubview(titleLabel)
         self.titleLabel = titleLabel
         
-        //create left buttons panel
-        let leftButtonsPanel = UIStackView()
-        //leftButtonsPanel.setContentHuggingPriority(UILayoutPriority(rawValue: 100), for: .horizontal)
-        leftButtonsPanel.axis = .horizontal
-        leftButtonsPanel.distribution = .fillProportionally
-        leftButtonsPanel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(leftButtonsPanel)
-        self.leftButtonsPanel = leftButtonsPanel
-        
-        let leftButton = UIButton(type: .system)
-        //leftButton.setContentHuggingPriority(UILayoutPriority(rawValue: 100), for: .horizontal)
-        leftButton.setTitle("left", for: .normal)
-        leftButtonsPanel.addArrangedSubview(leftButton)
-       
-        
-        let leftButton2 = UIButton(type: .system)
-       // leftButton2.setContentHuggingPriority(UILayoutPriority(rawValue: 100), for: .horizontal)
-        leftButton2.setTitle("left2", for: .normal)
-        leftButtonsPanel.addArrangedSubview(leftButton2)
-        
-        
-        //create right buttons panel
-        let rightButtonsPanel = UIStackView()
-        rightButtonsPanel.axis = .horizontal
-        rightButtonsPanel.distribution = .fillProportionally
-        rightButtonsPanel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(rightButtonsPanel)
-        self.rightButtonsPanel = rightButtonsPanel
-        
-        let rightButton = UIButton(type: .system)
-        rightButton.setTitle("right", for: .normal)
-        rightButtonsPanel.addArrangedSubview(rightButton)
-        
+        //create left container for view
+        let leftContainerForView = UIView()
+        leftContainerForView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(leftContainerForView)
+        self.leftContainerForView = leftContainerForView
+
+        //create right container for view
+        let rightContainerForView = UIView()
+        rightContainerForView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(rightContainerForView)
+        self.rightContainerForView = rightContainerForView
+
         //create constraints
-        addConstraints([
-            leftButtonsPanel.leftAnchor.constraint(equalTo: leftAnchor),
-            leftButtonsPanel.topAnchor.constraint(equalTo: topAnchor),
-            leftButtonsPanel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            leftButtonsPanel.widthAnchor.constraint(equalTo: rightButtonsPanel.widthAnchor)
-            ])
+        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: leftViewWidth)
+        leftContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
+        leftContainerForView.addConstraint(leftContainerForViewWidthConst)
+        self.leftContainerForViewWidthConst = leftContainerForViewWidthConst
+        
+        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: rightViewWidth)
+        rightContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
+        rightContainerForView.addConstraint(rightContainerForViewWidthConst)
+        self.rightContainerForViewWidthConst = rightContainerForViewWidthConst
         
         addConstraints([
-            //titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftButtonsPanel.rightAnchor),
-            //titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightButtonsPanel.leftAnchor),
-            titleLabel.leftAnchor.constraint(equalTo: leftButtonsPanel.rightAnchor),
-            titleLabel.rightAnchor.constraint(equalTo: rightButtonsPanel.leftAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-            ])
-        
-        addConstraints([
-            rightButtonsPanel.rightAnchor.constraint(equalTo: rightAnchor),
-            rightButtonsPanel.topAnchor.constraint(equalTo: topAnchor),
-            rightButtonsPanel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            leftContainerForView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            leftContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            leftContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            titleLabel.leftAnchor.constraint(equalTo: leftContainerForView.rightAnchor),
+            titleLabel.rightAnchor.constraint(equalTo: rightContainerForView.leftAnchor),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            rightContainerForView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            rightContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            rightContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             ])
     }
     
     private func refreshCustomView(){
-        
+        containerForCustomView.fill(withView: customView)
+        layoutIfNeeded()
+    }
+    
+    private func refreshLeftView(){
+        leftContainerForView.fill(withView: leftView)
+        layoutIfNeeded()
+    }
+    
+    private func refreshRightView(){
+        rightContainerForView.fill(withView: rightView)
+        layoutIfNeeded()
     }
 }
 

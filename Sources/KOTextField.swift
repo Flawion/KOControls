@@ -358,29 +358,7 @@ open class KOTextField : UITextField{
     }
     
     private func refreshCustomErrorView(){
-        guard containerForCustomErrorView.subviews.first != customErrorView else{
-            //nothing changed
-            return
-        }
-        
-        //delete old ones
-        containerForCustomErrorView.removeConstraints(containerForCustomErrorView.constraints)
-        for subview in containerForCustomErrorView.subviews{
-            subview.removeFromSuperview()
-        }
-        
-        //add new one if need
-        if let customErrorView = self.customErrorView{
-            customErrorView.translatesAutoresizingMaskIntoConstraints = false
-            containerForCustomErrorView.addSubview(customErrorView)
-            containerForCustomErrorView.addConstraints([
-                customErrorView.leftAnchor.constraint(equalTo: containerForCustomErrorView.leftAnchor),
-                customErrorView.topAnchor.constraint(equalTo: containerForCustomErrorView.topAnchor),
-                customErrorView.rightAnchor.constraint(equalTo: containerForCustomErrorView.rightAnchor),
-                customErrorView.bottomAnchor.constraint(equalTo: containerForCustomErrorView.bottomAnchor)
-                ])
-        }
-        
+        containerForCustomErrorView.fill(withView: customErrorView)
         layoutIfNeeded()
     }
     
@@ -515,28 +493,7 @@ open class KOTextField : UITextField{
             errorInfoView.isHidden = result
         }
         
-        guard containerForCustomErrorInfoView.subviews.first != customErrorInfoView else{
-            //nothing changed
-            return
-        }
-        
-        //delete old ones
-        containerForCustomErrorInfoView.removeConstraints(containerForCustomErrorInfoView.constraints)
-        for subview in containerForCustomErrorInfoView.subviews{
-            subview.removeFromSuperview()
-        }
-        
-        //add new one if need
-        if let customErrorInfoView = self.customErrorInfoView{
-            customErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
-            containerForCustomErrorInfoView.addSubview(customErrorInfoView)
-            containerForCustomErrorInfoView.addConstraints([
-                customErrorInfoView.leftAnchor.constraint(equalTo: containerForCustomErrorInfoView.leftAnchor),
-                customErrorInfoView.topAnchor.constraint(equalTo: containerForCustomErrorInfoView.topAnchor),
-                customErrorInfoView.rightAnchor.constraint(equalTo: containerForCustomErrorInfoView.rightAnchor),
-                customErrorInfoView.bottomAnchor.constraint(equalTo: containerForCustomErrorInfoView.bottomAnchor)
-                ])
-        }
+        containerForCustomErrorInfoView.fill(withView: customErrorInfoView)
         refreshCustomErrorInfoMarkerCenterXConst()
         layoutIfNeeded()
     }
