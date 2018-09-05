@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05251CBD213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */; };
 		053ED24A21162C2E0016ABC4 /* KOControls.h in Headers */ = {isa = PBXBuildFile; fileRef = 053ED24821162C2E0016ABC4 /* KOControls.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED27A211630EE0016ABC4 /* KOTextField.swift */; };
 		053ED28C211638950016ABC4 /* KOTextFieldErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOEdgesConstraintsInsets.swift; sourceTree = "<group>"; };
 		053ED24521162C2E0016ABC4 /* KOControls.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KOControls.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		053ED24821162C2E0016ABC4 /* KOControls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KOControls.h; sourceTree = "<group>"; };
 		053ED24921162C2E0016ABC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				053ED27A211630EE0016ABC4 /* KOTextField.swift */,
 				053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */,
 				05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */,
+				05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */,
 				05CBB2BE213D325F00EE6264 /* KOPickerViewController.swift */,
 				05B464022121B474005C6091 /* KOAnimation.swift */,
 				053ED24821162C2E0016ABC4 /* KOControls.h */,
@@ -153,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0566A6AA213E75D900E87518 /* UIView+Extensions.swift in Sources */,
+				05251CBD213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift in Sources */,
 				053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */,
 				05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */,
 				05B464032121B474005C6091 /* KOAnimation.swift in Sources */,

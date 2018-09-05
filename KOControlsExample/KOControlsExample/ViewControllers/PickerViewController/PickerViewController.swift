@@ -15,22 +15,19 @@ class PickerViewController: UIViewController {
         super.viewDidLoad()
 
         navigationItem.title = "KOPickerView"
+        definesPresentationContext = true
     }
     
     @IBAction func showPickerClick(_ sender: Any) {
         let datePicker = KODatePickerViewController()
-        datePicker.loadViewIfNeeded()
         datePicker.barView.titleLabel.text = "Date picker"
-        
-        let cancelBtt = UIButton(type: .system)
-        cancelBtt.setTitle("cancel", for: .normal)
-        cancelBtt.addConstraint(cancelBtt.widthAnchor.constraint(equalToConstant: 100))
-        
-        datePicker.barView.leftView = cancelBtt
-        datePicker.barView.rightViewWidth = 100
-        
-        datePicker.barView.layoutIfNeeded()
-        
+        datePicker.leftBarButtonAction = KOActionModel(title: "Cancel", action: {
+            datePicker.dismiss(animated: true, completion: nil)
+        })
+        datePicker.rightBarButtonAction = KOActionModel(title: "Done", action: {
+            datePicker.dismiss(animated: true, completion: nil)
+        })
+
         present(datePicker, animated: true, completion: nil)
     }
 }

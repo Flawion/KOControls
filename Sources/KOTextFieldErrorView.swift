@@ -18,9 +18,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     
     //description variables
     public private(set) weak var descriptionLabel : UILabel!
-    public private(set) weak var descriptionRightConst : NSLayoutConstraint!
-    public private(set) weak var descriptionTopConst : NSLayoutConstraint!
-    public private(set) weak var descriptionBottomConst : NSLayoutConstraint!
+    public private(set) weak var descriptionLabelEdgesConstraintsInsets : KOEdgesConstraintsInsets!
     
     open var defaultDescriptionInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
@@ -28,11 +26,8 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     
     //image variables
     public private(set) weak var imageView : UIImageView!
-    public private(set) weak var imageLeftConst : NSLayoutConstraint!
-    public private(set) weak var imageRightToDescriptionLeftConst : NSLayoutConstraint!
-    public private(set) weak var imageTopConst : NSLayoutConstraint!
-    public private(set) weak var imageBottomConst : NSLayoutConstraint!
     public private(set) weak var imageWidthConst : NSLayoutConstraint!
+    public private(set) var imageViewEdgesConstraintsInsets : KOEdgesConstraintsInsets!
     
     open var defaultImageInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
@@ -52,14 +47,16 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     private weak var markerShapeLayer : CAShapeLayer!
     private weak var markerWidthConst : NSLayoutConstraint!
     private weak var markerHeightConst : NSLayoutConstraint!
-    private weak var markerLeftConst : NSLayoutConstraint!
-    private weak var markerRightConst : NSLayoutConstraint!
+    
+    //public
+    public private(set) var markerMinHorizontalConstraintsInsets : KOHorizontalConstraintsInsets!
     
     public var markerWidth : CGFloat = 12 {
         didSet{
             recreateMarkerShape()
         }
     }
+    
     public var markerHeight : CGFloat = 9 {
         didSet{
             recreateMarkerShape()
@@ -73,18 +70,8 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
         }
     }
     
-    public var markerMinLeftMargin : CGFloat = 4{
-        didSet{
-            markerLeftConst.constant = markerMinLeftMargin
-            layoutIfNeeded()
-        }
-    }
-    
-    public var markerMinRightMargin : CGFloat = 4{
-        didSet{
-            markerRightConst.constant = -markerMinRightMargin
-            layoutIfNeeded()
-        }
+    open var defaultMarkerMinHorizontalInsets : CGFloat{
+        return 4
     }
     
     //MARK: - Functions
@@ -155,16 +142,15 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
         self.markerHeightConst = markerHeightConst
         recreateMarkerShape()
         
-        let markerLeftConst = markerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: markerMinLeftMargin)
-        let markerRightConst = markerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -markerMinRightMargin)
+        let markerLeftConst = markerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: defaultMarkerMinHorizontalInsets)
+        let markerRightConst = markerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -defaultMarkerMinHorizontalInsets)
         addConstraints([
             markerRightConst,
             markerLeftConst,
             markerView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
             markerView.topAnchor.constraint(equalTo: topAnchor)
             ])
-        self.markerLeftConst = markerLeftConst
-        self.markerRightConst = markerRightConst
+        markerMinHorizontalConstraintsInsets = KOHorizontalConstraintsInsets(leftConst: markerLeftConst, rightConst: markerRightConst)
         
         //for marker line
         let markerLineHeightConst = markerLineView.heightAnchor.constraint(equalToConstant: defaultMarkerLineHeight)
@@ -189,10 +175,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
             imageBottomConst,
             imageWidthConst
             ])
-        self.imageLeftConst = imageLeftConst
-        self.imageRightToDescriptionLeftConst = imageRightToDescriptionLeftConst
-        self.imageTopConst = imageTopConst
-        self.imageBottomConst = imageBottomConst
+        imageViewEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageLeftConst, rightConst: imageRightToDescriptionLeftConst), vertical: KOVerticalConstraintsInsets(topConst: imageTopConst, bottomConst: imageBottomConst))
 
         //for description
         let descriptionRightConst = descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -defaultDescriptionInsets.right)
@@ -203,9 +186,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
             descriptionTopConst,
             descriptionBottomConst
             ])
-        self.descriptionRightConst = descriptionRightConst
-        self.descriptionTopConst = descriptionTopConst
-        self.descriptionBottomConst = descriptionBottomConst
+        descriptionLabelEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageRightToDescriptionLeftConst, rightConst: descriptionRightConst, leftMultipler: -1.0), vertical: KOVerticalConstraintsInsets(topConst: descriptionTopConst, bottomConst: descriptionBottomConst))
     }
     
     private func initializeAppearance(){

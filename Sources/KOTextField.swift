@@ -154,7 +154,7 @@ open class KOTextField : UITextField{
     
     //public
     public private(set) weak var errorInfoView : KOTextFieldErrorView!
-    public weak var showErrorInfoInView : UIView?
+    public weak var showErrorInfoInView : UIView? //default will be a superview
     public var showErrorInfoMode : KOTextFieldShowErrorInfoModes = .onFocus{
         didSet{
             refreshShowErrorInfoMode()
@@ -226,6 +226,7 @@ open class KOTextField : UITextField{
         
         //container for custom error view
         let containerForCustomErrorView = UIView()
+        containerForCustomErrorView.isHidden = true
         containerForCustomErrorView.backgroundColor = UIColor.clear
         containerForCustomErrorView.translatesAutoresizingMaskIntoConstraints = false
         errorView.addSubview(containerForCustomErrorView)
@@ -358,6 +359,7 @@ open class KOTextField : UITextField{
     }
     
     private func refreshCustomErrorView(){
+        containerForCustomErrorView.isHidden = customErrorView == nil
         containerForCustomErrorView.fill(withView: customErrorView)
         layoutIfNeeded()
     }

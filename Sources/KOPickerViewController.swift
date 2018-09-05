@@ -8,6 +8,16 @@
 
 import UIKit
 
+public class KOActionModel{
+    public let title : String
+    public let action : ()->Void
+    
+    public init(title : String, action : @escaping ()->Void) {
+        self.title = title
+        self.action = action
+    }
+}
+
 public enum KOPickerBarModes {
     case top
     case bottom
@@ -19,12 +29,6 @@ open class KOPickerBarView : UIView{
     private weak var containerView : UIView!
     private weak var containerForCustomView : UIView!
     
-    private weak var leftContainerForView : UIView!
-    private weak var leftContainerForViewWidthConst : NSLayoutConstraint!
-    
-    private weak var rightContainerForView : UIView!
-    private weak var rightContainerForViewWidthConst : NSLayoutConstraint!
-    
     //public
     public private(set) weak var titleLabel : UILabel!
 
@@ -34,28 +38,42 @@ open class KOPickerBarView : UIView{
         }
     }
     
+    //MARK: Left view
+    private weak var leftContainerForView : UIView!
+    private weak var leftContainerForViewWidthConst : NSLayoutConstraint!
+    
+    //public
     public var leftView : UIView?{
         didSet{
             refreshLeftView()
         }
     }
     
-    public var leftViewWidth : CGFloat = 0{
+    public var leftViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
+    
+    public var defaultLeftViewWidth : CGFloat = 0{
         didSet{
-            leftContainerForViewWidthConst.constant = leftViewWidth
+            leftContainerForViewWidthConst.constant = defaultLeftViewWidth
             layoutIfNeeded()
         }
     }
     
+    //MARK: Right view
+    private weak var rightContainerForView : UIView!
+    private weak var rightContainerForViewWidthConst : NSLayoutConstraint!
+    
+    //public
     public var rightView : UIView?{
         didSet{
             refreshRightView()
         }
     }
     
-    public var rightViewWidth : CGFloat = 0{
+    public var rightViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
+    
+    public var defaultRightViewWidth : CGFloat = 0{
         didSet{
-            rightContainerForViewWidthConst.constant = rightViewWidth
+            rightContainerForViewWidthConst.constant = defaultRightViewWidth
             layoutIfNeeded()
         }
     }
@@ -86,12 +104,14 @@ open class KOPickerBarView : UIView{
         //create views
         //create container view
         let containerView = UIView()
+        containerView.backgroundColor = UIColor.clear
         containerView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(containerView)
         self.containerView = containerView
         
         //create container for custom View
         let containerForCustomView = UIView()
+        containerForCustomView.isHidden = true
         containerForCustomView.backgroundColor = UIColor.clear
         containerForCustomView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(containerForCustomView)
@@ -119,7 +139,6 @@ open class KOPickerBarView : UIView{
         //create views
         //create title
         let titleLabel = UILabel()
-        titleLabel.backgroundColor = UIColor.red
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
         titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 100), for: .horizontal)
@@ -139,35 +158,52 @@ open class KOPickerBarView : UIView{
         self.rightContainerForView = rightContainerForView
 
         //create constraints
-        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: leftViewWidth)
+        //for left view
+        let leftContainerForViewLeftConst = leftContainerForView.leftAnchor.constraint(equalTo: containerView.leftAnchor)
+        let leftContainerForViewTopConst = leftContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let leftContainerForViewRightConst = leftContainerForView.rightAnchor.constraint(equalTo: titleLabel.leftAnchor)
+        let leftContainerForViewBottomtConst = leftContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        leftViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewLeftConst, rightConst: leftContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: leftContainerForViewTopConst, bottomConst: leftContainerForViewBottomtConst))
+        
+        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: defaultLeftViewWidth)
         leftContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
         leftContainerForView.addConstraint(leftContainerForViewWidthConst)
         self.leftContainerForViewWidthConst = leftContainerForViewWidthConst
         
-        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: rightViewWidth)
+        //for right view
+        let rightContainerForViewLeftConst = rightContainerForView.leftAnchor.constraint(equalTo: titleLabel.rightAnchor)
+        let rightContainerForViewTopConst = rightContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let rightContainerForViewRightConst = rightContainerForView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
+        let rightContainerForViewBottomConst = rightContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        rightViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: rightContainerForViewLeftConst, rightConst: rightContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: rightContainerForViewTopConst, bottomConst: rightContainerForViewBottomConst))
+        
+        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: defaultRightViewWidth)
         rightContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
         rightContainerForView.addConstraint(rightContainerForViewWidthConst)
         self.rightContainerForViewWidthConst = rightContainerForViewWidthConst
         
         addConstraints([
-            leftContainerForView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            leftContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            leftContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            titleLabel.leftAnchor.constraint(equalTo: leftContainerForView.rightAnchor),
-            titleLabel.rightAnchor.constraint(equalTo: rightContainerForView.leftAnchor),
+            leftContainerForViewLeftConst,
+            leftContainerForViewTopConst,
+            leftContainerForViewRightConst,
+            leftContainerForViewBottomtConst,
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            rightContainerForView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            rightContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            rightContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            rightContainerForViewLeftConst,
+            rightContainerForViewTopConst,
+            rightContainerForViewRightConst,
+            rightContainerForViewBottomConst
             ])
     }
     
     private func refreshCustomView(){
+        containerForCustomView.isHidden = customView == nil
         containerForCustomView.fill(withView: customView)
         layoutIfNeeded()
     }
     
+    
+    //MARK: Left/Right views
     private func refreshLeftView(){
         leftContainerForView.fill(withView: leftView)
         layoutIfNeeded()
@@ -182,23 +218,47 @@ open class KOPickerBarView : UIView{
 open class KOPickerViewController : UIViewController{
     //MARK: - Variables
     private var allConstraints : [NSLayoutConstraint] = []
-    private weak var contentTopConst : NSLayoutConstraint!
-    private weak var contentLeftConst : NSLayoutConstraint!
-    private weak var contentRightConst : NSLayoutConstraint!
-    private weak var contentBottomConst : NSLayoutConstraint!
+    
+    //MARK: Content view
+    private var pContentView : UIView!
     
     //public
-    public private(set) var barView : KOPickerBarView!
-    public private(set) weak var contentView : UIView!
+    public weak var contentView : UIView!{
+        loadViewIfNeeded()
+        return pContentView
+    }
     
+    public var contentEdgesConstraintsInsets : KOEdgesConstraintsInsets!
+    
+    open var defaultContentInsets : UIEdgeInsets{
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    //MARK: Bar view
+    private var pBarView : KOPickerBarView!
+    
+    //public
+    public var barView : KOPickerBarView!{
+        loadViewIfNeeded()
+        return pBarView
+    }
+
     public var barMode : KOPickerBarModes = .top{
         didSet{
             refreshBarMode()
         }
     }
     
-    open var defaultContentInsets : UIEdgeInsets{
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    public var leftBarButtonAction : KOActionModel?{
+        didSet{
+            refreshLeftBarButtonAction()
+        }
+    }
+    
+    public var rightBarButtonAction : KOActionModel?{
+        didSet{
+            refreshRightBarButtonAction()
+        }
     }
     
     //MARK: - Functions
@@ -218,14 +278,14 @@ open class KOPickerViewController : UIViewController{
     private func initializeBar(){
         let barView = KOPickerBarView()
         barView.translatesAutoresizingMaskIntoConstraints = false
-        self.barView = barView
+        self.pBarView = barView
     }
     
     private func initializeContentView(){
         let contentView = createContentView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contentView)
-        self.contentView = contentView
+        self.pContentView = contentView
     }
     
     private func initializeAppearance(){
@@ -233,6 +293,10 @@ open class KOPickerViewController : UIViewController{
     }
     
     private func refreshBarMode(){
+        guard isViewLoaded else{
+            return
+        }
+        
         //delete old constraints
         if allConstraints.count > 0{
             view.removeConstraints(allConstraints)
@@ -241,47 +305,73 @@ open class KOPickerViewController : UIViewController{
         
         //create new one
         let defaultContentInsets = self.defaultContentInsets
-        let contentLeftConst : NSLayoutConstraint = contentView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: defaultContentInsets.left)
-        let contentRightConst: NSLayoutConstraint = contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -defaultContentInsets.right)
+        let contentLeftConst : NSLayoutConstraint = pContentView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: defaultContentInsets.left)
+        let contentRightConst: NSLayoutConstraint = pContentView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -defaultContentInsets.right)
         var contentTopConst : NSLayoutConstraint!
         var contentBottomConst : NSLayoutConstraint!
        
         //add or remove bar view
         if barMode != .hidden{
-            if barView.superview != view{
-                barView.removeFromSuperview()
+            if pBarView.superview != view{
+                pBarView.removeFromSuperview()
                 view.addSubview(barView)
             }
         }else{
-            barView.removeFromSuperview()
+            pBarView.removeFromSuperview()
         }
         
         //create bar constraints
         switch barMode {
         case .top:
-            contentTopConst = contentView.topAnchor.constraint(equalTo: barView.bottomAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = contentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [barView.leftAnchor.constraint(equalTo: view.leftAnchor), barView.rightAnchor.constraint(equalTo: view.rightAnchor), barView.topAnchor.constraint(equalTo: view.topAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
+            contentTopConst = pContentView.topAnchor.constraint(equalTo: pBarView.bottomAnchor, constant: defaultContentInsets.top)
+            contentBottomConst = pContentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -defaultContentInsets.bottom)
+            allConstraints = [pBarView.leftAnchor.constraint(equalTo: view.leftAnchor), pBarView.rightAnchor.constraint(equalTo: view.rightAnchor), pBarView.topAnchor.constraint(equalTo: view.topAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
             view.addConstraints(allConstraints)
        
             
         case .bottom:
-            contentTopConst = contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = contentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [barView.leftAnchor.constraint(equalTo: view.leftAnchor), barView.rightAnchor.constraint(equalTo: view.rightAnchor), barView.bottomAnchor.constraint(equalTo: view.bottomAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
+            contentTopConst = pContentView.topAnchor.constraint(equalTo: view.topAnchor, constant: defaultContentInsets.top)
+            contentBottomConst = pContentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -defaultContentInsets.bottom)
+            allConstraints = [pBarView.leftAnchor.constraint(equalTo: view.leftAnchor), pBarView.rightAnchor.constraint(equalTo: view.rightAnchor), pBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
             view.addConstraints(allConstraints)
             
         case .hidden:
-            contentTopConst = contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = contentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -defaultContentInsets.bottom)
+            contentTopConst = pContentView.topAnchor.constraint(equalTo: view.topAnchor, constant: defaultContentInsets.top)
+            contentBottomConst = pContentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -defaultContentInsets.bottom)
             allConstraints = [contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
             view.addConstraints(allConstraints)
         }
-        
-        self.contentLeftConst = contentLeftConst
-        self.contentTopConst = contentTopConst
-        self.contentRightConst = contentRightConst
-        self.contentBottomConst = contentBottomConst
+        contentEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: contentLeftConst, rightConst: contentRightConst), vertical: KOVerticalConstraintsInsets(topConst: contentTopConst, bottomConst: contentBottomConst))
+    }
+    
+    private func refreshLeftBarButtonAction(){
+        guard let leftBarButtonAction = leftBarButtonAction else{
+            barView.leftView = nil
+            return
+        }
+        let leftBarButton = UIButton(type: .system)
+        leftBarButton.setTitle(leftBarButtonAction.title, for: .normal)
+        leftBarButton.addTarget(self, action: #selector(leftBarButtonClick), for: .touchUpInside)
+        barView.leftView = leftBarButton
+    }
+    
+    private func refreshRightBarButtonAction(){
+        guard let rightBarButtonAction = rightBarButtonAction else{
+            barView.rightView = nil
+            return
+        }
+        let rightBarButton = UIButton(type: .system)
+        rightBarButton.setTitle(rightBarButtonAction.title, for: .normal)
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonClick), for: .touchUpInside)
+        barView.rightView = rightBarButton
+    }
+    
+    @objc private func leftBarButtonClick(){
+        leftBarButtonAction?.action()
+    }
+    
+    @objc private func rightBarButtonClick(){
+        rightBarButtonAction?.action()
     }
     
     open func createContentView()->UIView{
