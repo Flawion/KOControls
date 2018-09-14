@@ -8,13 +8,23 @@
 
 import UIKit
 
-public class KOActionModel{
+public class KOActionModel<Parameter> : NSObject{
     public let title : String
-    public let action : ()->Void
+    public let action : (Parameter)->Void
     
-    public init(title : String, action : @escaping ()->Void) {
+    public init(title : String, action : @escaping (Parameter)->Void) {
         self.title = title
         self.action = action
+        super.init()
+    }
+}
+
+public class KODialogViewControllerActionModel : KOActionModel<KODialogViewController>{
+    public static var cancelAction : KODialogViewControllerActionModel{
+        return KODialogViewControllerActionModel(title: "Cancel", action: {
+            (dialog) in
+            dialog.dismiss(animated: true, completion: nil)
+        })
     }
 }
 
@@ -24,9 +34,18 @@ public enum KODialogBarModes {
     case hidden
 }
 
+@objc public protocol KODialogViewControllerDelegate : NSObjectProtocol{
+    //user is responsible for set a title on the button, after implemented one of these methods
+    @objc optional func dialogViewControllerCreateLeftButton(_ dialogViewController : KODialogViewController)->UIButton
+    @objc optional func dialogViewControllerCreateRightButton(_ dialogViewController : KODialogViewController)->UIButton
+}
+
 open class KODialogViewController : UIViewController{
     //MARK: - Variables
     private var allConstraints : [NSLayoutConstraint] = []
+    
+    //public
+     @IBOutlet public weak var koDelegate : KODialogViewControllerDelegate?
     
     //MARK: Main view
     private weak var pMainView : UIView!
@@ -73,6 +92,18 @@ open class KODialogViewController : UIViewController{
         return .fill
     }
     
+    //MARK: Background visual effect view
+    private var backgroundVisualEffectConsts : [NSLayoutConstraint] = []
+    
+    //public
+    public private(set) weak var backgroundVisualEffectView : UIVisualEffectView?
+    
+    public var backgroundVisualEffect : UIVisualEffect?{
+        didSet{
+            refreshBackgroundVisualEffect()
+        }
+    }
+    
     //MARK: Content view
     private var pContentView : UIView!
     
@@ -103,13 +134,13 @@ open class KODialogViewController : UIViewController{
         }
     }
     
-    public var leftBarButtonAction : KOActionModel?{
+    public var leftBarButtonAction : KODialogViewControllerActionModel?{
         didSet{
             refreshLeftBarButtonAction()
         }
     }
     
-    public var rightBarButtonAction : KOActionModel?{
+    public var rightBarButtonAction : KODialogViewControllerActionModel?{
         didSet{
             refreshRightBarButtonAction()
         }
@@ -133,6 +164,7 @@ open class KODialogViewController : UIViewController{
         initializeContentView()
         initializeAppearance()
         refreshBarMode()
+        refreshBackgroundVisualEffect()
     }
     
     private func initializeView(){
@@ -272,6 +304,39 @@ open class KODialogViewController : UIViewController{
         mainViewEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: mainViewHorizontalConstraintsInsets, vertical: mainViewVerticalConstraintsInsets)
     }
     
+    private func refreshBackgroundVisualEffect(){
+        guard isViewLoaded else{
+            return
+        }
+        
+        guard let backgroundVisualEffect = backgroundVisualEffect else{
+            //remove visual effect view if need
+            if let backgroundVisualEffectView = self.backgroundVisualEffectView{
+                backgroundVisualEffectView.removeFromSuperview()
+                pMainView.removeConstraints(backgroundVisualEffectConsts)
+                backgroundVisualEffectConsts = []
+                pMainView.backgroundColor = UIColor.white
+            }
+            return
+        }
+        
+        //create visual effect
+        let backgroundVisualEffectView = UIVisualEffectView(effect: backgroundVisualEffect)
+        backgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+        pMainView.insertSubview(backgroundVisualEffectView, belowSubview: pContentView)
+        self.backgroundVisualEffectView = backgroundVisualEffectView
+        
+        //create constraints
+        backgroundVisualEffectConsts = [
+            backgroundVisualEffectView.leftAnchor.constraint(equalTo: pMainView.leftAnchor),
+            backgroundVisualEffectView.topAnchor.constraint(equalTo: pMainView.topAnchor),
+            backgroundVisualEffectView.rightAnchor.constraint(equalTo: pMainView.rightAnchor),
+            backgroundVisualEffectView.bottomAnchor.constraint(equalTo: pMainView.bottomAnchor)
+        ]
+        pMainView.addConstraints(backgroundVisualEffectConsts)
+        pMainView.backgroundColor = UIColor.clear
+    }
+    
     //MARK: Bar view and buttons
     private func refreshBarMode(){
         guard isViewLoaded else{
@@ -330,8 +395,13 @@ open class KODialogViewController : UIViewController{
             barView.leftView = nil
             return
         }
-        let leftBarButton = UIButton(type: .system)
-        leftBarButton.setTitle(leftBarButtonAction.title, for: .normal)
+        
+        var leftBarButton : UIButton! = koDelegate?.dialogViewControllerCreateLeftButton?(self)
+        if leftBarButton == nil{
+            leftBarButton = UIButton(type: .system)
+            leftBarButton.setTitle(leftBarButtonAction.title, for: .normal)
+        }
+        
         leftBarButton.addTarget(self, action: #selector(leftBarButtonClick), for: .touchUpInside)
         barView.leftView = leftBarButton
         barView.leftViewEdgesConstraintsInset.insets = defaultBarButtonInsets
@@ -342,19 +412,24 @@ open class KODialogViewController : UIViewController{
             barView.rightView = nil
             return
         }
-        let rightBarButton = UIButton(type: .system)
-        rightBarButton.setTitle(rightBarButtonAction.title, for: .normal)
+        
+        var rightBarButton : UIButton! = koDelegate?.dialogViewControllerCreateRightButton?(self)
+        if rightBarButton == nil{
+            rightBarButton = UIButton(type: .system)
+            rightBarButton.setTitle(rightBarButtonAction.title, for: .normal)
+        }
+        
         rightBarButton.addTarget(self, action: #selector(rightBarButtonClick), for: .touchUpInside)
         barView.rightView = rightBarButton
         barView.rightViewEdgesConstraintsInset.insets = defaultBarButtonInsets
     }
     
     @objc private func leftBarButtonClick(){
-        leftBarButtonAction?.action()
+        leftBarButtonAction?.action(self)
     }
     
     @objc private func rightBarButtonClick(){
-        rightBarButtonAction?.action()
+        rightBarButtonAction?.action(self)
     }
     
     @objc private func dismissOnTapRecognizerTap(){

@@ -12,7 +12,10 @@ public class KODimmingPresentationController : UIPresentationController {
     //MARK: Variables
     private var dimmingView : UIView!
     
-    //open
+    //public
+    public var dimmingShowAnimation : KOAnimationAlongsideTransitionInterface? = KOFadeInAnimation(fromValue: 0)
+    public var dimmingHideAnimation : KOAnimationAlongsideTransitionInterface? = KOFadeOutAnimation()
+
     public var setupDimmingViewEvent : ((UIView)->Void)? = nil
     public var dimmingViewTapEvent : (()->Void)? = nil
     
@@ -44,25 +47,11 @@ public class KODimmingPresentationController : UIPresentationController {
             dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             ])
         
-        guard let coordinator = presentedViewController.transitionCoordinator else {
-            dimmingView.alpha = 1.0
-            return
-        }
-        
-        coordinator.animate(alongsideTransition: { _ in
-            self.dimmingView.alpha = 1.0
-        })
+        dimmingShowAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
     }
     
     override public func dismissalTransitionWillBegin() {
-        guard let coordinator = presentedViewController.transitionCoordinator else {
-            dimmingView.alpha = 0.0
-            return
-        }
-        
-        coordinator.animate(alongsideTransition: { _ in
-            self.dimmingView.alpha = 0.0
-        })
+        dimmingHideAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
     }
     
     @objc private func dimmingViewTap(){

@@ -21,17 +21,16 @@ class PickerViewController: UIViewController {
     @IBAction func showPickerClick(_ sender: Any) {
         let datePicker = KODatePickerViewController()
         datePicker.barView.titleLabel.text = "Date picker "
-        datePicker.leftBarButtonAction = KOActionModel(title: "Cancel", action: {
-            datePicker.dismiss(animated: true, completion: nil)
-        })
-        //datePicker.barView.isTitleLabelCentered = false
-        //datePicker.barView.titleLabel.textAlignment = .left
+        datePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction
         
+        /*
+        datePicker.backgroundVisualEffect = UIBlurEffect(style: .extraLight)
+        datePicker.mainView.layer.cornerRadius = 12
+        datePicker.mainView.clipsToBounds = true
         
-       /* datePicker.rightBarButtonAction = KOActionModel(title: "Done", action: {
+        datePicker.rightBarButtonAction = KOActionModel(title: "Done", action: {
             datePicker.dismiss(animated: true, completion: nil)
         })*/
-        datePicker.view.layoutIfNeeded()
         present(datePicker, animated: true, completion: nil)
     }
 }

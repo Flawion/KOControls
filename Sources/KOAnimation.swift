@@ -8,17 +8,21 @@
 
 import UIKit
 
-
 public protocol KOAnimationInterface {
-    func animate(view : UIView, progress : CGFloat, completionHandler : ((Bool)->Void)?)
+    func animate(view : UIView,  progress : CGFloat, completionHandler : ((Bool)->Void)?)
 }
 
+public protocol KOAnimationAlongsideTransitionInterface {
+    func animateAlongsideTransition(view : UIView, coordinator : UIViewControllerTransitionCoordinator?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?)
+}
+
+//MARK: - Animator
 public struct KOAnimationSpringSettings{
     public var damping : CGFloat = 1.0
     public var velocity : CGFloat = 1.0
 }
 
-open class KOViewAnimator{
+open class KOViewAnimator {
     public var duration : TimeInterval = 0.5
     public var delay : TimeInterval = 0
     public var options : UIViewAnimationOptions = []
@@ -36,9 +40,22 @@ open class KOViewAnimator{
             animationBlock?()
         }, completion: completionHandler)
     }
+    
+    open func runAnimationAlongsideTransition(onView : UIView, coordinator : UIViewControllerTransitionCoordinator?, animationBlock : ((UIViewControllerTransitionCoordinatorContext?)->Void)?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?){
+        guard let coordinator = coordinator else{
+            animationBlock?(nil)
+            completionHandler?(nil)
+            return
+        }
+        
+        coordinator.animate(alongsideTransition: { (coordinatorContext) in
+            animationBlock?(coordinatorContext)
+        }, completion: completionHandler)
+    }
 }
 
-public class KOFadeAnimation : KOViewAnimator, KOAnimationInterface{
+//MARK: - Animations
+public class KOFadeAnimation : KOViewAnimator, KOAnimationInterface, KOAnimationAlongsideTransitionInterface{
     public var toValue : CGFloat
     public var fromValue : CGFloat?
     
@@ -47,16 +64,31 @@ public class KOFadeAnimation : KOViewAnimator, KOAnimationInterface{
         self.fromValue = fromValue
     }
     
-    public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
+    private func setStartingValue(ofView view: UIView){
         if let fromValue = fromValue{
             view.alpha = fromValue
         }
+    }
+    
+    public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
+        setStartingValue(ofView: view)
         runAnimation(onView: view, animationBlock: {
             [weak self] in
             guard let sSelf = self else{
                 return
             }
             view.alpha = sSelf.toValue * progress
+        }, completionHandler: completionHandler)
+    }
+    
+    public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
+        setStartingValue(ofView: view)
+        runAnimationAlongsideTransition(onView: view, coordinator: coordinator, animationBlock: {
+            [weak self] _ in
+            guard let sSelf = self else{
+                return
+            }
+            view.alpha = sSelf.toValue
         }, completionHandler: completionHandler)
     }
 }
