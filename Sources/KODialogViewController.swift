@@ -20,9 +20,17 @@ public class KOActionModel<Parameter> : NSObject{
 }
 
 public class KODialogViewControllerActionModel : KOActionModel<KODialogViewController>{
-    public static var cancelAction : KODialogViewControllerActionModel{
-        return KODialogViewControllerActionModel(title: "Cancel", action: {
+    public static func cancelAction(withTitle title: String = "Cancel")->KODialogViewControllerActionModel{
+        return KODialogViewControllerActionModel(title: title, action: {
             (dialog) in
+            dialog.dismiss(animated: true, completion: nil)
+        })
+    }
+    
+    public static func doneAction<controllerType : KODialogViewController>(withTitle title: String = "Done", action : @escaping (controllerType)->Void)->KODialogViewControllerActionModel{
+        return KODialogViewControllerActionModel(title: title, action: {
+            (dialog) in
+            action(dialog as! controllerType)
             dialog.dismiss(animated: true, completion: nil)
         })
     }
@@ -38,6 +46,12 @@ public enum KODialogBarModes {
     //user is responsible for set a title on the button, after implemented one of these methods
     @objc optional func dialogViewControllerCreateLeftButton(_ dialogViewController : KODialogViewController)->UIButton
     @objc optional func dialogViewControllerCreateRightButton(_ dialogViewController : KODialogViewController)->UIButton
+    
+    @objc optional func dialogViewControllerLeftButtonClicked(_ dialogViewController : KODialogViewController)
+    @objc optional func dialogViewControllerRightButtonClicked(_ dialogViewController : KODialogViewController)
+    
+    @objc optional func dialogViewControllerInitialized(_ dialogViewController : KODialogViewController)
+    @objc optional func dialogViewControllerDone(_ dialogViewController : KODialogViewController)
 }
 
 open class KODialogViewController : UIViewController{
@@ -45,7 +59,7 @@ open class KODialogViewController : UIViewController{
     private var allConstraints : [NSLayoutConstraint] = []
     
     //public
-     @IBOutlet public weak var koDelegate : KODialogViewControllerDelegate?
+    @IBOutlet public weak var delegate : KODialogViewControllerDelegate?
     
     //MARK: Main view
     private weak var pMainView : UIView!
@@ -145,7 +159,7 @@ open class KODialogViewController : UIViewController{
             refreshRightBarButtonAction()
         }
     }
-  
+    
     open var defaultBarButtonInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     }
@@ -165,6 +179,8 @@ open class KODialogViewController : UIViewController{
         initializeAppearance()
         refreshBarMode()
         refreshBackgroundVisualEffect()
+        
+        delegate?.dialogViewControllerInitialized?(self)
     }
     
     private func initializeView(){
@@ -396,7 +412,7 @@ open class KODialogViewController : UIViewController{
             return
         }
         
-        var leftBarButton : UIButton! = koDelegate?.dialogViewControllerCreateLeftButton?(self)
+        var leftBarButton : UIButton! = delegate?.dialogViewControllerCreateLeftButton?(self)
         if leftBarButton == nil{
             leftBarButton = UIButton(type: .system)
             leftBarButton.setTitle(leftBarButtonAction.title, for: .normal)
@@ -413,7 +429,7 @@ open class KODialogViewController : UIViewController{
             return
         }
         
-        var rightBarButton : UIButton! = koDelegate?.dialogViewControllerCreateRightButton?(self)
+        var rightBarButton : UIButton! = delegate?.dialogViewControllerCreateRightButton?(self)
         if rightBarButton == nil{
             rightBarButton = UIButton(type: .system)
             rightBarButton.setTitle(rightBarButtonAction.title, for: .normal)
@@ -426,10 +442,12 @@ open class KODialogViewController : UIViewController{
     
     @objc private func leftBarButtonClick(){
         leftBarButtonAction?.action(self)
+        delegate?.dialogViewControllerLeftButtonClicked?(self)
     }
     
     @objc private func rightBarButtonClick(){
         rightBarButtonAction?.action(self)
+        delegate?.dialogViewControllerRightButtonClicked?(self)
     }
     
     @objc private func dismissOnTapRecognizerTap(){

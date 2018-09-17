@@ -22,16 +22,14 @@ class TextFieldsViewController: UIViewController {
     @IBOutlet weak var userNameShowHideErrorBtt: UIButton!
     
     private let borderSettings = KOTextFieldBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
-    private let errorIcon =  UIImage(named: "field_error")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = "KOTextField"
         initialize()
     }
     
     private func initialize(){
+        navigationItem.title = "KOTextField"
         initializeEmailField()
         initializePasswordField()
         initializeUserNameField()
@@ -42,11 +40,6 @@ class TextFieldsViewController: UIViewController {
         emailField.borderSettings = borderSettings
         emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
         emailField.add(validator: KORegexTextValidator.mailValidator)
-        
-        //setting error view
-        emailField.errorIconView.image = errorIcon
-        emailField.errorIconView.contentMode = .center
-        emailField.errorWidth = 32
     }
     
     private func initializePasswordField(){
@@ -86,11 +79,6 @@ class TextFieldsViewController: UIViewController {
             (password) -> Bool in
             return password.count >= 8 && password.count <= 20
         }))
-        
-        //setting error view
-        userNameField.errorIconView.image = errorIcon
-        userNameField.errorIconView.contentMode = .center
-        userNameField.errorWidth = 32
         
         //setting custom error info view
         let userNameErrorInfoView = UserNameErrorInfoView()

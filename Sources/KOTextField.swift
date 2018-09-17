@@ -79,7 +79,7 @@ public class KOFunctionTextValidator : KOTextValidatorInterface{
     }
 }
 
-@objc public protocol KOTextFieldDelegate : NSObjectProtocol{
+@objc public protocol KOTextFieldDelegate : UITextFieldDelegate{
     @objc optional func textFieldDidShowError(_ textField: UITextField)
     @objc optional func textFieldDidHideError(_ textField: UITextField)
     
@@ -95,7 +95,14 @@ open class KOTextField : UITextField{
     //MARK: - Variables
     
     //public
-    @IBOutlet public weak var koDelegate : KOTextFieldDelegate?
+    @IBOutlet public weak var koDelegate : KOTextFieldDelegate?{
+        get{
+            return delegate as? KOTextFieldDelegate
+        }
+        set{
+            delegate = newValue
+        }
+    }
     public private(set) var validators : [KOTextValidatorInterface] = []
     public var validateMode : KOTextFieldValidateModes = .validateOnLostFocus
     public var isShowingError : Bool = false{
@@ -123,7 +130,7 @@ open class KOTextField : UITextField{
             refreshCustomErrorView()
         }
     }
-    public var errorWidth : CGFloat = 0{
+    public var errorWidth : CGFloat = 32{
         didSet{
             if oldValue != errorWidth{
                 refreshShowingError()
@@ -218,6 +225,7 @@ open class KOTextField : UITextField{
         //create views
         //error view
         let errorView = UIView()
+        errorView.isHidden = true
         errorView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(errorViewTap)))
         errorView.backgroundColor = UIColor.clear
         errorView.translatesAutoresizingMaskIntoConstraints = false
@@ -233,7 +241,8 @@ open class KOTextField : UITextField{
         self.containerForCustomErrorView = containerForCustomErrorView
         
         //error icon view
-        let errorIconView = UIImageView()
+        let errorIconView = UIImageView(image: UIImage(named: "field_error"))
+        errorIconView.contentMode = .center
         errorIconView.translatesAutoresizingMaskIntoConstraints = false
         errorView.addSubview(errorIconView)
         self.errorIconView = errorIconView
@@ -359,7 +368,9 @@ open class KOTextField : UITextField{
     }
     
     private func refreshCustomErrorView(){
-        containerForCustomErrorView.isHidden = customErrorView == nil
+        let isCustomErrorViewHidden = customErrorView == nil
+        containerForCustomErrorView.isHidden = isCustomErrorViewHidden
+        errorIconView.isHidden = !isCustomErrorViewHidden
         containerForCustomErrorView.fill(withView: customErrorView)
         layoutIfNeeded()
     }

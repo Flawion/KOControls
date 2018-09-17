@@ -9,28 +9,67 @@
 import UIKit
 import KOControls
 
-class PickerViewController: UIViewController {
-
+class PickerViewController: UIViewController, UITextFieldDelegate {
+    @IBOutlet weak var birthdayField: KOTextField!
+    
+    private var birthdayDate : Date = Date() {
+        didSet{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd-MM-YYYY"
+            birthdayField.text = dateFormatter.string(from: birthdayDate)
+            birthdayField.isShowingError = (Calendar.current.dateComponents([.year], from: birthdayDate, to: Date()).year ?? 0) < 18
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        intialize()
+    }
 
+    private func intialize(){
+        initializeView()
+        initializeFields()
+    }
+    
+    private func initializeView(){
         navigationItem.title = "KOPickerView"
         definesPresentationContext = true
     }
     
-    @IBAction func showPickerClick(_ sender: Any) {
-        let datePicker = KODatePickerViewController()
-        datePicker.barView.titleLabel.text = "Date picker "
-        datePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction
+    private func initializeFields(){
+        birthdayField.showErrorInfoMode = .always
+        birthdayField.errorInfoView.descriptionLabel.text = "You are under 18"
+    }
+    
+    private func handleShouldBeginEditing(textField: UITextField)->Bool{
+        switch textField.tag {
+        case 1:
+            showDatePicker()
+            return false
+            
+        default:
+            return true
+        }
+    }
+    
+    private func showDatePicker(){
+        let datePickerViewController = KODatePickerViewController()
+        datePickerViewController.barView.titleLabel.text = "Select your birthday"
+        datePickerViewController.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+        datePickerViewController.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+            [weak self](datePickerViewController : KODatePickerViewController) in
+            self?.birthdayDate =  datePickerViewController.datePicker.date
+        })
+
+        datePickerViewController.datePicker.date = birthdayDate
+        datePickerViewController.datePicker.datePickerMode = .date
+        datePickerViewController.datePicker.maximumDate = Date()
+        datePickerViewController.datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
         
-        /*
-        datePicker.backgroundVisualEffect = UIBlurEffect(style: .extraLight)
-        datePicker.mainView.layer.cornerRadius = 12
-        datePicker.mainView.clipsToBounds = true
-        
-        datePicker.rightBarButtonAction = KOActionModel(title: "Done", action: {
-            datePicker.dismiss(animated: true, completion: nil)
-        })*/
-        present(datePicker, animated: true, completion: nil)
+        present(datePickerViewController, animated: true, completion: nil)
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+       return handleShouldBeginEditing(textField: textField)
     }
 }

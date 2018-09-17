@@ -64,8 +64,6 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = "KOScrollOffsetBasedView"
         initialize()
     }
     
@@ -75,6 +73,8 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     }
     
     private func initializeView(){
+         navigationItem.title = "KOScrollOffsetBasedView"
+        
         if #available(iOS 11.0, *) {} else{
             offsetBasedContentTopConst.constant = 20
         }
@@ -86,7 +86,7 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     
     private func initializeScrollOffsetBasedView(){
         scrollOffsetProgressController = KOScrollOffsetProgressController()
-        scrollOffsetProgressController.koDelegate = self
+        scrollOffsetProgressController.delegate = self
         scrollOffsetProgressController.scrollView = scrollView
         scrollOffsetProgressController.maxOffset = 50
         scrollOffsetProgressController.mode = .translationOffsetBased

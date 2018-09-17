@@ -32,7 +32,7 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
         return mode == .scrollingBlockedUntilProgressMax
     }
     
-    public weak var koDelegate : KOScrollOffsetProgressControllerDelegate?{
+    public weak var delegate : KOScrollOffsetProgressControllerDelegate?{
         didSet{
             calculateOffsetProgress()
         }
@@ -74,7 +74,7 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     
     public private(set) var progress : CGFloat = 0{
         didSet{
-            koDelegate?.scrollOffsetProgressController(self, offsetProgress: progress)
+            delegate?.scrollOffsetProgressController(self, offsetProgress: progress)
         }
     }
     

@@ -26,12 +26,42 @@ open class KOPickerViewController : KODialogViewController{
 }
 
 //MARK - KODatePickerViewController
-open class KODatePickerViewController : KOPickerViewController{
-    public private(set) weak var datePicker : UIDatePicker?
+@objc public protocol KODatePickerViewControllerDelegate : KODialogViewControllerDelegate{
+    @objc optional func datePickerViewController(_ datePickerViewController : KODialogViewController, dateChanged : Date?)
     
+}
+
+open class KODatePickerViewController : KOPickerViewController{
+    //MARK: Variables
+    private weak var pDatePicker : UIDatePicker!
+    
+    public weak var datePickerDelegate : KODatePickerViewControllerDelegate?{
+        get{
+            return delegate as? KODatePickerViewControllerDelegate
+        }
+        set{
+            delegate = newValue
+        }
+    }
+    
+    //public
+    public var datePicker : UIDatePicker{
+        loadViewIfNeeded()
+        return pDatePicker
+    }
+    
+    public var dateChangedEvent : ((Date?)->Void)?
+    
+    //MARK: Methods
     override open func createContentView() -> UIView {
         let datePicker = UIDatePicker()
-        self.datePicker = datePicker
+        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+        self.pDatePicker = datePicker
         return datePicker
+    }
+    
+    @objc private func dateChanged(){
+        datePickerDelegate?.datePickerViewController?(self, dateChanged: pDatePicker.date)
+        dateChangedEvent?(pDatePicker.date)
     }
 }
