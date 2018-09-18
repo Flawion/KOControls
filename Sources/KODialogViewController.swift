@@ -61,6 +61,8 @@ open class KODialogViewController : UIViewController{
     //public
     @IBOutlet public weak var delegate : KODialogViewControllerDelegate?
     
+    public var initializedEvent : ((KODialogViewController)->Void)?
+    
     //MARK: Main view
     private weak var pMainView : UIView!
     
@@ -181,6 +183,7 @@ open class KODialogViewController : UIViewController{
         refreshBackgroundVisualEffect()
         
         delegate?.dialogViewControllerInitialized?(self)
+        initializedEvent?(self)
     }
     
     private func initializeView(){

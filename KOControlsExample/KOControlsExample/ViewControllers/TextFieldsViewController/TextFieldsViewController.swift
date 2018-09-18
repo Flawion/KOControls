@@ -20,9 +20,7 @@ class TextFieldsViewController: UIViewController {
     @IBOutlet weak var passwordField: KOTextField!
     @IBOutlet weak var userNameField: KOTextField!
     @IBOutlet weak var userNameShowHideErrorBtt: UIButton!
-    
-    private let borderSettings = KOTextFieldBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         initialize()
@@ -37,14 +35,14 @@ class TextFieldsViewController: UIViewController {
 
     private func initializeEmailField(){
         //- email field
-        emailField.borderSettings = borderSettings
+        emailField.borderSettings = AppSettings.borderSettings
         emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
         emailField.add(validator: KORegexTextValidator.mailValidator)
     }
     
     private func initializePasswordField(){
         //- password field
-        passwordField.borderSettings = borderSettings
+        passwordField.borderSettings = AppSettings.borderSettings
         passwordField.errorInfoView.descriptionLabel.text = "Password should contains 8 to 20 chars"
         passwordField.validateMode = .validateOnTextChanged
         passwordField.add(validator: KOFunctionTextValidator(function: {
@@ -73,7 +71,7 @@ class TextFieldsViewController: UIViewController {
     
     private func initializeUserNameField(){
         //- user name field
-        userNameField.borderSettings = borderSettings
+        userNameField.borderSettings = AppSettings.borderSettings
         userNameField.validateMode = .manual
         userNameField.add(validator: KOFunctionTextValidator(function: {
             (password) -> Bool in

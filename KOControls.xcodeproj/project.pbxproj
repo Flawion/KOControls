@@ -13,6 +13,8 @@
 		053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED27A211630EE0016ABC4 /* KOTextField.swift */; };
 		053ED28C211638950016ABC4 /* KOTextFieldErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */; };
 		0566A6AA213E75D900E87518 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566A6A9213E75D900E87518 /* UIView+Extensions.swift */; };
+		058529592151161100FA36DE /* KOPopoverSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058529582151161100FA36DE /* KOPopoverSettings.swift */; };
+		0585295B2151164000FA36DE /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585295A2151164000FA36DE /* UIViewController+Extensions.swift */; };
 		05B464032121B474005C6091 /* KOAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B464022121B474005C6091 /* KOAnimation.swift */; };
 		05CBB2BF213D325F00EE6264 /* KODialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */; };
 		05CCFDCE21256B4F00208BD5 /* KOScrollOffsetProgressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */; };
@@ -31,6 +33,8 @@
 		053ED27A211630EE0016ABC4 /* KOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextField.swift; sourceTree = "<group>"; };
 		053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextFieldErrorView.swift; sourceTree = "<group>"; };
 		0566A6A9213E75D900E87518 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		058529582151161100FA36DE /* KOPopoverSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPopoverSettings.swift; sourceTree = "<group>"; };
+		0585295A2151164000FA36DE /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		05B464022121B474005C6091 /* KOAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimation.swift; sourceTree = "<group>"; };
 		05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogViewController.swift; sourceTree = "<group>"; };
 		05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOScrollOffsetProgressController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,7 @@
 				053ED28B211638950016ABC4 /* KOTextFieldErrorView.swift */,
 				05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */,
 				05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */,
+				058529582151161100FA36DE /* KOPopoverSettings.swift */,
 				05E40301214A8E58004AB4A4 /* KODimmingTransition.swift */,
 				05E40303214A9156004AB4A4 /* KODialogBarView.swift */,
 				05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */,
@@ -84,6 +89,7 @@
 				053ED24821162C2E0016ABC4 /* KOControls.h */,
 				053ED24921162C2E0016ABC4 /* Info.plist */,
 				0566A6A9213E75D900E87518 /* UIView+Extensions.swift */,
+				0585295A2151164000FA36DE /* UIViewController+Extensions.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -169,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0566A6AA213E75D900E87518 /* UIView+Extensions.swift in Sources */,
+				0585295B2151164000FA36DE /* UIViewController+Extensions.swift in Sources */,
 				05251CBD213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift in Sources */,
 				053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */,
 				05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */,
@@ -176,6 +183,7 @@
 				05E40304214A9156004AB4A4 /* KODialogBarView.swift in Sources */,
 				05FD48E3214122390092A3A3 /* KOPickerViewController.swift in Sources */,
 				05B464032121B474005C6091 /* KOAnimation.swift in Sources */,
+				058529592151161100FA36DE /* KOPopoverSettings.swift in Sources */,
 				05CCFDCE21256B4F00208BD5 /* KOScrollOffsetProgressController.swift in Sources */,
 				05CBB2BF213D325F00EE6264 /* KODialogViewController.swift in Sources */,
 				053ED28C211638950016ABC4 /* KOTextFieldErrorView.swift in Sources */,
