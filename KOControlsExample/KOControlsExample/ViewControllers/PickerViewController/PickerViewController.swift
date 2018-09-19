@@ -50,6 +50,11 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    //country
+    @IBOutlet weak var countryField: KOTextField!
+    
+    
+    private var countries : [CountryModel] = []
     
     //MARK: Functions
     override func viewDidLoad() {
@@ -65,16 +70,19 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
     private func initializeView(){
         navigationItem.title = "KOPickerView"
         definesPresentationContext = true
+        countries = AppSettings.countries
     }
     
     private func initializeFields(){
-        birthdayField.borderSettings = AppSettings.borderSettings
+        birthdayField.borderSettings = AppSettings.fieldBorder
         birthdayField.showErrorInfoMode = .always
         birthdayField.errorInfoView.descriptionLabel.text = "You are under 18"
         
-        filmTypeField.borderSettings = AppSettings.borderSettings
+        filmTypeField.borderSettings = AppSettings.fieldBorder
         filmTypeField.showErrorInfoMode = .always
         filmTypeField.errorInfoView.descriptionLabel.text = "You have selected wrong option"
+        
+        countryField.borderSettings = AppSettings.fieldBorder
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -151,19 +159,21 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func initializeOptionsPicker(_ optionPickers : KOOptionsPickerViewController){
-        optionPickers.picker.selectRow(favoriteFilmTypeIndex, inComponent: 0, animated: false)
-        optionPickers.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
-        optionPickers.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+    private func initializeOptionsPicker(_ optionPicker : KOOptionsPickerViewController){
+        optionPicker.optionsPicker.selectRow(favoriteFilmTypeIndex, inComponent: 0, animated: false)
+        optionPicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+        optionPicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
             [weak self](optionPickerViewController : KOOptionsPickerViewController) in
             guard let sSelf = self else{
                 return
             }
-            sSelf.favoriteFilmTypeIndex = optionPickerViewController.picker.selectedRow(inComponent: 0)
+            sSelf.favoriteFilmTypeIndex = optionPickerViewController.optionsPicker.selectedRow(inComponent: 0)
         })
     }
     
-    
-
-  
+    //MARK: Items table picker
+    private func showItemsPicker(){
+        let itemsTablePicker = KOItemsTablePickerViewController()
+        
+    }
 }

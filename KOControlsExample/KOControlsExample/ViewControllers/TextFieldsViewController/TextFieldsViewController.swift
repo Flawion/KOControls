@@ -35,14 +35,14 @@ class TextFieldsViewController: UIViewController {
 
     private func initializeEmailField(){
         //- email field
-        emailField.borderSettings = AppSettings.borderSettings
+        emailField.borderSettings = AppSettings.fieldBorder
         emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
         emailField.add(validator: KORegexTextValidator.mailValidator)
     }
     
     private func initializePasswordField(){
         //- password field
-        passwordField.borderSettings = AppSettings.borderSettings
+        passwordField.borderSettings = AppSettings.fieldBorder
         passwordField.errorInfoView.descriptionLabel.text = "Password should contains 8 to 20 chars"
         passwordField.validateMode = .validateOnTextChanged
         passwordField.add(validator: KOFunctionTextValidator(function: {
@@ -71,7 +71,7 @@ class TextFieldsViewController: UIViewController {
     
     private func initializeUserNameField(){
         //- user name field
-        userNameField.borderSettings = AppSettings.borderSettings
+        userNameField.borderSettings = AppSettings.fieldBorder
         userNameField.validateMode = .manual
         userNameField.add(validator: KOFunctionTextValidator(function: {
             (password) -> Bool in

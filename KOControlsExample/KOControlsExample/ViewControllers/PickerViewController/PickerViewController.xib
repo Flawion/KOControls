@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PickerViewController" customModule="KOControlsExample" customModuleProvider="target">
             <connections>
                 <outlet property="birthdayField" destination="u42-GP-AJK" id="xRg-RT-M1B"/>
+                <outlet property="countryField" destination="dmQ-7e-1sW" id="W0F-eb-4kt"/>
                 <outlet property="filmTypeField" destination="CU1-KT-t8n" id="SVH-L7-HLw"/>
                 <outlet property="presentMode" destination="IAC-MB-UrX" id="VUA-25-rJ0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -32,26 +33,27 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VsM-mN-tL7">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date picker - click to insert date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBp-cQ-V8Z">
-                                            <rect key="frame" x="12" y="76.5" width="351" height="20.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Present mode" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5sy-zg-Erc">
                                             <rect key="frame" x="12" y="12" width="351" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Options picker - click to select the option" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4q-yP-qLX">
-                                            <rect key="frame" x="12" y="142.5" width="351" height="20.5"/>
+                                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="IAC-MB-UrX">
+                                            <rect key="frame" x="12" y="36.5" width="351" height="29"/>
+                                            <segments>
+                                                <segment title="Normal"/>
+                                                <segment title="Popover"/>
+                                            </segments>
+                                        </segmentedControl>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date picker - click to insert date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBp-cQ-V8Z">
+                                            <rect key="frame" x="12" y="76.5" width="351" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Birthday" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u42-GP-AJK" customClass="KOTextField" customModule="KOControls">
-                                            <rect key="frame" x="12" y="100.5" width="351" height="30"/>
+                                            <rect key="frame" x="12" y="101" width="351" height="30"/>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -60,15 +62,14 @@
                                                 <outlet property="delegate" destination="-1" id="huq-aS-UnD"/>
                                             </connections>
                                         </textField>
-                                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="IAC-MB-UrX">
-                                            <rect key="frame" x="12" y="36.5" width="351" height="29"/>
-                                            <segments>
-                                                <segment title="Normal"/>
-                                                <segment title="Popover"/>
-                                            </segments>
-                                        </segmentedControl>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Options picker - click to select the option" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4q-yP-qLX">
+                                            <rect key="frame" x="12" y="143" width="351" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <textField opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your favorite film type" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CU1-KT-t8n" customClass="KOTextField" customModule="KOControls">
-                                            <rect key="frame" x="12" y="167" width="351" height="30"/>
+                                            <rect key="frame" x="12" y="167.5" width="351" height="30"/>
                                             <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -76,22 +77,44 @@
                                                 <outlet property="delegate" destination="-1" id="qt0-vQ-MbA"/>
                                             </connections>
                                         </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Items table picker - click to select the items from table" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z7d-Sj-rPl">
+                                            <rect key="frame" x="12" y="209.5" width="351" height="41"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Select your country" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dmQ-7e-1sW" customClass="KOTextField" customModule="KOControls">
+                                            <rect key="frame" x="12" y="254.5" width="351" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="v2y-Se-fGv"/>
+                                            </connections>
+                                        </textField>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="CU1-KT-t8n" secondAttribute="trailing" constant="12" id="09x-Cl-hHI"/>
+                                        <constraint firstAttribute="trailing" secondItem="dmQ-7e-1sW" secondAttribute="trailing" constant="12" id="37t-aL-20Y"/>
                                         <constraint firstItem="5sy-zg-Erc" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" constant="12" id="42j-Ia-WLG"/>
                                         <constraint firstAttribute="trailing" secondItem="g4q-yP-qLX" secondAttribute="trailing" constant="12" id="BdV-QK-p9f"/>
                                         <constraint firstItem="yBp-cQ-V8Z" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" constant="12" id="CpO-q1-Sem"/>
+                                        <constraint firstItem="dmQ-7e-1sW" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" constant="12" id="CvD-7S-S1C"/>
                                         <constraint firstAttribute="height" constant="300" id="F3N-6B-K2t"/>
                                         <constraint firstItem="g4q-yP-qLX" firstAttribute="top" secondItem="u42-GP-AJK" secondAttribute="bottom" constant="12" id="H9s-jf-E0e"/>
                                         <constraint firstItem="CU1-KT-t8n" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" constant="12" id="IPL-eH-mrU"/>
+                                        <constraint firstItem="dmQ-7e-1sW" firstAttribute="top" secondItem="z7d-Sj-rPl" secondAttribute="bottom" constant="4" id="JXo-D3-puK"/>
                                         <constraint firstItem="IAC-MB-UrX" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" constant="12" id="MgY-4e-FtA"/>
                                         <constraint firstAttribute="trailing" secondItem="5sy-zg-Erc" secondAttribute="trailing" constant="12" id="N20-gl-lcQ"/>
+                                        <constraint firstItem="dmQ-7e-1sW" firstAttribute="top" secondItem="z7d-Sj-rPl" secondAttribute="bottom" constant="4" id="OOA-RH-bgv"/>
                                         <constraint firstItem="yBp-cQ-V8Z" firstAttribute="top" secondItem="IAC-MB-UrX" secondAttribute="bottom" constant="12" id="Ptu-qY-VW3"/>
                                         <constraint firstItem="u42-GP-AJK" firstAttribute="top" secondItem="yBp-cQ-V8Z" secondAttribute="bottom" constant="4" id="WPM-Af-VGa"/>
+                                        <constraint firstItem="z7d-Sj-rPl" firstAttribute="top" secondItem="CU1-KT-t8n" secondAttribute="bottom" constant="12" id="a0C-2J-gXJ"/>
+                                        <constraint firstItem="z7d-Sj-rPl" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" constant="12" id="d0r-DA-Uyd"/>
                                         <constraint firstAttribute="trailing" secondItem="yBp-cQ-V8Z" secondAttribute="trailing" constant="12" id="f95-SD-F1C"/>
                                         <constraint firstAttribute="trailing" secondItem="u42-GP-AJK" secondAttribute="trailing" constant="12" id="g5m-87-o9J"/>
+                                        <constraint firstAttribute="trailing" secondItem="z7d-Sj-rPl" secondAttribute="trailing" constant="12" id="gzJ-7g-F2k"/>
                                         <constraint firstItem="IAC-MB-UrX" firstAttribute="top" secondItem="5sy-zg-Erc" secondAttribute="bottom" constant="4" id="hcQ-Jr-4Qa"/>
                                         <constraint firstItem="5sy-zg-Erc" firstAttribute="top" secondItem="VsM-mN-tL7" secondAttribute="top" constant="12" id="hfG-YO-AFe"/>
                                         <constraint firstItem="CU1-KT-t8n" firstAttribute="top" secondItem="g4q-yP-qLX" secondAttribute="bottom" constant="4" id="pTx-dR-wzy"/>

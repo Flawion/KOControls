@@ -16,6 +16,7 @@
 		053ED286211632AD0016ABC4 /* TextFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */; };
 		053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */; };
 		053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED289211632EA0016ABC4 /* MenuItemTypes.swift */; };
+		056705BF21527C6000805BD1 /* CountriesList.txt in Resources */ = {isa = PBXBuildFile; fileRef = 056705BD21527C6000805BD1 /* CountriesList.txt */; };
 		058529562150DD7400FA36DE /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058529552150DD7400FA36DE /* AppSettings.swift */; };
 		05CBB2BC213D311F00EE6264 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBB2BA213D311F00EE6264 /* PickerViewController.swift */; };
 		05CBB2BD213D311F00EE6264 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05CBB2BB213D311F00EE6264 /* PickerViewController.xib */; };
@@ -48,6 +49,7 @@
 		053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
 		053ED285211632AD0016ABC4 /* TextFieldsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldsViewController.xib; sourceTree = "<group>"; };
 		053ED289211632EA0016ABC4 /* MenuItemTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemTypes.swift; sourceTree = "<group>"; };
+		056705BD21527C6000805BD1 /* CountriesList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountriesList.txt; sourceTree = "<group>"; };
 		058529552150DD7400FA36DE /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		05CBB2BA213D311F00EE6264 /* PickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
 		05CBB2BB213D311F00EE6264 /* PickerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PickerViewController.xib; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				053ED26021162FAB0016ABC4 /* AppDelegate.swift */,
 				058529552150DD7400FA36DE /* AppSettings.swift */,
 				053ED26721162FAC0016ABC4 /* Assets.xcassets */,
+				056705BD21527C6000805BD1 /* CountriesList.txt */,
 				053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */,
 				053ED26C21162FAC0016ABC4 /* Info.plist */,
 			);
@@ -274,6 +277,7 @@
 			files = (
 				05CCFDD421256BE800208BD5 /* ScrollOffsetProgressViewController.xib in Resources */,
 				05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */,
+				056705BF21527C6000805BD1 /* CountriesList.txt in Resources */,
 				053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */,
 				053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */,
 				053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */,

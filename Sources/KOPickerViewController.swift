@@ -8,38 +8,13 @@
 
 import UIKit
 
-//MARK: - KOPickerViewController
-open class KOPickerViewController : KODialogViewController{
-    public let dimmingTransition = KODimmingTransition()
-
-    override open var defaultMainViewVerticalAlignment: UIControlContentVerticalAlignment{
-        return .bottom
-    }
-    
-    override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        constructor()
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        constructor()
-    }
-    
-    private func constructor(){
-        modalPresentationStyle =  .custom
-        transitioningDelegate = dimmingTransition
-        dismissWhenUserTapAtBackground = true
-    }
-}
-
 //MARK - KODatePickerViewController
 @objc public protocol KODatePickerViewControllerDelegate : KODialogViewControllerDelegate{
     @objc optional func datePickerViewController(_ datePickerViewController : KODialogViewController, dateChanged : Date?)
     
 }
 
-open class KODatePickerViewController : KOPickerViewController{
+open class KODatePickerViewController : KODialogViewController{
     //MARK: Variables
     private weak var pDatePicker : UIDatePicker!
 
@@ -75,19 +50,19 @@ open class KODatePickerViewController : KOPickerViewController{
 }
 
 //MARK: - KOOptionsPickerViewController
-open class KOOptionsPickerViewController : KOPickerViewController, UIPickerViewDataSource, UIPickerViewDelegate{
+open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewDataSource, UIPickerViewDelegate{
     //MARK: Variables
-    private weak var pPicker : UIPickerView!
+    private weak var pOptionsPicker : UIPickerView!
     
     //public
-    public var picker : UIPickerView{
+    public var optionsPicker : UIPickerView{
         loadViewIfNeeded()
-        return pPicker
+        return pOptionsPicker
     }
     
     public var options : [[String]] = []{
         didSet{
-            picker.reloadAllComponents()
+            optionsPicker.reloadAllComponents()
         }
     }
     
@@ -108,13 +83,14 @@ open class KOOptionsPickerViewController : KOPickerViewController, UIPickerViewD
     }
     
     override open func createContentView() -> UIView {
-        let picker = UIPickerView()
-        picker.dataSource = self
-        picker.delegate = self
-        self.pPicker = picker
-        return picker
+        let optionsPicker = UIPickerView()
+        optionsPicker.dataSource = self
+        optionsPicker.delegate = self
+        self.pOptionsPicker = optionsPicker
+        return optionsPicker
     }
     
+    //MARK: UIPickerViewDataSource, UIPickerViewDelegate
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return options.count
     }
@@ -129,5 +105,57 @@ open class KOOptionsPickerViewController : KOPickerViewController, UIPickerViewD
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectionChangedEvent?(row,component)
+    }
+}
+
+//MARK: - KOItemsTablePickerViewController
+open class KOItemsTablePickerViewController : KODialogViewController{
+    //MARK: Variables
+    private weak var pItemsTable : UITableView!
+    
+    //public
+    public var itemsTable : UITableView{
+        loadViewIfNeeded()
+        return pItemsTable
+    }
+    
+    //MARK: Methods
+    override open func createContentView() -> UIView {
+        let itemsTable = UITableView()
+        self.pItemsTable = itemsTable
+        return itemsTable
+    }
+}
+
+
+//MARK: - KOItemsCollectionPickerViewController
+open class KOItemsCollectionPickerViewController : KODialogViewController{
+    //MARK: Variables
+    private weak var pItemsCollection : UICollectionView!
+    
+    private var itemsCollectionLayoutAtStart : UICollectionViewLayout!
+    
+    //public
+    public var itemsCollection : UICollectionView{
+        loadViewIfNeeded()
+        return pItemsCollection
+    }
+    
+    //MARK: Methods
+    public init(itemsCollectionLayout : UICollectionViewLayout) {
+        super.init(nibName: nil, bundle: nil)
+        itemsCollectionLayoutAtStart = itemsCollectionLayout
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        itemsCollectionLayoutAtStart = UICollectionViewFlowLayout()
+    }
+    
+    override open func createContentView() -> UIView {
+        let itemsCollection = UICollectionView(frame: CGRect.zero, collectionViewLayout: itemsCollectionLayoutAtStart)
+        self.pItemsCollection = itemsCollection
+        itemsCollectionLayoutAtStart = nil
+        return itemsCollection
     }
 }

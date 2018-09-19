@@ -61,6 +61,7 @@ open class KODialogViewController : UIViewController{
     //public
     @IBOutlet public weak var delegate : KODialogViewControllerDelegate?
     
+    public let dimmingTransition = KODimmingTransition()
     public var initializedEvent : ((KODialogViewController)->Void)?
     
     //MARK: Main view
@@ -80,7 +81,7 @@ open class KODialogViewController : UIViewController{
         return pMainView
     }
     
-    public var dismissWhenUserTapAtBackground : Bool = false{
+    public var dismissWhenUserTapAtBackground : Bool = true{
         didSet{
             refreshDismissOnTapRecognizer()
         }
@@ -101,7 +102,7 @@ open class KODialogViewController : UIViewController{
     public var mainViewEdgesConstraintsInsets : KOEdgesConstraintsInsets!
     
     open var defaultMainViewVerticalAlignment : UIControlContentVerticalAlignment{
-        return .fill
+        return .bottom
     }
     
     open var defaultMainViewHorizontalAlignment : UIControlContentHorizontalAlignment{
@@ -168,6 +169,21 @@ open class KODialogViewController : UIViewController{
     
     //MARK: - Functions
     //MARK: Initialization
+    override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        initTransition()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initTransition()
+    }
+    
+    private func initTransition(){
+        modalPresentationStyle =  .custom
+        transitioningDelegate = dimmingTransition
+    }
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
         initialize()
