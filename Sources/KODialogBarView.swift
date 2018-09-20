@@ -53,7 +53,7 @@ open class KODialogBarView : UIView{
     
     public var leftViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
-    public var defaultLeftViewWidth : CGFloat = 0{
+    open var defaultLeftViewWidth : CGFloat = 0{
         didSet{
             leftContainerForViewWidthConst.constant = defaultLeftViewWidth
             layoutIfNeeded()
@@ -73,7 +73,7 @@ open class KODialogBarView : UIView{
     
     public var rightViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
-    public var defaultRightViewWidth : CGFloat = 0{
+    open var defaultRightViewWidth : CGFloat = 0{
         didSet{
             rightContainerForViewWidthConst.constant = defaultRightViewWidth
             layoutIfNeeded()

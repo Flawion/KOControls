@@ -9,18 +9,6 @@
 import UIKit
 import KOControls
 
-class CountryModel{
-    let code : String
-    let name : String
-    let image : UIImage
-    
-    init(code : String, name: String, image : UIImage) {
-        self.code = code
-        self.name = name
-        self.image = image
-    }
-}
-
 class AppSettings{
     static let fieldBorder = KOTextFieldBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
     

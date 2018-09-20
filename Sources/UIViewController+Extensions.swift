@@ -25,7 +25,6 @@ extension UIViewController{
         }else{
             present(dialogViewController, animated: animated, completion: completion)
         }
-        
     }
     
     public func presentDatePicker(initializeAction : KOActionModel<KODatePickerViewController>, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
@@ -36,4 +35,9 @@ extension UIViewController{
     public func presentOptionsPicker(withOptions options: [[String]], initializeAction : KOActionModel<KOOptionsPickerViewController>, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
         presentDialog(KOOptionsPickerViewController(options: options), initializeAction: initializeAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
+    
+    public func presentItemsTablePicker(initializeAction : KOActionModel<KOItemsTablePickerViewController>, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+        presentDialog(KOItemsTablePickerViewController(), initializeAction: initializeAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
+    }
+    
 }

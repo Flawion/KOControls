@@ -137,9 +137,6 @@ open class KOTextField : UITextField{
             }
         }
     }
-    open var defaultErrorWidth : CGFloat{
-        return  0
-    }
     
     //MARK: Error info
     private var containerForErrorInfoView: UIView!
@@ -249,7 +246,7 @@ open class KOTextField : UITextField{
         
         //create constraints
         //for error view
-        let errorWidthConst = errorView.widthAnchor.constraint(equalToConstant: defaultErrorWidth)
+        let errorWidthConst = errorView.widthAnchor.constraint(equalToConstant: 0)
         addConstraints([
             errorView.topAnchor.constraint(equalTo: topAnchor),
             errorView.rightAnchor.constraint(equalTo: rightAnchor),

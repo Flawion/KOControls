@@ -54,7 +54,7 @@ public enum KODialogBarModes {
     @objc optional func dialogViewControllerDone(_ dialogViewController : KODialogViewController)
 }
 
-open class KODialogViewController : UIViewController{
+open class KODialogViewController : UIViewController, UIGestureRecognizerDelegate{
     //MARK: - Variables
     private var allConstraints : [NSLayoutConstraint] = []
     
@@ -87,7 +87,7 @@ open class KODialogViewController : UIViewController{
         }
     }
     
-    public var mainViewVerticalAlignment :  UIControlContentVerticalAlignment = .fill{
+    public var mainViewVerticalAlignment :  UIControlContentVerticalAlignment = .bottom{
         didSet{
             refreshMainViewVerticalAlignment()
         }
@@ -100,14 +100,6 @@ open class KODialogViewController : UIViewController{
     }
     
     public var mainViewEdgesConstraintsInsets : KOEdgesConstraintsInsets!
-    
-    open var defaultMainViewVerticalAlignment : UIControlContentVerticalAlignment{
-        return .bottom
-    }
-    
-    open var defaultMainViewHorizontalAlignment : UIControlContentHorizontalAlignment{
-        return .fill
-    }
     
     //MARK: Background visual effect view
     private var backgroundVisualEffectConsts : [NSLayoutConstraint] = []
@@ -124,6 +116,9 @@ open class KODialogViewController : UIViewController{
     //MARK: Content view
     private var pContentView : UIView!
     
+    private weak var contentWidthConst : NSLayoutConstraint!
+    private weak var contentHeightConst : NSLayoutConstraint!
+    
     //public
     public weak var contentView : UIView!{
         loadViewIfNeeded()
@@ -131,6 +126,18 @@ open class KODialogViewController : UIViewController{
     }
     
     public var contentEdgesConstraintsInsets : KOEdgesConstraintsInsets!
+    
+    public var contentHeight : CGFloat? = nil{
+        didSet{
+            refreshContentHeight()
+        }
+    }
+    
+    public var contentWidth : CGFloat? = nil{
+        didSet{
+            refreshContentWidth()
+        }
+    }
     
     open var defaultContentInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -203,9 +210,15 @@ open class KODialogViewController : UIViewController{
     }
     
     private func initializeView(){
-        dismissOnTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissOnTapRecognizerTap))
+        dismissOnTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissOnTapRecognizerTap(gesture:)))
+        dismissOnTapRecognizer.delegate = self
         refreshDismissOnTapRecognizer()
         view.addGestureRecognizer(dismissOnTapRecognizer)
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool{
+        //prevent from close dialog by touching child views
+        return view.hitTest(touch.location(in: view), with: nil) == view
     }
     
     private func initializeMainView(){
@@ -214,14 +227,17 @@ open class KODialogViewController : UIViewController{
         self.pMainView = mainView
         view.addSubview(mainView)
         
-        mainViewVerticalAlignment = defaultMainViewVerticalAlignment
-        mainViewHorizontalAlignment = defaultMainViewHorizontalAlignment
+        refreshMainViewVerticalAlignment()
+        refreshMainViewHorizontalAlignment()
     }
     
     private func initializeBarView(){
         let barView = KODialogBarView()
         barView.translatesAutoresizingMaskIntoConstraints = false
         self.pBarView = barView
+        
+        refreshLeftBarButtonAction()
+        refreshRightBarButtonAction()
     }
     
     private func initializeContentView(){
@@ -229,6 +245,9 @@ open class KODialogViewController : UIViewController{
         contentView.translatesAutoresizingMaskIntoConstraints = false
         pMainView.addSubview(contentView)
         self.pContentView = contentView
+        
+        refreshContentWidth()
+        refreshContentHeight()
     }
     
     private func refreshDismissOnTapRecognizer(){
@@ -250,6 +269,10 @@ open class KODialogViewController : UIViewController{
     
     //MARK: Main view
     private func refreshMainViewHorizontalAlignment(){
+        guard isViewLoaded else{
+            return
+        }
+        
         view.removeConstraints(mainViewAllHorizontalConsts)
         
         var leftConst : NSLayoutConstraint!
@@ -296,6 +319,10 @@ open class KODialogViewController : UIViewController{
     }
     
     private func refreshMainViewVerticalAlignment(){
+        guard isViewLoaded else{
+            return
+        }
+        
         view.removeConstraints(mainViewAllVerticalConsts)
         
         var topConst : NSLayoutConstraint!
@@ -372,6 +399,47 @@ open class KODialogViewController : UIViewController{
         pMainView.backgroundColor = UIColor.clear
     }
     
+    //MARK: Content view
+    private func refreshContentWidth(){
+        guard isViewLoaded else{
+            return
+        }
+        
+        guard let contentWidth = contentWidth, mainViewHorizontalAlignment != .fill else{
+            if let contentWidthConst = self.contentWidthConst{
+                contentView.removeConstraint(contentWidthConst)
+            }
+            return
+        }
+        guard let contentWidthConst =  self.contentWidthConst else{
+            let contentWidthConst = contentView.widthAnchor.constraint(equalToConstant: contentWidth)
+            contentView.addConstraint(contentWidthConst)
+            self.contentWidthConst = contentWidthConst
+            return
+        }
+        contentWidthConst.constant = contentWidth
+    }
+    
+    private func refreshContentHeight(){
+        guard isViewLoaded else{
+            return
+        }
+        
+        guard let contentHeight = self.contentHeight, mainViewVerticalAlignment != .fill else{
+            if let contentHeightConst = self.contentHeightConst{
+                contentView.removeConstraint(contentHeightConst)
+            }
+            return
+        }
+        guard let contentHeightConst = self.contentHeightConst else{
+            let contentHeightConst = contentView.heightAnchor.constraint(equalToConstant: contentHeight)
+            contentView.addConstraint(contentHeightConst)
+            self.contentHeightConst = contentHeightConst
+            return
+        }
+        contentHeightConst.constant = contentHeight
+    }
+    
     //MARK: Bar view and buttons
     private func refreshBarMode(){
         guard isViewLoaded else{
@@ -426,6 +494,10 @@ open class KODialogViewController : UIViewController{
     }
     
     private func refreshLeftBarButtonAction(){
+        guard isViewLoaded else{
+            return
+        }
+        
         guard let leftBarButtonAction = leftBarButtonAction else{
             barView.leftView = nil
             return
@@ -443,6 +515,10 @@ open class KODialogViewController : UIViewController{
     }
     
     private func refreshRightBarButtonAction(){
+        guard isViewLoaded else{
+            return
+        }
+        
         guard let rightBarButtonAction = rightBarButtonAction else{
             barView.rightView = nil
             return
@@ -469,7 +545,7 @@ open class KODialogViewController : UIViewController{
         delegate?.dialogViewControllerRightButtonClicked?(self)
     }
     
-    @objc private func dismissOnTapRecognizerTap(){
+    @objc private func dismissOnTapRecognizerTap(gesture : UITapGestureRecognizer){
         self.dismiss(animated: true, completion: nil)
     }
 }

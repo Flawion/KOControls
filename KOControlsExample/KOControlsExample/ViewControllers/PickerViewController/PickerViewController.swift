@@ -9,7 +9,7 @@
 import UIKit
 import KOControls
 
-class PickerViewController: UIViewController, UITextFieldDelegate {
+class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource {
     //MARK: Variables
     @IBOutlet weak var presentMode: UISegmentedControl!
     private var popoverSettings : KOPopoverSettings? = nil
@@ -52,9 +52,14 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
     
     //country
     @IBOutlet weak var countryField: KOTextField!
-    
-    
     private var countries : [CountryModel] = []
+    
+    private let countryTableViewCellKey = "countryTableViewCell"
+    private var countryTableIndex : Int = 0{
+        didSet{
+            countryField.text = countries[countryTableIndex].name
+        }
+    }
     
     //MARK: Functions
     override func viewDidLoad() {
@@ -97,6 +102,10 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
             
         case 2:
             showOptionsPicker()
+            return false
+            
+        case 3:
+            showItemsPicker()
             return false
             
         default:
@@ -173,7 +182,48 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: Items table picker
     private func showItemsPicker(){
-        let itemsTablePicker = KOItemsTablePickerViewController()
-        
+        let presentPopover = presentMode.selectedSegmentIndex == 1
+        if presentPopover{
+            popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
+            presentItemsTablePicker(initializeAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
+                [weak self](itemsTablePicker) in
+                guard let sSelf = self else{
+                    return
+                }
+                itemsTablePicker.mainView.backgroundColor = UIColor.clear
+                sSelf.initializeItemsTablePicker(itemsTablePicker)
+            }), popoverSettings: popoverSettings!)
+        }else{
+            presentItemsTablePicker(initializeAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
+                [weak self](itemsTablePicker) in
+                self?.initializeItemsTablePicker(itemsTablePicker)
+            }))
+        }
+    }
+    
+    private func initializeItemsTablePicker(_ itemsTablePicker : KOItemsTablePickerViewController){
+        itemsTablePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+        itemsTablePicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+            [weak self](itemsTablePickerViewController : KOItemsTablePickerViewController) in
+            guard let sSelf = self else{
+                return
+            }
+            if let countryIndex = itemsTablePickerViewController.itemsTable.indexPathForSelectedRow?.row{
+                sSelf.countryTableIndex = countryIndex
+            }
+        })
+        itemsTablePicker.itemsTable.allowsSelection = true
+        itemsTablePicker.itemsTable.register(UINib(nibName: "CountryTableViewCell", bundle: nil), forCellReuseIdentifier: countryTableViewCellKey)
+        itemsTablePicker.itemsTable.dataSource = self
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return countries.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: countryTableViewCellKey, for: indexPath) as! CountryTableViewCell
+        cell.countryModel = countries[indexPath.row]
+        return cell
     }
 }
