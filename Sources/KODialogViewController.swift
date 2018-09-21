@@ -62,7 +62,7 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     @IBOutlet public weak var delegate : KODialogViewControllerDelegate?
     
     public let dimmingTransition = KODimmingTransition()
-    public var initializedEvent : ((KODialogViewController)->Void)?
+    public var viewLoadedEvent : ((KODialogViewController)->Void)?
     
     //MARK: Main view
     private weak var pMainView : UIView!
@@ -206,7 +206,7 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
         refreshBackgroundVisualEffect()
         
         delegate?.dialogViewControllerInitialized?(self)
-        initializedEvent?(self)
+        viewLoadedEvent?(self)
     }
     
     private func initializeView(){
@@ -405,7 +405,7 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
             return
         }
         
-        guard let contentWidth = contentWidth, mainViewHorizontalAlignment != .fill else{
+        guard let contentWidth = contentWidth else{
             if let contentWidthConst = self.contentWidthConst{
                 contentView.removeConstraint(contentWidthConst)
             }
@@ -425,7 +425,7 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
             return
         }
         
-        guard let contentHeight = self.contentHeight, mainViewVerticalAlignment != .fill else{
+        guard let contentHeight = self.contentHeight else{
             if let contentHeightConst = self.contentHeightConst{
                 contentView.removeConstraint(contentHeightConst)
             }

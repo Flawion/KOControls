@@ -21,6 +21,8 @@
 		059C740F2153864800422E73 /* CountryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C740E2153864800422E73 /* CountryModel.swift */; };
 		059C74142153870400422E73 /* CountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C74122153870400422E73 /* CountryTableViewCell.swift */; };
 		059C74152153870400422E73 /* CountryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 059C74132153870400422E73 /* CountryTableViewCell.xib */; };
+		05A7769E2154E935007FC401 /* CountryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A7769C2154E935007FC401 /* CountryCollectionViewCell.swift */; };
+		05A7769F2154E935007FC401 /* CountryCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05A7769D2154E935007FC401 /* CountryCollectionViewCell.xib */; };
 		05CBB2BC213D311F00EE6264 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBB2BA213D311F00EE6264 /* PickerViewController.swift */; };
 		05CBB2BD213D311F00EE6264 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05CBB2BB213D311F00EE6264 /* PickerViewController.xib */; };
 		05CCFDD321256BE800208BD5 /* ScrollOffsetProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDD121256BE800208BD5 /* ScrollOffsetProgressViewController.swift */; };
@@ -57,6 +59,8 @@
 		059C740E2153864800422E73 /* CountryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryModel.swift; sourceTree = "<group>"; };
 		059C74122153870400422E73 /* CountryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryTableViewCell.swift; sourceTree = "<group>"; };
 		059C74132153870400422E73 /* CountryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryTableViewCell.xib; sourceTree = "<group>"; };
+		05A7769C2154E935007FC401 /* CountryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCollectionViewCell.swift; sourceTree = "<group>"; };
+		05A7769D2154E935007FC401 /* CountryCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryCollectionViewCell.xib; sourceTree = "<group>"; };
 		05CBB2BA213D311F00EE6264 /* PickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
 		05CBB2BB213D311F00EE6264 /* PickerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PickerViewController.xib; sourceTree = "<group>"; };
 		05CCFDD121256BE800208BD5 /* ScrollOffsetProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollOffsetProgressViewController.swift; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 			children = (
 				059C74122153870400422E73 /* CountryTableViewCell.swift */,
 				059C74132153870400422E73 /* CountryTableViewCell.xib */,
+				05A7769C2154E935007FC401 /* CountryCollectionViewCell.swift */,
+				05A7769D2154E935007FC401 /* CountryCollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -296,6 +302,7 @@
 				05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */,
 				056705BF21527C6000805BD1 /* CountriesList.txt in Resources */,
 				053ED287211632AD0016ABC4 /* TextFieldsViewController.xib in Resources */,
+				05A7769F2154E935007FC401 /* CountryCollectionViewCell.xib in Resources */,
 				053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */,
 				053ED282211631B10016ABC4 /* MenuViewController.xib in Resources */,
 				059C74152153870400422E73 /* CountryTableViewCell.xib in Resources */,
@@ -360,6 +367,7 @@
 				05CBB2BC213D311F00EE6264 /* PickerViewController.swift in Sources */,
 				058529562150DD7400FA36DE /* AppSettings.swift in Sources */,
 				053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */,
+				05A7769E2154E935007FC401 /* CountryCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

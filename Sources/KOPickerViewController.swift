@@ -120,20 +120,6 @@ open class KOItemsTablePickerViewController : KODialogViewController{
     }
     
     //MARK: Methods
-    public init(){
-        super.init(nibName: nil, bundle: nil)
-        additionalInit()
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        additionalInit()
-    }
-    
-    private func additionalInit(){
-        contentHeight = 300
-    }
-    
     override open func createContentView() -> UIView {
         let itemsTable = UITableView()
         itemsTable.tableFooterView = UIView()
@@ -160,16 +146,15 @@ open class KOItemsCollectionPickerViewController : KODialogViewController{
     //MARK: Methods
     public init(itemsCollectionLayout : UICollectionViewLayout) {
         super.init(nibName: nil, bundle: nil)
-        additionalInit(itemsCollectionLayout: itemsCollectionLayout)
+        postInit(itemsCollectionLayout: itemsCollectionLayout)
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        additionalInit(itemsCollectionLayout: UICollectionViewFlowLayout())
+        postInit(itemsCollectionLayout: UICollectionViewFlowLayout())
     }
 
-    private func additionalInit(itemsCollectionLayout : UICollectionViewLayout){
-        contentHeight = 300
+    private func postInit(itemsCollectionLayout : UICollectionViewLayout){
         itemsCollectionLayoutAtStart = itemsCollectionLayout
     }
     

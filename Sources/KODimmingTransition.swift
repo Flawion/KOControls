@@ -10,13 +10,12 @@ import UIKit
 
 public class KODimmingPresentationController : UIPresentationController {
     //MARK: Variables
-    private var dimmingView : UIView!
+     //public
+    public private(set) var dimmingView : UIView!
     
-    //public
     public var dimmingShowAnimation : KOAnimationAlongsideTransitionInterface? = KOFadeInAnimation(fromValue: 0)
     public var dimmingHideAnimation : KOAnimationAlongsideTransitionInterface? = KOFadeOutAnimation()
 
-    public var setupDimmingViewEvent : ((UIView)->Void)? = nil
     public var dimmingViewTapEvent : (()->Void)? = nil
     
     //MARK: Functions
@@ -31,8 +30,6 @@ public class KODimmingPresentationController : UIPresentationController {
         dimmingView.translatesAutoresizingMaskIntoConstraints = false
         dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dimmingViewTap)))
-        
-        setupDimmingViewEvent?(dimmingView)
     }
     
     override public func presentationTransitionWillBegin() {
