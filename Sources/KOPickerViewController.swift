@@ -28,6 +28,15 @@ open class KODatePickerViewController : KODialogViewController{
         }
     }
     
+    public var datePickerTextColor : UIColor?{
+        get{
+            return datePicker.value(forKey: "textColor") as? UIColor
+        }
+        set{
+            datePicker.setValue(UIColor.orange, forKey: "textColor")
+        }
+    }
+    
     public var datePicker : UIDatePicker{
         loadViewIfNeeded()
         return pDatePicker
@@ -55,6 +64,8 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
     private weak var pOptionsPicker : UIPickerView!
     
     //public
+    public var optionsPickerTitleAttributes : [NSAttributedStringKey : Any]?
+    
     public var optionsPicker : UIPickerView{
         loadViewIfNeeded()
         return pOptionsPicker
@@ -101,6 +112,13 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
     
     public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return options[component][row]
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        guard let optionsPickerTitleAttributes = optionsPickerTitleAttributes else{
+            return nil
+        }
+        return NSAttributedString(string: options[component][row], attributes: optionsPickerTitleAttributes)
     }
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

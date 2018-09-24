@@ -452,10 +452,28 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
             allConstraints = []
         }
         
+        //get main view anchors
+        var mLeftAnchor : NSLayoutXAxisAnchor!
+        var mRightAnchor : NSLayoutXAxisAnchor!
+        var mTopAnchor : NSLayoutYAxisAnchor!
+        var mBottomAnchor : NSLayoutYAxisAnchor!
+
+        if #available(iOS 11.0, *) {
+            mLeftAnchor = pMainView.safeAreaLayoutGuide.leftAnchor
+            mRightAnchor = pMainView.safeAreaLayoutGuide.rightAnchor
+            mTopAnchor = pMainView.safeAreaLayoutGuide.topAnchor
+            mBottomAnchor = pMainView.safeAreaLayoutGuide.bottomAnchor
+        } else {
+            mLeftAnchor = pMainView.leftAnchor
+            mRightAnchor = pMainView.rightAnchor
+            mTopAnchor = pMainView.topAnchor
+            mBottomAnchor = pMainView.bottomAnchor
+        }
+        
         //create new one
         let defaultContentInsets = self.defaultContentInsets
-        let contentLeftConst : NSLayoutConstraint = pContentView.leftAnchor.constraint(equalTo: pMainView.leftAnchor, constant: defaultContentInsets.left)
-        let contentRightConst: NSLayoutConstraint = pContentView.bottomAnchor.constraint(equalTo: pMainView.bottomAnchor, constant: -defaultContentInsets.right)
+        let contentLeftConst : NSLayoutConstraint = pContentView.leftAnchor.constraint(equalTo: mLeftAnchor, constant: defaultContentInsets.left)
+        let contentRightConst: NSLayoutConstraint = pContentView.rightAnchor.constraint(equalTo: mRightAnchor, constant: -defaultContentInsets.right)
         var contentTopConst : NSLayoutConstraint!
         var contentBottomConst : NSLayoutConstraint!
         
@@ -473,20 +491,20 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
         switch barMode {
         case .top:
             contentTopConst = pContentView.topAnchor.constraint(equalTo: pBarView.bottomAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = pContentView.rightAnchor.constraint(equalTo: pMainView.rightAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [pBarView.leftAnchor.constraint(equalTo: pMainView.leftAnchor), pBarView.rightAnchor.constraint(equalTo: pMainView.rightAnchor), pBarView.topAnchor.constraint(equalTo: pMainView.topAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
+            contentBottomConst = pContentView.bottomAnchor.constraint(equalTo: mBottomAnchor, constant: -defaultContentInsets.bottom)
+            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mLeftAnchor), pBarView.rightAnchor.constraint(equalTo: mRightAnchor), pBarView.topAnchor.constraint(equalTo: mTopAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
             pMainView.addConstraints(allConstraints)
             
             
         case .bottom:
-            contentTopConst = pContentView.topAnchor.constraint(equalTo: pMainView.topAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = pContentView.rightAnchor.constraint(equalTo: pMainView.rightAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [pBarView.leftAnchor.constraint(equalTo: pMainView.leftAnchor), pBarView.rightAnchor.constraint(equalTo: pMainView.rightAnchor), pBarView.bottomAnchor.constraint(equalTo: pMainView.bottomAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
+            contentTopConst = pContentView.topAnchor.constraint(equalTo: mTopAnchor, constant: defaultContentInsets.top)
+            contentBottomConst = pContentView.bottomAnchor.constraint(equalTo: pBarView.topAnchor, constant: -defaultContentInsets.bottom)
+            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mLeftAnchor), pBarView.rightAnchor.constraint(equalTo: mRightAnchor), pBarView.bottomAnchor.constraint(equalTo: mBottomAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
             pMainView.addConstraints(allConstraints)
             
         case .hidden:
-            contentTopConst = pContentView.topAnchor.constraint(equalTo: pMainView.topAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = pContentView.rightAnchor.constraint(equalTo: pMainView.rightAnchor, constant: -defaultContentInsets.bottom)
+            contentTopConst = pContentView.topAnchor.constraint(equalTo: mTopAnchor, constant: defaultContentInsets.top)
+            contentBottomConst = pContentView.bottomAnchor.constraint(equalTo: mBottomAnchor, constant: -defaultContentInsets.bottom)
             allConstraints = [contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
             pMainView.addConstraints(allConstraints)
         }

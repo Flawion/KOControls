@@ -9,7 +9,7 @@
 import UIKit
 import KOControls
 
-class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UICollectionViewDataSource {
+class PickerViewController: UIViewController, UITextFieldDelegate{
     //MARK: Variables
     @IBOutlet weak var scrollViewContainer: UIView!
     
@@ -17,11 +17,11 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var styleModePanel: UIView!
     @IBOutlet weak var styleMode: UISegmentedControl!
     
-    private var popoverSettings : KOPopoverSettings? = nil
+    fileprivate var popoverSettings : KOPopoverSettings? = nil
     
     //birthday
     @IBOutlet weak var birthdayField: KOTextField!
-    private var birthdayDate : Date = Date() {
+    fileprivate var birthdayDate : Date = Date() {
         didSet{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd-MM-YYYY"
@@ -32,7 +32,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     //film type
     @IBOutlet weak var filmTypeField: KOTextField!
-    private var filmTypes : [String] = [
+    fileprivate var filmTypes : [String] = [
             "Action",
             "Adventure",
             "Biographical",
@@ -48,7 +48,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             "War",
             "Incorrect type"
     ]
-    private var favoriteFilmTypeIndex : Int = 0{
+    fileprivate var favoriteFilmTypeIndex : Int = 0{
         didSet{
             filmTypeField.text = filmTypes[favoriteFilmTypeIndex]
             filmTypeField.isShowingError = favoriteFilmTypeIndex == (filmTypes.count - 1)
@@ -59,12 +59,12 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var countryField: KOTextField!
     @IBOutlet weak var countryPickerType: UISegmentedControl!
     
-    private var countries : [CountryModel] = []
+    fileprivate var countries : [CountryModel] = []
     
-    private let countryTableViewCellKey = "countryTableViewCell"
-    private let countryCollectionViewCellKey = "countryCollectionViewCell"
+    fileprivate let countryTableViewCellKey = "countryTableViewCell"
+    fileprivate let countryCollectionViewCellKey = "countryCollectionViewCell"
     
-    private var countryIndex : Int = 0{
+    fileprivate var countryIndex : Int = 0{
         didSet{
             countryField.text = countries[countryIndex].name
         }
@@ -124,17 +124,25 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         }
     }
     
+    private func showItemsPicker(){
+        if countryPickerType.selectedSegmentIndex == 0{
+            showItemsTablePicker()
+        }else{
+            showItemsCollectionPicker()
+        }
+    }
+    
     //MARK: Additionals customizations
     private func customize(dialogViewController : KODialogViewController){
         if presentMode.selectedSegmentIndex == 0{
             dialogViewController.backgroundVisualEffect = UIBlurEffect(style: .dark)
+            dialogViewController.mainViewHorizontalAlignment = .center
+            dialogViewController.mainViewVerticalAlignment = .center
         }
-        
-        dialogViewController.mainViewHorizontalAlignment = .center
-        dialogViewController.mainViewVerticalAlignment = .center
         dialogViewController.mainView.layer.cornerRadius = 12
         dialogViewController.mainView.clipsToBounds = true
         
+        dialogViewController.barMode = .bottom
         dialogViewController.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         dialogViewController.barView.titleLabel.textColor = UIColor.white
         (dialogViewController.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
@@ -160,8 +168,11 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             presentationController.dimmingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         }
     }
+}
+
+//MARK: - Date picker
+extension PickerViewController{
     
-    //MARK: Date picker
     private func showDatePicker(){
         let presentPopover = presentMode.selectedSegmentIndex == 1
         if presentPopover{
@@ -201,15 +212,19 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         customizeIfNeed(datePicker: datePicker)
     }
     
+    //MARK: Customization
     private func customizeIfNeed(datePicker : KODatePickerViewController){
         guard styleMode.selectedSegmentIndex == 1 else{
             return
         }
+        datePicker.datePickerTextColor = UIColor.orange
         customize(dialogViewController: datePicker)
-        datePicker.datePicker.setValue(UIColor.orange, forKey: "textColor")
     }
+}
+
+//MARK: - Option picker
+extension PickerViewController{
     
-    //MARK: Option picker
     private func showOptionsPicker(){
         let presentPopover = presentMode.selectedSegmentIndex == 1
         if presentPopover{
@@ -248,24 +263,20 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         customizeIfNeed(optionsPicker: optionsPicker)
     }
     
-    private func showItemsPicker(){
-        if countryPickerType.selectedSegmentIndex == 0{
-            showItemsTablePicker()
-        }else{
-            showItemsCollectionPicker()
-        }
-    }
-    
+    //MARK: Customization
     private func customizeIfNeed(optionsPicker : KOOptionsPickerViewController){
         guard styleMode.selectedSegmentIndex == 1 else{
             return
         }
-        customize(dialogViewController: optionsPicker)
-        optionsPicker.optionsPicker.setValue(UIColor.orange, forKey: "textColor")
+        optionsPicker.optionsPickerTitleAttributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.orange]
         optionsPicker.optionsPicker.reloadAllComponents()
+        customize(dialogViewController: optionsPicker)
     }
+}
+
+//MARK: - Items table picker
+extension PickerViewController : UITableViewDataSource{
     
-    //MARK: Items table picker
     private func showItemsTablePicker(){
         let presentPopover = presentMode.selectedSegmentIndex == 1
         if presentPopover{
@@ -307,8 +318,36 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         itemsTablePicker.itemsTable.allowsSelection = true
         itemsTablePicker.itemsTable.register(UINib(nibName: "CountryTableViewCell", bundle: nil), forCellReuseIdentifier: countryTableViewCellKey)
         itemsTablePicker.itemsTable.dataSource = self
+        customizeIfNeed(itemsTablePicker: itemsTablePicker)
     }
     
+    //MARK: Customization
+    private func customizeIfNeed(itemsTablePicker : KOItemsTablePickerViewController){
+        guard styleMode.selectedSegmentIndex == 1 else{
+            return
+        }
+        itemsTablePicker.itemsTable.separatorColor = UIColor.white
+        itemsTablePicker.itemsTable.backgroundColor = UIColor.clear
+        /* If custom style horizontal alignment isn't equal to fill,
+        picker must has to set contentWidth, to properly calculate sizes of view.
+         We only need to do it in normal presentation mode because in popover presentation mode
+         we already override  prefered content size
+         */
+        if presentMode.selectedSegmentIndex == 0{
+            itemsTablePicker.contentWidth = 320
+        }
+        customize(dialogViewController: itemsTablePicker)
+    }
+    
+    private func customizeIfNeed(countryTableViewCell : CountryTableViewCell){
+        guard styleMode.selectedSegmentIndex == 1 else{
+            return
+        }
+        countryTableViewCell.backgroundColor = UIColor.clear
+        countryTableViewCell.titleLabel.textColor = UIColor.orange
+    }
+    
+    //MARK: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return countries.count
     }
@@ -316,13 +355,19 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: countryTableViewCellKey, for: indexPath) as! CountryTableViewCell
         cell.countryModel = countries[indexPath.row]
+        customizeIfNeed(countryTableViewCell: cell)
         return cell
     }
+}
+
+//MARK: - Items collection picker
+extension PickerViewController : UICollectionViewDataSource{
     
-    //MARK: Items collection picker
     private func showItemsCollectionPicker(){
         let presentPopover = presentMode.selectedSegmentIndex == 1
+        //show as a popover or not
         if presentPopover{
+            //creates popover's settings
             popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
             popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
             customizeIfNeed(popoverSettings: popoverSettings!)
@@ -361,10 +406,20 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                 sSelf.countryIndex = countryIndex
             }
         })
+
+        itemsCollectionPicker.itemsCollection.allowsSelection = true
+        itemsCollectionPicker.itemsCollection.backgroundColor = UIColor.lightGray
+        itemsCollectionPicker.itemsCollection.dataSource = self
+        itemsCollectionPicker.itemsCollection.register(UINib(nibName: "CountryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: countryCollectionViewCellKey)
         
+        customizeIfNeed(itemsCollectionPickerViewController: itemsCollectionPicker)
+        calculateCollectionSize(itemsCollectionPicker, availableWidth: availableWidth, itemMaxWidth: itemMaxWidth)
+    }
+    
+    private func calculateCollectionSize(_ itemsCollectionPicker : KOItemsCollectionPickerViewController, availableWidth : CGFloat, itemMaxWidth : Double){
         let inset : CGFloat = 4
         let itemMargin = 2.0
-        let parentWidth = Double(availableWidth - inset * 2)
+        let parentWidth = Double( (itemsCollectionPicker.contentWidth ?? availableWidth) - inset * 2)
         let divider = max(2.0,(Double(parentWidth)) / itemMaxWidth)
         let column = floor(divider)
         let allMargin = (itemMargin * (column - 1))
@@ -376,13 +431,35 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         flowLayout.minimumLineSpacing = CGFloat(lineSpacing)
         flowLayout.itemSize = CGSize(width: itemSize, height: itemSize)
         flowLayout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-        
-        itemsCollectionPicker.itemsCollection.allowsSelection = true
-        itemsCollectionPicker.itemsCollection.backgroundColor = UIColor.lightGray
-        itemsCollectionPicker.itemsCollection.dataSource = self
-        itemsCollectionPicker.itemsCollection.register(UINib(nibName: "CountryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: countryCollectionViewCellKey)
     }
     
+    //MARK: Customization
+    private func customizeIfNeed(itemsCollectionPickerViewController : KOItemsCollectionPickerViewController){
+        guard styleMode.selectedSegmentIndex == 1 else{
+            return
+        }
+        itemsCollectionPickerViewController.itemsCollection.backgroundColor = UIColor.clear
+        
+        /* If custom style horizontal alignment isn't equal to fill,
+         picker must has to set contentWidth, to properly calculate sizes of view.
+         We only need to do it in normal presentation mode because in popover presentation mode
+         we already override  prefered content size
+         */
+        if presentMode.selectedSegmentIndex == 0{
+            itemsCollectionPickerViewController.contentWidth = 320
+        }
+        customize(dialogViewController: itemsCollectionPickerViewController)
+    }
+    
+    private func customizeIfNeed(countryCollectionViewCell : CountryCollectionViewCell){
+        guard styleMode.selectedSegmentIndex == 1 else{
+            return
+        }
+        countryCollectionViewCell.backgroundColor = UIColor.clear
+        countryCollectionViewCell.titleLabel.textColor = UIColor.orange
+    }
+    
+    //MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return countries.count
     }
@@ -390,6 +467,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: countryCollectionViewCellKey, for: indexPath) as! CountryCollectionViewCell
         cell.countryModel = countries[indexPath.row]
+        customizeIfNeed(countryCollectionViewCell: cell)
         return cell
     }
 }

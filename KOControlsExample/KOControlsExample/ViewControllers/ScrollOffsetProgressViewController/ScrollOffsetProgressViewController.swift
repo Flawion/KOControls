@@ -9,11 +9,11 @@
 import UIKit
 import KOControls
 
-class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgressControllerDelegate{
+class ScrollOffsetProgressViewController: UIViewController, UICollectionViewDataSource, KOScrollOffsetProgressControllerDelegate{
     //MARK: - Variables
     private var scrollOffsetProgressController: KOScrollOffsetProgressController!
     
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var offsetBasedContentTopConst: NSLayoutConstraint!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userPointsLabel: UILabel!
@@ -25,6 +25,9 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     
     @IBOutlet weak var userInformationLeftConst: NSLayoutConstraint!
     @IBOutlet weak var userInformationTopConst: NSLayoutConstraint!
+    
+    fileprivate var countries : [CountryModel] = []
+    fileprivate let countryCollectionViewCellKey = "countryCollectionViewCell"
     
     //MARK: Settable parameters
     private let backBttWidth : CGFloat = 40
@@ -50,6 +53,7 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollOffsetProgressController(scrollOffsetProgressController, offsetProgress: scrollOffsetProgressController.progress)
+        calculateCollectionSize(collectionView, availableWidth: view.bounds.width, itemMaxWidth: 120)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,6 +73,7 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     
     private func initialize(){
         initializeView()
+        initializeCollectionView()
         initializeScrollOffsetBasedView()
     }
     
@@ -84,12 +89,18 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
         userImageView.layer.borderColor = UIColor.white.cgColor
     }
     
+    private func initializeCollectionView(){
+        countries = AppSettings.countries
+        collectionView.allowsSelection = false
+        collectionView.register(UINib(nibName: "CountryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: countryCollectionViewCellKey)
+    }
+    
     private func initializeScrollOffsetBasedView(){
         scrollOffsetProgressController = KOScrollOffsetProgressController()
         scrollOffsetProgressController.delegate = self
-        scrollOffsetProgressController.scrollView = scrollView
-        scrollOffsetProgressController.maxOffset = 50
-        scrollOffsetProgressController.mode = .translationOffsetBased
+        scrollOffsetProgressController.scrollView = collectionView
+        scrollOffsetProgressController.maxOffset = 300
+        scrollOffsetProgressController.mode = .contentOffsetBased
     }
     
     func scrollOffsetProgressController(_: KOScrollOffsetProgressController, offsetProgress: CGFloat) {
@@ -112,6 +123,34 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
         userPointsLabel.font = UIFont.systemFont(ofSize: defaultValueProgress * userPointsMaxFont + offsetProgress * userPointsMinFont, weight: .medium)
         
         view.layoutIfNeeded()
+    }
+    
+    private func calculateCollectionSize(_ collectionView : UICollectionView, availableWidth : CGFloat, itemMaxWidth : Double){
+        let inset : CGFloat = 4
+        let itemMargin = 2.0
+        let parentWidth = Double(availableWidth - inset * 2)
+        let divider = max(2.0,(Double(parentWidth)) / itemMaxWidth)
+        let column = floor(divider)
+        let allMargin = (itemMargin * (column - 1))
+        let itemSize = (Double(parentWidth) / column) - allMargin
+        let lineSpacing = max(4.0, ((Double(parentWidth) - allMargin) - (column * itemSize)) / column)
+        
+        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        flowLayout.minimumInteritemSpacing = CGFloat(itemMargin) * 2
+        flowLayout.minimumLineSpacing = CGFloat(lineSpacing)
+        flowLayout.itemSize = CGSize(width: itemSize, height: itemSize)
+        flowLayout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+    }
+    
+    //MARK: UICollectionViewDataSource
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return countries.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: countryCollectionViewCellKey, for: indexPath) as! CountryCollectionViewCell
+        cell.countryModel = countries[indexPath.row]
+        return cell
     }
     
     @IBAction func backBttClick(_ sender: Any) {

@@ -45,7 +45,7 @@ extension UIViewController{
     public func presentItemsTablePicker(viewLoadedAction : KOActionModel<KOItemsTablePickerViewController>, postInit : ((KOItemsTablePickerViewController)->Void)? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
         let itemsTablePickerViewController = KOItemsTablePickerViewController()
         postInit?(itemsTablePickerViewController)
-        presentDialog(KOItemsTablePickerViewController(), viewLoadedAction: viewLoadedAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        presentDialog(itemsTablePickerViewController, viewLoadedAction: viewLoadedAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
     public func presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewLayout, viewLoadedAction : KOActionModel<KOItemsCollectionPickerViewController>, postInit : ((KOItemsCollectionPickerViewController)->Void)? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){

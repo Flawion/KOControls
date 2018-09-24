@@ -39,6 +39,10 @@ open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate
         return .none
     }
     
+    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
+    
     public func prepareViewController(_ viewController : UIViewController, presentOnViewController : UIViewController ){
         viewController.modalPresentationStyle = .popover
         

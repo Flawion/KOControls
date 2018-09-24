@@ -238,7 +238,7 @@ open class KOTextField : UITextField{
         self.containerForCustomErrorView = containerForCustomErrorView
         
         //error icon view
-        let errorIconView = UIImageView(image: UIImage(named: "field_error"))
+        let errorIconView = UIImageView(image: UIImage(named: "field_error", in: Bundle(for: type(of: self)), compatibleWith: nil))
         errorIconView.contentMode = .center
         errorIconView.translatesAutoresizingMaskIntoConstraints = false
         errorView.addSubview(errorIconView)
