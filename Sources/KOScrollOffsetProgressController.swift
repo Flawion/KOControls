@@ -74,9 +74,12 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     
     public private(set) var progress : CGFloat = 0{
         didSet{
+            progressChangedEvent?(progress)
             delegate?.scrollOffsetProgressController(self, offsetProgress: progress)
         }
     }
+    
+    public var progressChangedEvent : ((_ : CGFloat)->Void)? = nil
     
     //MARK: - Functions
     private func refreshMode(){

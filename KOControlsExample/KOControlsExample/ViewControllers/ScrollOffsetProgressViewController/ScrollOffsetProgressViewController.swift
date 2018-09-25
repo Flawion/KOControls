@@ -9,11 +9,12 @@
 import UIKit
 import KOControls
 
-class ScrollOffsetProgressViewController: UIViewController, UICollectionViewDataSource, KOScrollOffsetProgressControllerDelegate{
+class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgressControllerDelegate{
     //MARK: - Variables
     private var scrollOffsetProgressController: KOScrollOffsetProgressController!
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var offsetBasedContentView: UIView!
     @IBOutlet weak var offsetBasedContentTopConst: NSLayoutConstraint!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userPointsLabel: UILabel!
@@ -26,8 +27,9 @@ class ScrollOffsetProgressViewController: UIViewController, UICollectionViewData
     @IBOutlet weak var userInformationLeftConst: NSLayoutConstraint!
     @IBOutlet weak var userInformationTopConst: NSLayoutConstraint!
     
-    fileprivate var countries : [CountryModel] = []
-    fileprivate let countryCollectionViewCellKey = "countryCollectionViewCell"
+    private var lastCollectionViewWidth: CGFloat = 0
+    private var lastOffsetBasedContentViewWidth : CGFloat = 0
+    private let countryCollectionsController : CountryCollectionsController = CountryCollectionsController()
     
     //MARK: Settable parameters
     private let backBttWidth : CGFloat = 40
@@ -52,8 +54,10 @@ class ScrollOffsetProgressViewController: UIViewController, UICollectionViewData
     //MARK: - Functions
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollOffsetProgressController(scrollOffsetProgressController, offsetProgress: scrollOffsetProgressController.progress)
-        calculateCollectionSize(collectionView, availableWidth: view.bounds.width, itemMaxWidth: 120)
+        DispatchQueue.main.async {
+            [weak self] in
+            self?.recalculateSizeIfNeed()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,9 +94,8 @@ class ScrollOffsetProgressViewController: UIViewController, UICollectionViewData
     }
     
     private func initializeCollectionView(){
-        countries = AppSettings.countries
+        countryCollectionsController.attach(collectionView: collectionView)
         collectionView.allowsSelection = false
-        collectionView.register(UINib(nibName: "CountryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: countryCollectionViewCellKey)
     }
     
     private func initializeScrollOffsetBasedView(){
@@ -103,57 +106,90 @@ class ScrollOffsetProgressViewController: UIViewController, UICollectionViewData
         scrollOffsetProgressController.mode = .contentOffsetBased
     }
     
-    func scrollOffsetProgressController(_: KOScrollOffsetProgressController, offsetProgress: CGFloat) {
-        let defaultValueProgress = (1.0 - offsetProgress)
+    private func recalculateSizeIfNeed(){
+        if offsetBasedContentView.bounds.width != lastOffsetBasedContentViewWidth{
+            scrollOffsetProgressController(scrollOffsetProgressController, offsetProgress: scrollOffsetProgressController.progress)
+            lastOffsetBasedContentViewWidth = offsetBasedContentView.bounds.width
+        }
         
-        let userImageMaxLeft : CGFloat = ((view.bounds.width / 2.0) - backBttWidth) - (userImageMaxSize.width / 2.0)
-        let userInformationMaxLeft : CGFloat = -(view.bounds.width - ((view.bounds.width - backBttWidth) - userImageMaxLeft))
-        let userImageNewHeight = defaultValueProgress * userImageMaxSize.height + offsetProgress * userImageMinSize.height
-        let userImageNewLeft = defaultValueProgress * userImageMaxLeft + offsetProgress * userImageMinLeftPadding
+        if collectionView.bounds.width != lastCollectionViewWidth{
+            countryCollectionsController.calculateCollectionSize(collectionView, availableWidth: collectionView.bounds.width, itemMaxWidth: 120)
+            lastCollectionViewWidth = collectionView.bounds.width
+        }
+    }
+    
+    func scrollOffsetProgressController(_: KOScrollOffsetProgressController, offsetProgress: CGFloat) {
+        let entryProgress = (1.0 - offsetProgress)
+        
+        let availableWidth : CGFloat = offsetBasedContentView.bounds.width
+        let userImageMaxLeft : CGFloat = ((availableWidth / 2.0) - backBttWidth) - (userImageMaxSize.width / 2.0)
+        let userInformationMaxLeft : CGFloat = -(availableWidth - ((availableWidth - backBttWidth) - userImageMaxLeft))
+        let userImageNewHeight = entryProgress * userImageMaxSize.height + offsetProgress * userImageMinSize.height
+        let userImageNewLeft = entryProgress * userImageMaxLeft + offsetProgress * userImageMinLeftPadding
         
         userImageHeightConst.constant = userImageNewHeight
-        userImageWidthConst.constant = defaultValueProgress * userImageMaxSize.width + offsetProgress * userImageMinSize.width
-        userImageTopConst.constant = defaultValueProgress * userImageMaxTopPadding + offsetProgress * userImageMinTopPadding
+        userImageWidthConst.constant = entryProgress * userImageMaxSize.width + offsetProgress * userImageMinSize.width
+        userImageTopConst.constant = entryProgress * userImageMaxTopPadding + offsetProgress * userImageMinTopPadding
         userImageLeftConst.constant = userImageNewLeft
         userImageView.layer.cornerRadius = userImageNewHeight / 2
     
-        userInformationLeftConst.constant = defaultValueProgress * userInformationMaxLeft + offsetProgress * userInformationMinLeftPadding
-        userInformationTopConst.constant = defaultValueProgress * userInformationMaxTopPadding + offsetProgress * userInformationMinTopPadding
+        userInformationLeftConst.constant = entryProgress * userInformationMaxLeft + offsetProgress * userInformationMinLeftPadding
+        userInformationTopConst.constant = entryProgress * userInformationMaxTopPadding + offsetProgress * userInformationMinTopPadding
         
-        userPointsLabel.font = UIFont.systemFont(ofSize: defaultValueProgress * userPointsMaxFont + offsetProgress * userPointsMinFont, weight: .medium)
+        userPointsLabel.font = UIFont.systemFont(ofSize: entryProgress * userPointsMaxFont + offsetProgress * userPointsMinFont, weight: .medium)
         
         view.layoutIfNeeded()
     }
     
-    private func calculateCollectionSize(_ collectionView : UICollectionView, availableWidth : CGFloat, itemMaxWidth : Double){
-        let inset : CGFloat = 4
-        let itemMargin = 2.0
-        let parentWidth = Double(availableWidth - inset * 2)
-        let divider = max(2.0,(Double(parentWidth)) / itemMaxWidth)
-        let column = floor(divider)
-        let allMargin = (itemMargin * (column - 1))
-        let itemSize = (Double(parentWidth) / column) - allMargin
-        let lineSpacing = max(4.0, ((Double(parentWidth) - allMargin) - (column * itemSize)) / column)
-        
-        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.minimumInteritemSpacing = CGFloat(itemMargin) * 2
-        flowLayout.minimumLineSpacing = CGFloat(lineSpacing)
-        flowLayout.itemSize = CGSize(width: itemSize, height: itemSize)
-        flowLayout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-    }
-    
-    //MARK: UICollectionViewDataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return countries.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: countryCollectionViewCellKey, for: indexPath) as! CountryCollectionViewCell
-        cell.countryModel = countries[indexPath.row]
-        return cell
-    }
-    
     @IBAction func backBttClick(_ sender: Any) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    private let scrollOffsetProgressControllerModes : [String] = [
+        "contentOffsetBased",
+        "translationOffsetBased",
+        "scrollingBlockedUntilProgressMax" ]
+    
+    private let scrollOffsetProgressControllerMaxOffsets : [String] = [
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700"
+    ]
+    var popoverSettings : KOPopoverSettings?
+    @IBAction func settingsBttClick(_ sender: UIButton) {
+        popoverSettings = KOPopoverSettings(sourceView: sender, sourceRect: sender.bounds)
+        
+        presentOptionsPicker(withOptions: [scrollOffsetProgressControllerModes, scrollOffsetProgressControllerMaxOffsets], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Choose mode and max offset of calculating scroll offset progress", action: {
+            (optionsPickerViewController) in
+            optionsPickerViewController.mainView.backgroundColor = UIColor.clear
+            optionsPickerViewController.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction(withTitle: "Cancel")
+            optionsPickerViewController.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(withTitle: "Done", action: {
+                (optionsPickerViewController : KOOptionsPickerViewController) in
+                
+            })
+            
+        }), postInit: {
+            (optionsPickerViewController) in
+            optionsPickerViewController.optionsPickerDelegateInstance = KOOptionsPickerCustomViewDelegate(optionsPickerViewController: optionsPickerViewController, widthForComponent: { (component) -> CGFloat in
+                return component == 0 ? 240 : 60
+            }, heightForComponent: { _ -> CGFloat in
+                return 44
+            }, viewForRowInComponent: {
+                (_, component, title, reusableView : UIView?) in
+                guard let reusableLabel = reusableView as? UILabel else{
+                    let label = UILabel()
+                    label.textColor = UIColor.black
+                    label.font = UIFont.systemFont(ofSize: component == 0 ? 14 : 17)
+                    label.text = title
+                    return label
+                }
+                reusableLabel.text = title
+                return reusableLabel
+            })
+            
+        }, popoverSettings: popoverSettings!)
     }
 }

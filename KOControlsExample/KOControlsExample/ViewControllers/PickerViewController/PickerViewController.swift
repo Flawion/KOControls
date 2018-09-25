@@ -19,6 +19,14 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     
     fileprivate var popoverSettings : KOPopoverSettings? = nil
     
+    fileprivate var isPresentPopover : Bool{
+        return presentMode.selectedSegmentIndex == 1
+    }
+    
+    fileprivate var isStyleCustomize : Bool{
+        return styleMode.selectedSegmentIndex == 1
+    }
+    
     //birthday
     @IBOutlet weak var birthdayField: KOTextField!
     fileprivate var birthdayDate : Date = Date() {
@@ -59,14 +67,11 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var countryField: KOTextField!
     @IBOutlet weak var countryPickerType: UISegmentedControl!
     
-    fileprivate var countries : [CountryModel] = []
-    
-    fileprivate let countryTableViewCellKey = "countryTableViewCell"
-    fileprivate let countryCollectionViewCellKey = "countryCollectionViewCell"
+    fileprivate let countryCollectionsController : CountryCollectionsController = CountryCollectionsController()
     
     fileprivate var countryIndex : Int = 0{
         didSet{
-            countryField.text = countries[countryIndex].name
+            countryField.text = countryCollectionsController.countries[countryIndex].name
         }
     }
     
@@ -84,7 +89,6 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     private func initializeView(){
         navigationItem.title = "KOPickerView"
         definesPresentationContext = true
-        countries = AppSettings.countries
     }
     
     private func initializeFields(){
@@ -101,6 +105,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         countryField.borderSettings = AppSettings.fieldBorder
     }
     
+    //MARK: Show picker after field clicked
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return handleShouldBeginEditing(textField: textField)
     }
@@ -134,7 +139,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     
     //MARK: Additionals customizations
     private func customize(dialogViewController : KODialogViewController){
-        if presentMode.selectedSegmentIndex == 0{
+        if !isPresentPopover{
             dialogViewController.backgroundVisualEffect = UIBlurEffect(style: .dark)
             dialogViewController.mainViewHorizontalAlignment = .center
             dialogViewController.mainViewVerticalAlignment = .center
@@ -150,7 +155,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     }
     
     private func customizeIfNeed(popoverSettings : KOPopoverSettings){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         popoverSettings.setupPopoverPresentationControllerEvent = {
@@ -160,7 +165,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     }
     
     private func customizeTransitionIfNeed(dialogViewController : KODialogViewController){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         dialogViewController.dimmingTransition.setupPresentationControllerEvent = {
@@ -173,31 +178,34 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
 //MARK: - Date picker
 extension PickerViewController{
     
-    private func showDatePicker(){
-        let presentPopover = presentMode.selectedSegmentIndex == 1
-        if presentPopover{
-            popoverSettings = KOPopoverSettings(sourceView: birthdayField, sourceRect: birthdayField.bounds)
-            customizeIfNeed(popoverSettings: popoverSettings!)
-            
-            presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
-                [weak self](datePicker) in
-                guard let sSelf = self else{
-                    return
-                }
-                datePicker.mainView.backgroundColor = UIColor.clear
-                sSelf.initializeDatePicker(datePicker)
-            }), popoverSettings: popoverSettings!)
-        }else{
-            presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
-                [weak self](datePicker) in
-                self?.initializeDatePicker(datePicker)
-            }), postInit: {
-                [weak self] datePicker in
-                self?.customizeTransitionIfNeed(dialogViewController: datePicker)
-            })
-        }
+    fileprivate func showDatePicker(){
+        isPresentPopover ? showDatePickerPopover() : showDatePickerNormal()
     }
 
+    private func showDatePickerPopover(){
+        popoverSettings = KOPopoverSettings(sourceView: birthdayField, sourceRect: birthdayField.bounds)
+        customizeIfNeed(popoverSettings: popoverSettings!)
+        
+        presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
+            [weak self](datePicker) in
+            guard let sSelf = self else{
+                return
+            }
+            datePicker.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeDatePicker(datePicker)
+        }), popoverSettings: popoverSettings!)
+    }
+    
+    private func showDatePickerNormal(){
+        presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
+            [weak self](datePicker) in
+            self?.initializeDatePicker(datePicker)
+        }), postInit: {
+            [weak self] datePicker in
+            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+        })
+    }
+    
     private func initializeDatePicker(_ datePicker : KODatePickerViewController){
         datePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
         datePicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
@@ -214,7 +222,7 @@ extension PickerViewController{
     
     //MARK: Customization
     private func customizeIfNeed(datePicker : KODatePickerViewController){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         datePicker.datePickerTextColor = UIColor.orange
@@ -225,29 +233,32 @@ extension PickerViewController{
 //MARK: - Option picker
 extension PickerViewController{
     
-    private func showOptionsPicker(){
-        let presentPopover = presentMode.selectedSegmentIndex == 1
-        if presentPopover{
-            popoverSettings = KOPopoverSettings(sourceView: filmTypeField, sourceRect: filmTypeField.bounds)
-            customizeIfNeed(popoverSettings: popoverSettings!)
-            
-            presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
-                [weak self](optionsPicker) in
-                guard let sSelf = self else{
-                    return
-                }
-                optionsPicker.mainView.backgroundColor = UIColor.clear
-                sSelf.initializeOptionsPicker(optionsPicker)
-            }), popoverSettings: popoverSettings!)
-        }else{
-            presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
-                [weak self](optionsPicker) in
-                self?.initializeOptionsPicker(optionsPicker)
-            }), postInit: {
-                [weak self] datePicker in
-                self?.customizeTransitionIfNeed(dialogViewController: datePicker)
-            })
-        }
+    fileprivate func showOptionsPicker(){
+        isPresentPopover ? showOptionsPickerPopover() : showOptionsPickerNormal()
+    }
+    
+    private func showOptionsPickerPopover(){
+        popoverSettings = KOPopoverSettings(sourceView: filmTypeField, sourceRect: filmTypeField.bounds)
+        customizeIfNeed(popoverSettings: popoverSettings!)
+        
+        presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
+            [weak self](optionsPicker) in
+            guard let sSelf = self else{
+                return
+            }
+            optionsPicker.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeOptionsPicker(optionsPicker)
+        }), popoverSettings: popoverSettings!)
+    }
+    
+    private func showOptionsPickerNormal(){
+        presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
+            [weak self](optionsPicker) in
+            self?.initializeOptionsPicker(optionsPicker)
+        }), postInit: {
+            [weak self] datePicker in
+            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+        })
     }
     
     private func initializeOptionsPicker(_ optionsPicker : KOOptionsPickerViewController){
@@ -265,43 +276,49 @@ extension PickerViewController{
     
     //MARK: Customization
     private func customizeIfNeed(optionsPicker : KOOptionsPickerViewController){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
-        optionsPicker.optionsPickerTitleAttributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14, weight: .medium), NSAttributedString.Key.foregroundColor : UIColor.orange]
+        (optionsPicker.optionsPickerDelegateInstance as! KOOptionsPickerSimpleDelegate).titleAttributesForRowInComponents =
+            { (_, _) in
+                return [NSAttributedString.Key.foregroundColor : UIColor.orange]
+            }
         optionsPicker.optionsPicker.reloadAllComponents()
         customize(dialogViewController: optionsPicker)
     }
 }
 
 //MARK: - Items table picker
-extension PickerViewController : UITableViewDataSource{
+extension PickerViewController{
     
-    private func showItemsTablePicker(){
-        let presentPopover = presentMode.selectedSegmentIndex == 1
-        if presentPopover{
-            popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
-            popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
-            customizeIfNeed(popoverSettings: popoverSettings!)
-            
-            presentItemsTablePicker( viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
-                [weak self](itemsTablePicker) in
-                guard let sSelf = self else{
-                    return
-                }
-                itemsTablePicker.mainView.backgroundColor = UIColor.clear
-                sSelf.initializeItemsTablePicker(itemsTablePicker)
-            }), popoverSettings: popoverSettings!)
-        }else{
-            presentItemsTablePicker(viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
-                [weak self](itemsTablePicker) in
-                itemsTablePicker.contentHeight = 300
-                self?.initializeItemsTablePicker(itemsTablePicker)
-            }), postInit: {
-                [weak self] datePicker in
-                self?.customizeTransitionIfNeed(dialogViewController: datePicker)
-            })
-        }
+    fileprivate func showItemsTablePicker(){
+        isPresentPopover ? showItemsTablePickerPopover() : showItemsTablePickerNormal()
+    }
+    
+    private func showItemsTablePickerNormal(){
+        presentItemsTablePicker(viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
+            [weak self](itemsTablePicker) in
+            itemsTablePicker.contentHeight = 300
+            self?.initializeItemsTablePicker(itemsTablePicker)
+        }), postInit: {
+            [weak self] datePicker in
+            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+        })
+    }
+    
+    private func showItemsTablePickerPopover(){
+        popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
+        popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
+        customizeIfNeed(popoverSettings: popoverSettings!)
+        
+        presentItemsTablePicker( viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
+            [weak self](itemsTablePicker) in
+            guard let sSelf = self else{
+                return
+            }
+            itemsTablePicker.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeItemsTablePicker(itemsTablePicker)
+        }), popoverSettings: popoverSettings!)
     }
     
     private func initializeItemsTablePicker(_ itemsTablePicker : KOItemsTablePickerViewController){
@@ -316,14 +333,15 @@ extension PickerViewController : UITableViewDataSource{
             }
         })
         itemsTablePicker.itemsTable.allowsSelection = true
-        itemsTablePicker.itemsTable.register(UINib(nibName: "CountryTableViewCell", bundle: nil), forCellReuseIdentifier: countryTableViewCellKey)
-        itemsTablePicker.itemsTable.dataSource = self
+        countryCollectionsController.attach(tableView: itemsTablePicker.itemsTable)
+        countryCollectionsController.tableViewSetupCell = {[weak self] cell in self?.customizeIfNeed(countryTableViewCell: cell) }
+        
         customizeIfNeed(itemsTablePicker: itemsTablePicker)
     }
     
     //MARK: Customization
     private func customizeIfNeed(itemsTablePicker : KOItemsTablePickerViewController){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         itemsTablePicker.itemsTable.separatorColor = UIColor.white
@@ -340,59 +358,49 @@ extension PickerViewController : UITableViewDataSource{
     }
     
     private func customizeIfNeed(countryTableViewCell : CountryTableViewCell){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         countryTableViewCell.backgroundColor = UIColor.clear
         countryTableViewCell.titleLabel.textColor = UIColor.orange
     }
-    
-    //MARK: UITableViewDataSource
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return countries.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: countryTableViewCellKey, for: indexPath) as! CountryTableViewCell
-        cell.countryModel = countries[indexPath.row]
-        customizeIfNeed(countryTableViewCell: cell)
-        return cell
-    }
 }
 
 //MARK: - Items collection picker
-extension PickerViewController : UICollectionViewDataSource{
+extension PickerViewController{
     
-    private func showItemsCollectionPicker(){
-        let presentPopover = presentMode.selectedSegmentIndex == 1
-        //show as a popover or not
-        if presentPopover{
-            //creates popover's settings
-            popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
-            popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
-            customizeIfNeed(popoverSettings: popoverSettings!)
-            
-            presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
-                [weak self](itemsCollectionPicker) in
-                guard let sSelf = self else{
-                    return
-                }
-                itemsCollectionPicker.mainView.backgroundColor = UIColor.clear
-                sSelf.initializeItemsCollectionPicker(itemsCollectionPicker, availableWidth: 320, itemMaxWidth: 80)
-            }), popoverSettings: popoverSettings!)
-        }else{
-            presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
-                [weak self](itemsCollectionPicker) in
-                guard let sSelf = self else{
-                    return
-                }
-                itemsCollectionPicker.contentHeight = 300
-                sSelf.initializeItemsCollectionPicker(itemsCollectionPicker, availableWidth: sSelf.view.bounds.width, itemMaxWidth: 120)
-            }), postInit: {
-                [weak self] datePicker in
-                self?.customizeTransitionIfNeed(dialogViewController: datePicker)
-            })
-        }
+    fileprivate func showItemsCollectionPicker(){
+        isPresentPopover ? showItemsCollectionPickerPopover() : showItemsCollectionPickerNormal()
+    }
+    
+    private func showItemsCollectionPickerNormal(){
+        presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
+            [weak self](itemsCollectionPicker) in
+            guard let sSelf = self else{
+                return
+            }
+            itemsCollectionPicker.contentHeight = 300
+            sSelf.initializeItemsCollectionPicker(itemsCollectionPicker, availableWidth: sSelf.view.bounds.width, itemMaxWidth: 120)
+        }), postInit: {
+            [weak self] datePicker in
+            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+        })
+    }
+    
+    private func showItemsCollectionPickerPopover(){
+        //creates popover's settings
+        popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
+        popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
+        customizeIfNeed(popoverSettings: popoverSettings!)
+        
+        presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
+            [weak self](itemsCollectionPicker) in
+            guard let sSelf = self else{
+                return
+            }
+            itemsCollectionPicker.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeItemsCollectionPicker(itemsCollectionPicker, availableWidth: 320, itemMaxWidth: 80)
+        }), popoverSettings: popoverSettings!)
     }
     
     private func initializeItemsCollectionPicker(_ itemsCollectionPicker : KOItemsCollectionPickerViewController, availableWidth : CGFloat, itemMaxWidth : Double){
@@ -409,33 +417,16 @@ extension PickerViewController : UICollectionViewDataSource{
 
         itemsCollectionPicker.itemsCollection.allowsSelection = true
         itemsCollectionPicker.itemsCollection.backgroundColor = UIColor.lightGray
-        itemsCollectionPicker.itemsCollection.dataSource = self
-        itemsCollectionPicker.itemsCollection.register(UINib(nibName: "CountryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: countryCollectionViewCellKey)
+        countryCollectionsController.attach(collectionView: itemsCollectionPicker.itemsCollection)
+        countryCollectionsController.collectionViewSetupCell = {[weak self] cell in self?.customizeIfNeed(countryCollectionViewCell: cell) }
         
         customizeIfNeed(itemsCollectionPickerViewController: itemsCollectionPicker)
-        calculateCollectionSize(itemsCollectionPicker, availableWidth: availableWidth, itemMaxWidth: itemMaxWidth)
-    }
-    
-    private func calculateCollectionSize(_ itemsCollectionPicker : KOItemsCollectionPickerViewController, availableWidth : CGFloat, itemMaxWidth : Double){
-        let inset : CGFloat = 4
-        let itemMargin = 2.0
-        let parentWidth = Double( (itemsCollectionPicker.contentWidth ?? availableWidth) - inset * 2)
-        let divider = max(2.0,(Double(parentWidth)) / itemMaxWidth)
-        let column = floor(divider)
-        let allMargin = (itemMargin * (column - 1))
-        let itemSize = (Double(parentWidth) / column) - allMargin
-        let lineSpacing = max(4.0, ((Double(parentWidth) - allMargin) - (column * itemSize)) / column)
-        
-        let flowLayout = itemsCollectionPicker.itemsCollection.collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.minimumInteritemSpacing = CGFloat(itemMargin) * 2
-        flowLayout.minimumLineSpacing = CGFloat(lineSpacing)
-        flowLayout.itemSize = CGSize(width: itemSize, height: itemSize)
-        flowLayout.sectionInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        countryCollectionsController.calculateCollectionSize(itemsCollectionPicker.itemsCollection, availableWidth: itemsCollectionPicker.contentWidth ?? availableWidth, itemMaxWidth: itemMaxWidth)
     }
     
     //MARK: Customization
     private func customizeIfNeed(itemsCollectionPickerViewController : KOItemsCollectionPickerViewController){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         itemsCollectionPickerViewController.itemsCollection.backgroundColor = UIColor.clear
@@ -445,29 +436,17 @@ extension PickerViewController : UICollectionViewDataSource{
          We only need to do it in normal presentation mode because in popover presentation mode
          we already override  prefered content size
          */
-        if presentMode.selectedSegmentIndex == 0{
+        if !isPresentPopover{
             itemsCollectionPickerViewController.contentWidth = 320
         }
         customize(dialogViewController: itemsCollectionPickerViewController)
     }
     
     private func customizeIfNeed(countryCollectionViewCell : CountryCollectionViewCell){
-        guard styleMode.selectedSegmentIndex == 1 else{
+        guard isStyleCustomize else{
             return
         }
         countryCollectionViewCell.backgroundColor = UIColor.clear
         countryCollectionViewCell.titleLabel.textColor = UIColor.orange
-    }
-    
-    //MARK: UICollectionViewDataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return countries.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: countryCollectionViewCellKey, for: indexPath) as! CountryCollectionViewCell
-        cell.countryModel = countries[indexPath.row]
-        customizeIfNeed(countryCollectionViewCell: cell)
-        return cell
     }
 }

@@ -58,21 +58,91 @@ open class KODatePickerViewController : KODialogViewController{
     }
 }
 
+//MARK: - KOOptionsPickerViewDelegates
+open class KOOptionsPickerSimpleDelegate : NSObject, UIPickerViewDelegate{
+    fileprivate weak var optionsPickerViewController : KOOptionsPickerViewController!
+    
+    public var titleAttributesForRowInComponents : ((_ row : Int, _ component : Int)->[NSAttributedStringKey : Any])?
+    
+    public init(optionsPickerViewController : KOOptionsPickerViewController){
+        self.optionsPickerViewController = optionsPickerViewController
+        super.init()
+    }
+    
+    //MARK: UIPickerViewDelegate
+    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return optionsPickerViewController.options[component][row]
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        guard let optionsPickerTitleAttributes = titleAttributesForRowInComponents?(row, component) else{
+            return nil
+        }
+        return NSAttributedString(string: optionsPickerViewController.options[component][row], attributes: optionsPickerTitleAttributes)
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        optionsPickerViewController.selectionChangedEvent?(row,component)
+    }
+}
+
+open class KOOptionsPickerResizableDelegate : KOOptionsPickerSimpleDelegate{
+    private let widthForComponent : (_ component : Int)->CGFloat
+    private let heightForComponent : (_ component : Int)->CGFloat
+    
+    public init(optionsPickerViewController : KOOptionsPickerViewController, widthForComponent : @escaping (Int)->CGFloat, heightForComponent : @escaping (Int)->CGFloat){
+        self.widthForComponent = widthForComponent
+        self.heightForComponent = heightForComponent
+        super.init(optionsPickerViewController: optionsPickerViewController)
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return heightForComponent(component)
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        return widthForComponent(component)
+    }
+}
+
+open class KOOptionsPickerCustomViewDelegate : KOOptionsPickerResizableDelegate{
+    private let viewForRowInComponent : (_ row : Int, _ component : Int, _ title : String, _ reusableView : UIView?)->UIView
+    
+    public init(optionsPickerViewController : KOOptionsPickerViewController, widthForComponent : @escaping (Int)->CGFloat, heightForComponent : @escaping (Int)->CGFloat, viewForRowInComponent : @escaping (Int, Int, String, UIView?)->UIView){
+        self.viewForRowInComponent = viewForRowInComponent
+        super.init(optionsPickerViewController: optionsPickerViewController, widthForComponent: widthForComponent, heightForComponent: heightForComponent)
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        return viewForRowInComponent(row, component, optionsPickerViewController.options[component][row], view)
+    }
+}
+
 //MARK: - KOOptionsPickerViewController
-open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewDataSource, UIPickerViewDelegate{
+open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewDataSource{
     //MARK: Variables
     private weak var pOptionsPicker : UIPickerView!
     
     //public
-    public var optionsPickerTitleAttributes : [NSAttributedStringKey : Any]?
-    
     public var optionsPicker : UIPickerView{
         loadViewIfNeeded()
         return pOptionsPicker
     }
     
+    public var optionsPickerDelegateInstance : UIPickerViewDelegate!{
+        didSet{
+            guard isViewLoaded else{
+                return
+            }
+            pOptionsPicker.delegate = optionsPickerDelegateInstance
+        }
+    }
+    
     public var options : [[String]] = []{
         didSet{
+            guard isViewLoaded else{
+                return
+            }
             optionsPicker.reloadAllComponents()
         }
     }
@@ -96,8 +166,12 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
     override open func createContentView() -> UIView {
         let optionsPicker = UIPickerView()
         optionsPicker.dataSource = self
-        optionsPicker.delegate = self
         self.pOptionsPicker = optionsPicker
+        if let optionsPickerDelegate = optionsPickerDelegateInstance{
+            optionsPicker.delegate = optionsPickerDelegate
+        }else{
+            optionsPickerDelegateInstance = KOOptionsPickerSimpleDelegate(optionsPickerViewController: self)
+        }
         return optionsPicker
     }
     
@@ -108,21 +182,6 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
     
     public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return options[component].count
-    }
-    
-    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return options[component][row]
-    }
-    
-    public func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        guard let optionsPickerTitleAttributes = optionsPickerTitleAttributes else{
-            return nil
-        }
-        return NSAttributedString(string: options[component][row], attributes: optionsPickerTitleAttributes)
-    }
-    
-    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectionChangedEvent?(row,component)
     }
 }
 

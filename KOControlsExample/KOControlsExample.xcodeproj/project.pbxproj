@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05191DC1215A237000C45D14 /* CountryCollectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05191DC0215A237000C45D14 /* CountryCollectionsController.swift */; };
 		053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED26021162FAB0016ABC4 /* AppDelegate.swift */; };
 		053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26721162FAC0016ABC4 /* Assets.xcassets */; };
 		053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05191DC0215A237000C45D14 /* CountryCollectionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCollectionsController.swift; sourceTree = "<group>"; };
 		053ED25D21162FAB0016ABC4 /* KOControlsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KOControlsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		053ED26021162FAB0016ABC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		053ED26721162FAC0016ABC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				053ED288211632DB0016ABC4 /* Models */,
 				059C74112153866500422E73 /* Views */,
 				053ED27D211631900016ABC4 /* ViewControllers */,
+				05191DC0215A237000C45D14 /* CountryCollectionsController.swift */,
 				053ED26021162FAB0016ABC4 /* AppDelegate.swift */,
 				058529552150DD7400FA36DE /* AppSettings.swift */,
 				053ED26721162FAC0016ABC4 /* Assets.xcassets */,
@@ -361,6 +364,7 @@
 				053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */,
 				059C740F2153864800422E73 /* CountryModel.swift in Sources */,
 				05CCFDD321256BE800208BD5 /* ScrollOffsetProgressViewController.swift in Sources */,
+				05191DC1215A237000C45D14 /* CountryCollectionsController.swift in Sources */,
 				059C74142153870400422E73 /* CountryTableViewCell.swift in Sources */,
 				053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */,
 				05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */,
