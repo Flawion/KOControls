@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScrollOffsetProgressViewController" customModule="KOControlsExample" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="4cI-tP-NNU" id="0ib-0M-dE9"/>
+                <outlet property="gradientView" destination="lSn-Du-gnb" id="7m7-0C-fkE"/>
                 <outlet property="offsetBasedContentTopConst" destination="vxE-Md-Vpr" id="dO5-Tn-lO8"/>
                 <outlet property="offsetBasedContentView" destination="fhf-cG-Oon" id="wxU-T2-Ejf"/>
                 <outlet property="userImageHeightConst" destination="2iy-nb-9a0" id="NKx-gN-Oby"/>
@@ -21,6 +22,7 @@
                 <outlet property="userImageView" destination="Lvy-pt-oTn" id="EX0-pj-3zw"/>
                 <outlet property="userImageWidthConst" destination="kwh-MO-xc1" id="KBG-7o-CjS"/>
                 <outlet property="userInformationLeftConst" destination="iIS-ae-bh1" id="YVb-a0-q9F"/>
+                <outlet property="userInformationRightConst" destination="Ka0-sB-tMK" id="SBn-2l-s3n"/>
                 <outlet property="userInformationTopConst" destination="yvj-Le-cxl" id="Rec-bF-Fcw"/>
                 <outlet property="userPointsLabel" destination="o1P-XB-qN4" id="7N3-xY-ZhK"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -34,7 +36,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZMZ-7a-cLd">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lSn-Du-gnb">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lSn-Du-gnb" customClass="GradientView" customModule="KOControlsExample" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="239.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fhf-cG-Oon" userLabel="OffsetBasedContentView">

@@ -11,13 +11,13 @@ import KOControls
 
 class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgressControllerDelegate{
     //MARK: - Variables
-    private var scrollOffsetProgressController: KOScrollOffsetProgressController!
-    
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var gradientView: GradientView!
     @IBOutlet weak var offsetBasedContentView: UIView!
-    @IBOutlet weak var offsetBasedContentTopConst: NSLayoutConstraint!
-    @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userPointsLabel: UILabel!
+    @IBOutlet weak var userImageView: UIImageView!
+    
+    @IBOutlet weak var offsetBasedContentTopConst: NSLayoutConstraint!
     
     @IBOutlet weak var userImageHeightConst: NSLayoutConstraint!
     @IBOutlet weak var userImageWidthConst: NSLayoutConstraint!
@@ -25,11 +25,51 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     @IBOutlet weak var userImageTopConst: NSLayoutConstraint!
     
     @IBOutlet weak var userInformationLeftConst: NSLayoutConstraint!
+    @IBOutlet weak var userInformationRightConst: NSLayoutConstraint!
     @IBOutlet weak var userInformationTopConst: NSLayoutConstraint!
     
     private var lastCollectionViewWidth: CGFloat = 0
     private var lastOffsetBasedContentViewWidth : CGFloat = 0
     private let countryCollectionsController : CountryCollectionsController = CountryCollectionsController()
+    
+    //MARK: Scroll offset progress
+    private var scrollOffsetProgressController: KOScrollOffsetProgressController!
+    private var popoverSettings : KOPopoverSettings?
+    
+    private let scrollOffsetProgressModes : [String] = [
+        "contentOffsetBased",
+        "translationOffsetBased",
+        "scrollingBlockedUntilProgressMax" ]
+    
+    private let scrollOffsetProgressMaxOffsets : [String] = [
+        "200",
+        "300",
+        "400",
+        "500",
+        "600",
+        "700"
+    ]
+    
+    private var selectedScrollOffsetProgressModeIndex : Int = 0{
+        didSet{
+            switch selectedScrollOffsetProgressModeIndex {
+            case 0:
+                scrollOffsetProgressController.mode = .contentOffsetBased
+            case 1:
+                scrollOffsetProgressController.mode = .translationOffsetBased
+            case 2:
+                scrollOffsetProgressController.mode = .scrollingBlockedUntilProgressMax
+            default: break
+            }
+        }
+    }
+    
+    private var selectedScrollOffsetProgressMaxOffsetIndex : Int = 1{
+        didSet{
+            let numberFormatter = NumberFormatter()
+            scrollOffsetProgressController.maxOffset = CGFloat(numberFormatter.number(from: scrollOffsetProgressMaxOffsets[selectedScrollOffsetProgressMaxOffsetIndex])?.floatValue ?? 300)
+        }
+    }
     
     //MARK: Settable parameters
     private let backBttWidth : CGFloat = 40
@@ -91,6 +131,9 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
         automaticallyAdjustsScrollViewInsets = false
         userImageView.layer.borderWidth = 1
         userImageView.layer.borderColor = UIColor.white.cgColor
+        
+        gradientView.gradientLayer.colors = [UIColor.black.cgColor, UIColor(red: 49/255, green: 49/255, blue: 49/255, alpha: 1.0).cgColor ]
+        gradientView.gradientLayer.locations = [0, 0.5]
     }
     
     private func initializeCollectionView(){
@@ -135,6 +178,7 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     
         userInformationLeftConst.constant = entryProgress * userInformationMaxLeft + offsetProgress * userInformationMinLeftPadding
         userInformationTopConst.constant = entryProgress * userInformationMaxTopPadding + offsetProgress * userInformationMinTopPadding
+        userInformationRightConst.constant = entryProgress * userInformationMinLeftPadding + offsetProgress * backBttWidth
         
         userPointsLabel.font = UIFont.systemFont(ofSize: entryProgress * userPointsMaxFont + offsetProgress * userPointsMinFont, weight: .medium)
         
@@ -144,31 +188,27 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     @IBAction func backBttClick(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-    
-    private let scrollOffsetProgressControllerModes : [String] = [
-        "contentOffsetBased",
-        "translationOffsetBased",
-        "scrollingBlockedUntilProgressMax" ]
-    
-    private let scrollOffsetProgressControllerMaxOffsets : [String] = [
-        "200",
-        "300",
-        "400",
-        "500",
-        "600",
-        "700"
-    ]
-    var popoverSettings : KOPopoverSettings?
+   
     @IBAction func settingsBttClick(_ sender: UIButton) {
         popoverSettings = KOPopoverSettings(sourceView: sender, sourceRect: sender.bounds)
         
-        presentOptionsPicker(withOptions: [scrollOffsetProgressControllerModes, scrollOffsetProgressControllerMaxOffsets], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Choose mode and max offset of calculating scroll offset progress", action: {
-            (optionsPickerViewController) in
+        presentOptionsPicker(withOptions: [scrollOffsetProgressModes, scrollOffsetProgressMaxOffsets], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Choose mode and max offset of calculating scroll offset progress", action: {
+            [weak self](optionsPickerViewController) in
+            guard let sSelf = self else{
+                return
+            }
+            
+            optionsPickerViewController.optionsPicker.selectRow(sSelf.selectedScrollOffsetProgressModeIndex, inComponent: 0, animated: false)
+            optionsPickerViewController.optionsPicker.selectRow(sSelf.selectedScrollOffsetProgressMaxOffsetIndex, inComponent: 1, animated: false)
             optionsPickerViewController.mainView.backgroundColor = UIColor.clear
             optionsPickerViewController.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction(withTitle: "Cancel")
             optionsPickerViewController.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(withTitle: "Done", action: {
-                (optionsPickerViewController : KOOptionsPickerViewController) in
-                
+                [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
+                guard let sSelf = self else{
+                    return
+                }
+                sSelf.selectedScrollOffsetProgressModeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
+                sSelf.selectedScrollOffsetProgressMaxOffsetIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 1)
             })
             
         }), postInit: {
@@ -191,5 +231,16 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
             })
             
         }, popoverSettings: popoverSettings!)
+    }
+}
+
+
+class GradientView : UIView{
+    override class var layerClass: AnyClass {
+        return CAGradientLayer.self
+    }
+    
+    var gradientLayer : CAGradientLayer{
+        return layer as! CAGradientLayer
     }
 }

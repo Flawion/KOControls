@@ -450,3 +450,35 @@ extension PickerViewController{
         countryCollectionViewCell.titleLabel.textColor = UIColor.orange
     }
 }
+
+
+//MARK: - Custom picker
+class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
+    
+    override func createContentView() -> UIView {
+        let containerView = UIView()
+        
+        let itemsTable = super.createContentView()
+        containerView.addSubview(itemsTable)
+        itemsTable.translatesAutoresizingMaskIntoConstraints = false
+        
+        let searchField = KOTextField()
+        searchField.placeholder = "Search country"
+        containerView.addSubview(searchField)
+        searchField.translatesAutoresizingMaskIntoConstraints = false
+        
+        containerView.addConstraints([
+            searchField.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            searchField.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            searchField.topAnchor.constraint(equalTo: containerView.topAnchor),
+            itemsTable.topAnchor.constraint(equalTo: searchField.bottomAnchor),
+            itemsTable.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            itemsTable.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            itemsTable.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            ])
+        
+        return containerView
+    }
+    
+    
+}
