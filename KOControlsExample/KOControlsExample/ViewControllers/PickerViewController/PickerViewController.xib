@@ -15,6 +15,7 @@
                 <outlet property="birthdayField" destination="u42-GP-AJK" id="xRg-RT-M1B"/>
                 <outlet property="countryField" destination="dmQ-7e-1sW" id="W0F-eb-4kt"/>
                 <outlet property="countryPickerType" destination="X32-t7-UsJ" id="gGa-b0-ULE"/>
+                <outlet property="customCountryField" destination="vD5-j5-1vE" id="xuY-RA-1bo"/>
                 <outlet property="filmTypeField" destination="CU1-KT-t8n" id="SVH-L7-HLw"/>
                 <outlet property="presentMode" destination="IAC-MB-UrX" id="VUA-25-rJ0"/>
                 <outlet property="scrollViewContainer" destination="VsM-mN-tL7" id="Pqp-ce-LgJ"/>

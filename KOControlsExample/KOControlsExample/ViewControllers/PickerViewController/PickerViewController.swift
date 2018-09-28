@@ -66,7 +66,9 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     //country
     @IBOutlet weak var countryField: KOTextField!
     @IBOutlet weak var countryPickerType: UISegmentedControl!
+    @IBOutlet weak var customCountryField: KOTextField!
     
+    fileprivate let customCountryCollectionsController : CountryCollectionsController = CountryCollectionsController()
     fileprivate let countryCollectionsController : CountryCollectionsController = CountryCollectionsController()
     
     fileprivate var countryIndex : Int = 0{
@@ -84,6 +86,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     private func intialize(){
         initializeView()
         initializeFields()
+        initializeCountryCollectionControllers()
     }
     
     private func initializeView(){
@@ -103,6 +106,17 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         filmTypeField.showErrorInfoInView = scrollViewContainer
         
         countryField.borderSettings = AppSettings.fieldBorder
+        customCountryField.borderSettings = AppSettings.fieldBorder
+    }
+    
+    private func initializeCountryCollectionControllers(){
+        let setupTableCell : (CountryTableViewCell)->Void = {[weak self] (cell : CountryTableViewCell ) in self?.customizeIfNeed(countryTableViewCell: cell) }
+        let setupCollectionCell : (CountryCollectionViewCell)->Void = {[weak self] (cell : CountryCollectionViewCell ) in self?.customizeIfNeed(countryCollectionViewCell: cell) }
+        
+        countryCollectionsController.collectionViewSetupCell = setupCollectionCell
+        countryCollectionsController.tableViewSetupCell = setupTableCell
+        customCountryCollectionsController.collectionViewSetupCell = setupCollectionCell
+        customCountryCollectionsController.tableViewSetupCell = setupTableCell
     }
     
     //MARK: Show picker after field clicked
@@ -122,6 +136,10 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
             
         case 3:
             showItemsPicker()
+            return false
+            
+        case 4:
+            showCustomItemsTablePicker()
             return false
             
         default:
@@ -334,8 +352,7 @@ extension PickerViewController{
         })
         itemsTablePicker.itemsTable.allowsSelection = true
         countryCollectionsController.attach(tableView: itemsTablePicker.itemsTable)
-        countryCollectionsController.tableViewSetupCell = {[weak self] cell in self?.customizeIfNeed(countryTableViewCell: cell) }
-        
+ 
         customizeIfNeed(itemsTablePicker: itemsTablePicker)
     }
     
@@ -418,8 +435,7 @@ extension PickerViewController{
         itemsCollectionPicker.itemsCollection.allowsSelection = true
         itemsCollectionPicker.itemsCollection.backgroundColor = UIColor.lightGray
         countryCollectionsController.attach(collectionView: itemsCollectionPicker.itemsCollection)
-        countryCollectionsController.collectionViewSetupCell = {[weak self] cell in self?.customizeIfNeed(countryCollectionViewCell: cell) }
-        
+
         customizeIfNeed(itemsCollectionPickerViewController: itemsCollectionPicker)
         countryCollectionsController.calculateCollectionSize(itemsCollectionPicker.itemsCollection, availableWidth: itemsCollectionPicker.contentWidth ?? availableWidth, itemMaxWidth: itemMaxWidth)
     }
@@ -452,8 +468,61 @@ extension PickerViewController{
 }
 
 
-//MARK: - Custom picker
+//MARK: - Custom items table picker
+extension PickerViewController{
+    
+    fileprivate func showCustomItemsTablePicker(){
+        isPresentPopover ? showCustomItemsTablePickerPopover() : showCustomItemsTablePickerNormal()
+    }
+    
+    private func showCustomItemsTablePickerNormal(){
+        let searchItemsTablePicker = SearchItemsTablePickerViewController()
+        customizeTransitionIfNeed(dialogViewController: searchItemsTablePicker)
+        presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
+            [weak self](itemsTablePicker) in
+            guard let sSelf = self else{
+                return
+            }
+            itemsTablePicker.contentHeight = 300
+            sSelf.initializeItemsTablePicker(itemsTablePicker)
+            sSelf.initializeCustomItemsTablePicker(itemsTablePicker)
+        }))
+    }
+    
+    private func showCustomItemsTablePickerPopover(){
+        let searchItemsTablePicker = SearchItemsTablePickerViewController()
+        
+        popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
+        popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
+        customizeIfNeed(popoverSettings: popoverSettings!)
+        
+        presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
+            [weak self](itemsTablePicker) in
+            guard let sSelf = self else{
+                return
+            }
+            itemsTablePicker.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeItemsTablePicker(itemsTablePicker)
+            sSelf.initializeCustomItemsTablePicker(itemsTablePicker)
+            
+        }), popoverSettings: popoverSettings)
+    }
+    
+    private func initializeCustomItemsTablePicker(_ itemsTablePicker : SearchItemsTablePickerViewController){
+        itemsTablePicker.searchField.addTarget(self, action: #selector(customItemsTablePickerSearchFieldChanged(_:)) , for: .editingChanged)
+        
+        customCountryCollectionsController.searchForCountries(byName: "")
+        customCountryCollectionsController.attach(tableView: itemsTablePicker.itemsTable)
+    }
+    
+    @objc private func customItemsTablePickerSearchFieldChanged(_ sender : UITextField){
+        customCountryCollectionsController.searchForCountries(byName: sender.text ?? "")
+    }
+}
+
 class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
+    private(set) weak var searchField : KOTextField!
+    
     
     override func createContentView() -> UIView {
         let containerView = UIView()
@@ -463,15 +532,18 @@ class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
         itemsTable.translatesAutoresizingMaskIntoConstraints = false
         
         let searchField = KOTextField()
+        searchField.borderStyle = .roundedRect
+        searchField.borderSettings = AppSettings.fieldBorder
         searchField.placeholder = "Search country"
         containerView.addSubview(searchField)
         searchField.translatesAutoresizingMaskIntoConstraints = false
+        self.searchField = searchField
         
         containerView.addConstraints([
-            searchField.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            searchField.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            searchField.topAnchor.constraint(equalTo: containerView.topAnchor),
-            itemsTable.topAnchor.constraint(equalTo: searchField.bottomAnchor),
+            searchField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8),
+            searchField.rightAnchor.constraint(equalTo: containerView.rightAnchor,  constant: -8),
+            searchField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            itemsTable.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 4),
             itemsTable.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             itemsTable.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             itemsTable.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
@@ -479,6 +551,4 @@ class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
         
         return containerView
     }
-    
-    
 }

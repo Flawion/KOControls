@@ -177,22 +177,26 @@ open class KOTextField : UITextField{
     //MARK: Overridden rects to avoid intersection with the error icon view
     override open func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         let rightViewRect = super.rightViewRect(forBounds: bounds)
+        guard errorWidthConst != nil, bounds.isEmpty else{ return rightViewRect}
         return rightViewRect.offsetBy(dx: -errorWidthConst.constant, dy: 0)
     }
     
     override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
         let clearButtonRect = super.clearButtonRect(forBounds: bounds)
+        guard errorWidthConst != nil, bounds.isEmpty else{ return clearButtonRect}
         return clearButtonRect.offsetBy(dx: -errorWidthConst.constant, dy: 0)
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         var textRect = super.textRect(forBounds: bounds)
+        guard errorWidthConst != nil, bounds.isEmpty else{ return textRect}
         textRect.size.width -= errorWidthConst.constant
         return textRect
     }
     
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         var editingRect = super.editingRect(forBounds: bounds)
+        guard errorWidthConst != nil, bounds.isEmpty else{ return editingRect}
         editingRect.size.width -= errorWidthConst.constant
         return editingRect
     }

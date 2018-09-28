@@ -13,9 +13,13 @@ class CountryCollectionsController: NSObject, UICollectionViewDataSource, UITabl
     private let countryTableViewCellKey = "countryTableViewCell"
     private let countryCollectionViewCellKey = "countryCollectionViewCell"
     
-    let countries : [CountryModel]
+    private weak var collectionView : UICollectionView?
+    private weak var tableView : UITableView?
     
-    //public
+     //public
+    private(set) var currentVisibleCountries : [CountryModel] = []
+    let countries : [CountryModel]
+   
     var collectionViewSetupCell : ((CountryCollectionViewCell)->Void)? = nil
     var tableViewSetupCell : ((CountryTableViewCell)->Void)? = nil
     
@@ -23,6 +27,7 @@ class CountryCollectionsController: NSObject, UICollectionViewDataSource, UITabl
     //MARK: Initialize
     override init() {
         countries = AppSettings.countries
+        currentVisibleCountries = countries
         super.init()
     }
     
@@ -30,11 +35,32 @@ class CountryCollectionsController: NSObject, UICollectionViewDataSource, UITabl
     func attach(collectionView : UICollectionView){
         collectionView.register(UINib(nibName: "CountryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: countryCollectionViewCellKey)
         collectionView.dataSource = self
+        self.collectionView = collectionView
     }
     
     func attach(tableView : UITableView){
         tableView.register(UINib(nibName: "CountryTableViewCell", bundle: nil), forCellReuseIdentifier: countryTableViewCellKey)
         tableView.dataSource = self
+        self.tableView = tableView
+    }
+    
+    func searchForCountries(byName name: String){
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !trimmedName.isEmpty else{
+            currentVisibleCountries = countries
+            return
+        }
+        currentVisibleCountries = countries.filter({$0.name.lowercased().contains(trimmedName)})
+        tableView?.reloadData()
+        collectionView?.reloadData()
+    }
+    
+    func startSearchedCountries(byName name: String){
+        
+    }
+    
+    func stopSearchedCountries(byName name : String){
+        
     }
     
     func calculateCollectionSize(_ collectionView : UICollectionView, availableWidth : CGFloat, itemMaxWidth : Double){
@@ -56,24 +82,26 @@ class CountryCollectionsController: NSObject, UICollectionViewDataSource, UITabl
     
     //MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return countries.count
+        return currentVisibleCountries.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: countryCollectionViewCellKey, for: indexPath) as! CountryCollectionViewCell
-        cell.countryModel = countries[indexPath.row]
+        guard indexPath.row < currentVisibleCountries.count else{return cell}
+        cell.countryModel = currentVisibleCountries[indexPath.row]
         collectionViewSetupCell?(cell)
         return cell
     }
     
     //MARK: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return countries.count
+        return currentVisibleCountries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: countryTableViewCellKey, for: indexPath) as! CountryTableViewCell
-        cell.countryModel = countries[indexPath.row]
+        guard indexPath.row < currentVisibleCountries.count else{return cell}
+        cell.countryModel = currentVisibleCountries[indexPath.row]
         tableViewSetupCell?(cell)
         return cell
     }
