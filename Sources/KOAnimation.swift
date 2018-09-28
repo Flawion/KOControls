@@ -80,12 +80,14 @@ public class KOFadeAnimation : KOAnimator, KOAnimationInterface, KOAnimationAlon
     
     public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
         setStartingValue(ofView: view)
+        let maxProgress = min(1.0, progress)
+        let oldProgress = 1.0 - progress
         runViewAnimation(animationBlock: {
             [weak self] in
             guard let sSelf = self else{
                 return
             }
-            view.alpha = sSelf.toValue * progress
+            view.alpha = view.alpha * oldProgress + sSelf.toValue * maxProgress
         }, completionHandler: completionHandler)
     }
     
@@ -113,3 +115,79 @@ public class KOFadeOutAnimation : KOFadeAnimation{
     }
 }
 
+public class KOTransformAnimation: KOAnimator, KOAnimationInterface, KOAnimationAlongsideTransitionInterface{
+    public var toValue : CGAffineTransform
+    public var fromValue : CGAffineTransform?
+    
+    public init(toValue : CGAffineTransform, fromValue : CGAffineTransform? = nil){
+        self.toValue = toValue
+        self.fromValue = fromValue
+    }
+    
+    private func setStartingValue(ofView view: UIView){
+        if let fromValue = fromValue{
+            view.transform = fromValue
+        }
+    }
+    
+    public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
+        setStartingValue(ofView: view)
+        let maxProgress = min(1.0, progress)
+        let oldProgress = 1.0 - progress
+        runViewAnimation(animationBlock: {
+            [weak self] in
+            guard let sSelf = self else{
+                return
+            }
+            let oldTransform = view.transform
+            view.transform = CGAffineTransform(a: oldTransform.a * oldProgress + sSelf.toValue.a * maxProgress,
+                b: oldTransform.b * oldProgress + sSelf.toValue.b * maxProgress,
+                c: oldTransform.c * oldProgress + sSelf.toValue.c * maxProgress,
+                d: oldTransform.d * oldProgress + sSelf.toValue.d * maxProgress,
+                tx: oldTransform.tx * oldProgress + sSelf.toValue.tx * maxProgress,
+                ty: oldTransform.ty * oldProgress + sSelf.toValue.ty * maxProgress)
+        }, completionHandler: completionHandler)
+ 
+    }
+    
+    public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
+        setStartingValue(ofView: view)
+        runAnimationAlongsideTransition(coordinator: coordinator, animationBlock: {
+            [weak self] _ in
+            guard let sSelf = self else{
+                return
+            }
+            view.transform = sSelf.toValue
+            }, completionHandler: completionHandler)
+    }
+}
+
+public class KOScaleAnimation : KOTransformAnimation{
+    public init(toValue: CGPoint, fromValue: CGPoint?) {
+        var fromValueTransform : CGAffineTransform? = nil
+        if let fromValuePoint = fromValue{
+            fromValueTransform = CGAffineTransform(scaleX: fromValuePoint.x, y: fromValuePoint.y)
+        }
+        super.init(toValue: CGAffineTransform(scaleX: toValue.x, y: toValue.y), fromValue: fromValueTransform)
+    }
+}
+
+public class KOTranslationAnimation : KOTransformAnimation{
+    public init(toValue: CGPoint, fromValue: CGPoint?) {
+        var fromValueTransform : CGAffineTransform? = nil
+        if let fromValuePoint = fromValue{
+            fromValueTransform = CGAffineTransform(translationX: fromValuePoint.x, y: fromValuePoint.y)
+        }
+        super.init(toValue: CGAffineTransform(translationX: toValue.x, y: toValue.y), fromValue: fromValueTransform)
+    }
+}
+
+public class KORotationAnimation : KOTransformAnimation{
+    public init(toValue: CGFloat, fromValue: CGFloat?) {
+        var fromValueTransform : CGAffineTransform? = nil
+        if let fromValueFloat = fromValue{
+            fromValueTransform = CGAffineTransform(rotationAngle: fromValueFloat)
+        }
+        super.init(toValue: CGAffineTransform(rotationAngle: toValue), fromValue: fromValueTransform)
+    }
+}

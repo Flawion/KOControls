@@ -146,7 +146,6 @@ open class KOTextField : UITextField{
     private weak var containerForCustomErrorInfoView: UIView!
     private var isShowedErrorInfo : Bool = false
     private var isErrorInfoHideAnimationRunning : Bool = false
-    private var isErrorInfoAnimationBlocked : Bool = false
     
     private var isShowingErrorInfo : Bool = false{
         didSet{
@@ -361,9 +360,7 @@ open class KOTextField : UITextField{
     private func hideError(){
         errorWidthConst.constant = 0
         errorView.isHidden = true
-        isErrorInfoAnimationBlocked = true
         isShowingErrorInfo = false
-        isErrorInfoAnimationBlocked = false
         layoutIfNeeded()
         koDelegate?.textFieldDidHideError?(self)
     }
@@ -378,16 +375,12 @@ open class KOTextField : UITextField{
     
     //MARK: Error info view
     private func refreshShowingErrorInfo(){
-        if isErrorInfoAnimationBlocked {
-            isShowingErrorInfo ? showErrorInfo() : hideErrorInfo()
-        }else{
-            isShowingErrorInfo ? showErrorInfoAnimated() : hideErrorInfoAnimated()
-        }
+        isShowingErrorInfo ? showErrorInfoAnimated() : hideErrorInfoAnimated()
     }
     
     private func showErrorInfoAnimated(){
         showErrorInfo()
-        koDelegate?.textFieldStartingErrorInfoHideAnimation?(self)
+        koDelegate?.textFieldStartingErrorInfoShowAnimation?(self)
         errorInfoShowAnimation?.animate(view: containerForErrorInfoView, progress: 1.0, completionHandler: nil)
     }
     
