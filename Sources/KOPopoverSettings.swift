@@ -18,7 +18,7 @@ open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate
     public private(set) var sourceRect : CGRect?
     
     //others
-    public var calculatePreferredContentSizeByLayoutSizeFitting : CGSize? = UILayoutFittingCompressedSize
+    public var calculatePreferredContentSizeByLayoutSizeFitting : CGSize? = UIView.layoutFittingCompressedSize
     public var overridePreferredContentSize : CGSize? = nil
     
     public var setupPopoverPresentationControllerEvent : ((UIPopoverPresentationController)->Void)? = nil

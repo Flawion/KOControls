@@ -30,7 +30,7 @@ public struct KOAnimationSpringSettings{
 open class KOAnimator {
     public var duration : TimeInterval = 0.5
     public var delay : TimeInterval = 0
-    public var options : UIViewAnimationOptions = []
+    public var options : UIView.AnimationOptions = []
     public var springSettings : KOAnimationSpringSettings? = nil
     
     public init(){
@@ -43,7 +43,7 @@ open class KOAnimator {
             }, completion: completionHandler)
             return
         }
-        
+
         UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: springSettings.damping, initialSpringVelocity: springSettings.velocity, options: options, animations: {
             animationBlock?()
         }, completion: completionHandler)

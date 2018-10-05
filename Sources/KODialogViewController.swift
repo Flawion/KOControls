@@ -87,13 +87,13 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
         }
     }
     
-    public var mainViewVerticalAlignment :  UIControlContentVerticalAlignment = .bottom{
+    public var mainViewVerticalAlignment :  UIControl.ContentVerticalAlignment = .bottom{
         didSet{
             refreshMainViewVerticalAlignment()
         }
     }
     
-    public var mainViewHorizontalAlignment :  UIControlContentHorizontalAlignment = .fill{
+    public var mainViewHorizontalAlignment :  UIControl.ContentHorizontalAlignment = .fill{
         didSet{
             refreshMainViewHorizontalAlignment()
         }

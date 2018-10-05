@@ -62,7 +62,7 @@ open class KODatePickerViewController : KODialogViewController{
 open class KOOptionsPickerSimpleDelegate : NSObject, UIPickerViewDelegate{
     fileprivate weak var optionsPickerViewController : KOOptionsPickerViewController!
     
-    public var titleAttributesForRowInComponents : ((_ row : Int, _ component : Int)->[NSAttributedStringKey : Any])?
+    public var titleAttributesForRowInComponents : ((_ row : Int, _ component : Int)->[NSAttributedString.Key : Any])?
     
     public init(optionsPickerViewController : KOOptionsPickerViewController){
         self.optionsPickerViewController = optionsPickerViewController

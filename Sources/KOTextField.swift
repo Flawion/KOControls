@@ -150,7 +150,7 @@ open class KOTextField : UITextField{
     private var isShowingErrorInfo : Bool = false{
         didSet{
             if oldValue != isShowingErrorInfo{
-                refreshShowingErrorInfo()
+                refreshShowingErrorInfo(animated: true)
             }
         }
     }
@@ -314,7 +314,7 @@ open class KOTextField : UITextField{
     }
     
     override open func didMoveToSuperview() {
-        refreshShowingErrorInfo()
+        refreshShowingErrorInfo(animated: false)
     }
     
     //MARK: Responder
@@ -374,8 +374,8 @@ open class KOTextField : UITextField{
     }
     
     //MARK: Error info view
-    private func refreshShowingErrorInfo(){
-        isShowingErrorInfo ? showErrorInfoAnimated() : hideErrorInfoAnimated()
+    private func refreshShowingErrorInfo(animated : Bool){
+        animated ? (isShowingErrorInfo ? showErrorInfoAnimated() : hideErrorInfoAnimated()) : (isShowingErrorInfo ? showErrorInfo() : hideErrorInfo())
     }
     
     private func showErrorInfoAnimated(){

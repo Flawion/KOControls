@@ -18,7 +18,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     
     //description variables
     public private(set) weak var descriptionLabel : UILabel!
-    public private(set) weak var descriptionLabelEdgesConstraintsInsets : KOEdgesConstraintsInsets!
+    public private(set) var descriptionLabelEdgesConstraintsInsets : KOEdgesConstraintsInsets!
     
     open var defaultDescriptionInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
