@@ -32,7 +32,7 @@ open class nKOAnimator{
             guard let view = self?.view else{
                 return
             }
-            animation.animationBlock(view: view)
+            animation.animation(view: view)
         }
         if let completionHandler = completionHandler{
             currentPropertyAnimator?.addCompletion(completionHandler)
@@ -98,27 +98,27 @@ open class nKOAnimation{
         guard let springSettings = springSettings else{
             UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
                 [weak self] in
-                self?.animationBlock(view: view)
+                self?.animation(view: view)
             }, completion: completionHandler)
             return
         }
         
         UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: springSettings.damping, initialSpringVelocity: springSettings.velocity, options: options, animations: {
             [weak self] in
-            self?.animationBlock(view: view)
+            self?.animation(view: view)
         }, completion: completionHandler)
     }
     
     public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
         prepareViewForAnimation(view)
         guard let coordinator = coordinator else{
-            animationBlock(view: view)
+            animation(view: view)
             completionHandler?(nil)
             return
         }
         
         coordinator.animate(alongsideTransition: { [weak self](coordinatorContext) in
-            self?.animationBlock(view: view)
+            self?.animation(view: view)
         }, completion: completionHandler)
     }
     
@@ -127,7 +127,7 @@ open class nKOAnimation{
         //to override
     }
     
-    open func animationBlock(view : UIView){
+    open func animation(view : UIView){
         //to override
     }
 }
@@ -141,7 +141,7 @@ open class nKOCustomAnimation : nKOAnimation{
         self.prepareViewForAnimationEvent = prepareViewForAnimation
     }
     
-    override open func animationBlock(view: UIView) {
+    override open func animation(view: UIView) {
         animationEvent(view)
     }
     
@@ -161,7 +161,7 @@ open class nKOFadeAnimation : nKOAnimation{
         super.init()
     }
     
-    override open func animationBlock(view: UIView) {
+    override open func animation(view: UIView) {
         view.alpha = toValue
     }
     
@@ -200,7 +200,7 @@ public class nKOTransformAnimation: nKOAnimation{
         }
     }
     
-    override public func animationBlock(view: UIView) {
+    override public func animation(view: UIView) {
         view.transform = toValue
     }
 }
