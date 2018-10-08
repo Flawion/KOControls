@@ -51,6 +51,15 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     //public
     public private(set) var markerMinHorizontalConstraintsInsets : KOHorizontalConstraintsInsets!
     
+    public var isMarkerViewHidden : Bool{
+        get{
+            return markerView.isHidden
+        }
+        set{
+            markerView.isHidden = newValue
+        }
+    }
+    
     public var markerWidth : CGFloat = 12 {
         didSet{
             recreateMarkerShape()

@@ -76,6 +76,12 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
             countryField.text = countryCollectionsController.countries[countryIndex].name
         }
     }
+    fileprivate var customCountryIndex : Int = 0{
+        didSet{
+            customCountryField.text = customCountryCollectionsController.currentVisibleCountries[countryIndex].name
+        }
+    }
+    //customCountryIndex
     
     //MARK: Functions
     override func viewDidLoad() {
@@ -484,7 +490,6 @@ extension PickerViewController{
                 return
             }
             itemsTablePicker.contentHeight = 300
-            sSelf.initializeItemsTablePicker(itemsTablePicker)
             sSelf.initializeCustomItemsTablePicker(itemsTablePicker)
         }))
     }
@@ -492,7 +497,7 @@ extension PickerViewController{
     private func showCustomItemsTablePickerPopover(){
         let searchItemsTablePicker = SearchItemsTablePickerViewController()
         
-        popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
+        popoverSettings = KOPopoverSettings(sourceView: customCountryField, sourceRect: customCountryField.bounds)
         popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
@@ -509,8 +514,20 @@ extension PickerViewController{
     }
     
     private func initializeCustomItemsTablePicker(_ itemsTablePicker : SearchItemsTablePickerViewController){
-        itemsTablePicker.searchField.addTarget(self, action: #selector(customItemsTablePickerSearchFieldChanged(_:)) , for: .editingChanged)
+        itemsTablePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+        itemsTablePicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+            [weak self](itemsTablePickerViewController : KOItemsTablePickerViewController) in
+            guard let sSelf = self else{
+                return
+            }
+            if let countryIndex = itemsTablePickerViewController.itemsTable.indexPathForSelectedRow?.row{
+                sSelf.customCountryIndex = countryIndex
+            }
+        })
+        itemsTablePicker.itemsTable.allowsSelection = true
+        customizeIfNeed(itemsTablePicker: itemsTablePicker)
         
+        itemsTablePicker.searchField.addTarget(self, action: #selector(customItemsTablePickerSearchFieldChanged(_:)) , for: .editingChanged)
         customCountryCollectionsController.searchForCountries(byName: "")
         customCountryCollectionsController.attach(tableView: itemsTablePicker.itemsTable)
     }

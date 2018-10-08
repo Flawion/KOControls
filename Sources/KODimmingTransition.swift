@@ -13,8 +13,8 @@ public class KODimmingPresentationController : UIPresentationController {
      //public
     public private(set) var dimmingView : UIView!
     
-    public var dimmingShowAnimation : KOAnimationAlongsideTransitionInterface? = KOFadeInAnimation(fromValue: 0)
-    public var dimmingHideAnimation : KOAnimationAlongsideTransitionInterface? = KOFadeOutAnimation()
+    public var dimmingShowAnimation : KOAnimation? = KOFadeInAnimation(fromValue: 0)
+    public var dimmingHideAnimation : KOAnimation? = KOFadeOutAnimation()
 
     public var dimmingViewTapEvent : (()->Void)? = nil
     

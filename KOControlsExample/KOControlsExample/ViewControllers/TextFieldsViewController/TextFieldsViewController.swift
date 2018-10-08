@@ -51,10 +51,14 @@ class TextFieldsViewController: UIViewController {
         }))
         
         //setting custom error view
-        /*
-        let scaleAnim =  KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5), fromValue: CGPoint(x: 1.0, y: 1.0))
-        passwordField.errorInfoHideAnimation = scaleAnim
-        passwordField.errorInfoShowAnimation = KOTranslationAnimation(toValue: CGPoint.zero, fromValue: CGPoint(x: -200, y: 0))*/
+        passwordField.errorInfoHideAnimation = KOAnimationGroup(animations:[
+                KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
+                KOFadeOutAnimation()
+            ])
+        passwordField.errorInfoShowAnimation = KOAnimationGroup(animations: [
+            KOTranslationAnimation(toValue: CGPoint.zero, fromValue: CGPoint(x: -200, y: 20)),
+            KOFadeInAnimation(fromValue: 0)
+            ], dampingRatio: 0.6)
         
         passwordField.errorInfoView.descriptionLabel.textColor = UIColor.black
         passwordField.errorInfoView.contentView.backgroundColor = UIColor.white

@@ -156,6 +156,7 @@ open class KOTextField : UITextField{
     }
     
     //public
+    public private(set) var errorInfoAnimator : KOAnimator!
     public private(set) weak var errorInfoView : KOTextFieldErrorView!
     public weak var showErrorInfoInView : UIView? //default will be a superview
     public var showErrorInfoMode : KOTextFieldShowErrorInfoModes = .onFocus{
@@ -169,8 +170,9 @@ open class KOTextField : UITextField{
         }
     }
     public var errorInfoInsets : UIEdgeInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
-    public var errorInfoShowAnimation : KOAnimationInterface?
-    public var errorInfoHideAnimation : KOAnimationInterface?
+    
+    public var errorInfoShowAnimation : KOAnimation?
+    public var errorInfoHideAnimation : KOAnimation?
    
     //MARK: - Functions
     //MARK: Overridden rects to avoid intersection with the error icon view
@@ -290,6 +292,7 @@ open class KOTextField : UITextField{
         self.errorInfoView = errorInfoView
         
         //animations
+        errorInfoAnimator = KOAnimator(view: containerForErrorInfoView)
         errorInfoShowAnimation = KOFadeInAnimation(fromValue: 0)
         errorInfoHideAnimation = KOFadeOutAnimation()
         
@@ -381,7 +384,11 @@ open class KOTextField : UITextField{
     private func showErrorInfoAnimated(){
         showErrorInfo()
         koDelegate?.textFieldStartingErrorInfoShowAnimation?(self)
-        errorInfoShowAnimation?.animate(view: containerForErrorInfoView, progress: 1.0, completionHandler: nil)
+        if let errorInfoShowAnimation = errorInfoShowAnimation{
+            errorInfoAnimator.runViewAnimation(errorInfoShowAnimation, completionHandler: nil)
+        }else{
+            errorInfoAnimator.stopViewAnimation()
+        }
     }
     
     private func showErrorInfo(){
@@ -392,12 +399,14 @@ open class KOTextField : UITextField{
         if isShowedErrorInfo{
             //if error info is showing in the other superview than needs, it will be removed from old parent before add
             isErrorInfoHideAnimationRunning = false
+            errorInfoAnimator.stopViewAnimation()
             guard showInView != errorInfoShowedInView else{
                 return
             }
             hideErrorInfo()
         }
         
+        errorInfoView.isMarkerViewHidden = false
         showInView.addSubview(containerForErrorInfoView)
         containerForErrorInfoConsts = [
             containerForErrorInfoView.rightAnchor.constraint(equalTo: rightAnchor, constant: -errorInfoInsets.right),
@@ -414,14 +423,18 @@ open class KOTextField : UITextField{
 
     private func hideErrorInfoAnimated(){
         guard let hideErrorInfoAnimation = errorInfoHideAnimation else{
+            errorInfoAnimator.stopViewAnimation()
             hideErrorInfo()
             return
         }
+        
+        //hide marker before animation to avoid strange behaviour
+        errorInfoView.isMarkerViewHidden = !isShowingError
         koDelegate?.textFieldStartingErrorInfoHideAnimation?(self)
         isErrorInfoHideAnimationRunning = true
-        hideErrorInfoAnimation.animate(view: containerForErrorInfoView, progress: 1.0) {
+        errorInfoAnimator.runViewAnimation(hideErrorInfoAnimation) {
             [weak self] _ in
-            guard let sSelf = self, sSelf.isErrorInfoHideAnimationRunning else{
+            guard let sSelf = self, sSelf.isErrorInfoHideAnimationRunning  else{
                 return
             }
             sSelf.hideErrorInfo()

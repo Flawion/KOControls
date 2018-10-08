@@ -1,22 +1,13 @@
 //
-//  KOAnimation.swift
+//  KOAnimationNew.swift
 //  KOControls
 //
-//  Created by Kuba Ostrowski on 13.08.2018.
+//  Created by Kuba Ostrowski on 05/10/2018.
 //  Copyright © 2018 Kuba Ostrowski. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-public protocol KOAnimationInterface {
-    func animate(view : UIView,  progress : CGFloat, completionHandler : ((Bool)->Void)?)
-}
-
-public protocol KOAnimationAlongsideTransitionInterface {
-    func animateAlongsideTransition(view : UIView, coordinator : UIViewControllerTransitionCoordinator?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?)
-}
-
-//MARK: - Animator
 public struct KOAnimationSpringSettings{
     public var damping : CGFloat = 1.0
     public var velocity : CGFloat = 1.0
@@ -27,79 +18,205 @@ public struct KOAnimationSpringSettings{
     }
 }
 
-open class KOAnimator {
-    public var duration : TimeInterval = 0.5
-    public var delay : TimeInterval = 0
-    public var options : UIView.AnimationOptions = []
-    public var springSettings : KOAnimationSpringSettings? = nil
+open class KOAnimator{
+    private weak var view : UIView?
     
-    public init(){
+    public private(set) var currentViewAnimation : KOAnimation?
+    public private(set) var currentPropertyAnimator : UIViewPropertyAnimator?
+    
+    public var prepareViewForAnimationEvent : ((_ : UIView)->Void)?
+    
+    public var isRunning : Bool {
+        return currentPropertyAnimator?.isRunning ?? false
     }
     
-    open func runViewAnimation(animationBlock : (()->Void)?, completionHandler : ((Bool)->Void)?){
+    public init(view : UIView){
+        self.view = view
+    }
+
+    open func runViewAnimation(_ animation : KOAnimation, completionHandler : ((UIViewAnimatingPosition)->Void)?){
+        stopViewAnimation()
+        
+        if let view = view{
+            prepareViewForAnimationEvent?(view)
+            animation.prepareViewForAnimation(view)
+        }
+        currentViewAnimation = animation
+        currentPropertyAnimator = UIViewPropertyAnimator(duration: animation.duration, timingParameters: animation.timingParameters)
+        currentPropertyAnimator?.addAnimations {
+            [weak self] in
+            guard let view = self?.view else{
+                return
+            }
+            animation.animation(view: view)
+        }
+        if let completionHandler = completionHandler{
+            currentPropertyAnimator?.addCompletion(completionHandler)
+        }
+        playViewAnimation()
+    }
+    
+    open func runAnimationAlongsideTransition(_ animation : KOAnimation, coordinator : UIViewControllerTransitionCoordinator?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?){
+        guard let view = view else{
+            return
+        }
+        animation.prepareViewForAnimation(view)
+        animation.animateAlongsideTransition(view: view, coordinator: coordinator, completionHandler: completionHandler)
+    }
+    
+    public func pauseViewAnimation(){
+        guard let currentPropertyAnimator = currentPropertyAnimator else{
+            return
+        }
+        currentPropertyAnimator.pauseAnimation()
+    }
+    
+    public func stopViewAnimation(){
+        guard let currentPropertyAnimator = currentPropertyAnimator, currentPropertyAnimator.state != .stopped else{
+            return
+        }
+        currentPropertyAnimator.stopAnimation(false)
+    }
+    
+    public func playViewAnimation(){
+        guard let currentViewAnimation = currentViewAnimation, let currentPropertyAnimator = currentPropertyAnimator else{
+            return
+        }
+        currentPropertyAnimator.startAnimation(afterDelay: currentViewAnimation.delay)
+    }
+}
+
+open class KOAnimation{
+    //MARK: Variables
+    public var duration : TimeInterval
+    public var delay : TimeInterval
+    public var timingParameters : UITimingCurveProvider
+    
+    //MARK: Functions
+    public init(duration: TimeInterval = 0.5, delay : TimeInterval = 0, timingParameters : UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)){
+        self.duration = duration
+        self.delay = delay
+        self.timingParameters = timingParameters
+    }
+    
+    public convenience init(duration: TimeInterval = 0.5, delay : TimeInterval = 0, animationCurve : UIView.AnimationCurve){
+        self.init(duration: duration, delay: delay, timingParameters: UICubicTimingParameters(animationCurve: .easeInOut))
+    }
+    
+    public convenience init(duration: TimeInterval = 0.5, delay : TimeInterval = 0, dampingRatio : CGFloat){
+        self.init(duration: duration, delay: delay, timingParameters: UISpringTimingParameters(dampingRatio: dampingRatio))
+    }
+    
+    public func animate(view : UIView, options : UIView.AnimationOptions = [], springSettings : KOAnimationSpringSettings? = nil, completionHandler : ((Bool)->Void)? = nil){
+        prepareViewForAnimation(view)
         guard let springSettings = springSettings else{
             UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
-                animationBlock?()
+                [weak self] in
+                self?.animation(view: view)
             }, completion: completionHandler)
             return
         }
-
+        
         UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: springSettings.damping, initialSpringVelocity: springSettings.velocity, options: options, animations: {
-            animationBlock?()
+            [weak self] in
+            self?.animation(view: view)
         }, completion: completionHandler)
     }
     
-    open func runAnimationAlongsideTransition(coordinator : UIViewControllerTransitionCoordinator?, animationBlock : ((UIViewControllerTransitionCoordinatorContext?)->Void)?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?){
+    public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
+        prepareViewForAnimation(view)
         guard let coordinator = coordinator else{
-            animationBlock?(nil)
+            animation(view: view)
             completionHandler?(nil)
             return
         }
         
-        coordinator.animate(alongsideTransition: { (coordinatorContext) in
-            animationBlock?(coordinatorContext)
+        coordinator.animate(alongsideTransition: { [weak self](coordinatorContext) in
+            self?.animation(view: view)
         }, completion: completionHandler)
+    }
+    
+    //MARK: Functions to override
+    open func prepareViewForAnimation(_ view: UIView){
+        //to override
+    }
+    
+    open func animation(view : UIView){
+        //to override
     }
 }
 
-//MARK: - Animations
-public class KOFadeAnimation : KOAnimator, KOAnimationInterface, KOAnimationAlongsideTransitionInterface{
-    public var toValue : CGFloat
-    public var fromValue : CGFloat?
+open class KOAnimationGroup : KOAnimation{
+    private let animations : [KOAnimation]
     
-    public init(toValue : CGFloat, fromValue : CGFloat? = nil){
-        self.toValue = toValue
-        self.fromValue = fromValue
+    public init(animations : [KOAnimation], duration: TimeInterval = 0.5, delay : TimeInterval = 0, timingParameters : UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)){
+        self.animations = animations
+        super.init(duration: duration, delay: delay, timingParameters: timingParameters)
     }
     
-    private func setStartingValue(ofView view: UIView){
-        if let fromValue = fromValue{
-            view.alpha = fromValue
+    public convenience init(animations : [KOAnimation], duration: TimeInterval = 0.5, delay : TimeInterval = 0, animationCurve : UIView.AnimationCurve){
+        self.init(animations: animations, duration: duration, delay: delay, timingParameters: UICubicTimingParameters(animationCurve: .easeInOut))
+    }
+    
+    public convenience init(animations : [KOAnimation],duration: TimeInterval = 0.5, delay : TimeInterval = 0, dampingRatio : CGFloat){
+        self.init(animations: animations, duration: duration, delay: delay, timingParameters: UISpringTimingParameters(dampingRatio: dampingRatio))
+    }
+    
+    //MARK: Functions to override
+    override open func prepareViewForAnimation(_ view: UIView){
+        for animation in animations{
+            animation.prepareViewForAnimation(view)
         }
     }
     
-    public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
-        setStartingValue(ofView: view)
-        let maxProgress = min(1.0, progress)
-        let oldProgress = 1.0 - progress
-        runViewAnimation(animationBlock: {
-            [weak self] in
-            guard let sSelf = self else{
-                return
-            }
-            view.alpha = view.alpha * oldProgress + sSelf.toValue * maxProgress
-        }, completionHandler: completionHandler)
+    override open func animation(view : UIView){
+        for animation in animations{
+            animation.animate(view: view)
+        }
+    }
+}
+
+open class KOCustomAnimation : KOAnimation{
+    private var animationEvent : (UIView)->Void
+    private var prepareViewForAnimationEvent : ((UIView)->Void)?
+    
+    public init(animation : @escaping (UIView)->Void, prepareViewForAnimation : ((UIView)->Void)?) {
+        self.animationEvent = animation
+        self.prepareViewForAnimationEvent = prepareViewForAnimation
+        
+        super.init()
     }
     
-    public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
-        setStartingValue(ofView: view)
-        runAnimationAlongsideTransition(coordinator: coordinator, animationBlock: {
-            [weak self] _ in
-            guard let sSelf = self else{
-                return
-            }
-            view.alpha = sSelf.toValue
-        }, completionHandler: completionHandler)
+    override open func animation(view: UIView) {
+        animationEvent(view)
+    }
+    
+    override open func prepareViewForAnimation(_ view: UIView) {
+        prepareViewForAnimationEvent?(view)
+    }
+}
+
+open class KOFromToAnimation<ValueType> : KOAnimation{
+    public var toValue : ValueType
+    public var fromValue : ValueType?
+    
+    public init(toValue : ValueType, fromValue : ValueType? = nil){
+        self.toValue = toValue
+        self.fromValue = fromValue
+        
+        super.init()
+    }
+}
+
+open class KOFadeAnimation : KOFromToAnimation<CGFloat>{
+    override open func animation(view: UIView) {
+        view.alpha = toValue
+    }
+    
+    override open func prepareViewForAnimation(_ view: UIView) {
+        if let fromValue = fromValue{
+            view.alpha = fromValue
+        }
     }
 }
 
@@ -115,55 +232,20 @@ public class KOFadeOutAnimation : KOFadeAnimation{
     }
 }
 
-public class KOTransformAnimation: KOAnimator, KOAnimationInterface, KOAnimationAlongsideTransitionInterface{
-    public var toValue : CGAffineTransform
-    public var fromValue : CGAffineTransform?
-    
-    public init(toValue : CGAffineTransform, fromValue : CGAffineTransform? = nil){
-        self.toValue = toValue
-        self.fromValue = fromValue
-    }
-    
-    private func setStartingValue(ofView view: UIView){
+public class KOTransformAnimation: KOFromToAnimation<CGAffineTransform>{
+    override public func prepareViewForAnimation(_ view: UIView) {
         if let fromValue = fromValue{
             view.transform = fromValue
         }
     }
     
-    public func animate(view : UIView, progress : CGFloat = 1.0, completionHandler : ((Bool)->Void)? = nil){
-        setStartingValue(ofView: view)
-        let maxProgress = min(1.0, progress)
-        let oldProgress = 1.0 - progress
-        runViewAnimation(animationBlock: {
-            [weak self] in
-            guard let sSelf = self else{
-                return
-            }
-            let oldTransform = view.transform
-            view.transform = CGAffineTransform(a: oldTransform.a * oldProgress + sSelf.toValue.a * maxProgress,
-                b: oldTransform.b * oldProgress + sSelf.toValue.b * maxProgress,
-                c: oldTransform.c * oldProgress + sSelf.toValue.c * maxProgress,
-                d: oldTransform.d * oldProgress + sSelf.toValue.d * maxProgress,
-                tx: oldTransform.tx * oldProgress + sSelf.toValue.tx * maxProgress,
-                ty: oldTransform.ty * oldProgress + sSelf.toValue.ty * maxProgress)
-        }, completionHandler: completionHandler)
- 
-    }
-    
-    public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
-        setStartingValue(ofView: view)
-        runAnimationAlongsideTransition(coordinator: coordinator, animationBlock: {
-            [weak self] _ in
-            guard let sSelf = self else{
-                return
-            }
-            view.transform = sSelf.toValue
-            }, completionHandler: completionHandler)
+    override public func animation(view: UIView) {
+        view.transform = toValue
     }
 }
 
 public class KOScaleAnimation : KOTransformAnimation{
-    public init(toValue: CGPoint, fromValue: CGPoint?) {
+    public init(toValue: CGPoint, fromValue: CGPoint?  = nil) {
         var fromValueTransform : CGAffineTransform? = nil
         if let fromValuePoint = fromValue{
             fromValueTransform = CGAffineTransform(scaleX: fromValuePoint.x, y: fromValuePoint.y)
@@ -173,7 +255,7 @@ public class KOScaleAnimation : KOTransformAnimation{
 }
 
 public class KOTranslationAnimation : KOTransformAnimation{
-    public init(toValue: CGPoint, fromValue: CGPoint?) {
+    public init(toValue: CGPoint, fromValue: CGPoint? = nil) {
         var fromValueTransform : CGAffineTransform? = nil
         if let fromValuePoint = fromValue{
             fromValueTransform = CGAffineTransform(translationX: fromValuePoint.x, y: fromValuePoint.y)
@@ -183,11 +265,23 @@ public class KOTranslationAnimation : KOTransformAnimation{
 }
 
 public class KORotationAnimation : KOTransformAnimation{
-    public init(toValue: CGFloat, fromValue: CGFloat?) {
+    public init(toValue: CGFloat, fromValue: CGFloat? = nil) {
         var fromValueTransform : CGAffineTransform? = nil
         if let fromValueFloat = fromValue{
             fromValueTransform = CGAffineTransform(rotationAngle: fromValueFloat)
         }
         super.init(toValue: CGAffineTransform(rotationAngle: toValue), fromValue: fromValueTransform)
+    }
+}
+
+open class KOBackgroundColorAnimation : KOFromToAnimation<UIColor>{
+    override open func animation(view: UIView) {
+        view.backgroundColor = toValue
+    }
+    
+    override open func prepareViewForAnimation(_ view: UIView) {
+        if let fromValue = fromValue{
+            view.backgroundColor = fromValue
+        }
     }
 }
