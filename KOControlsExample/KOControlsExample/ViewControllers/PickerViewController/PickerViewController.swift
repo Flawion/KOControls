@@ -170,7 +170,6 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         }
         dialogViewController.mainView.layer.cornerRadius = 12
         dialogViewController.mainView.clipsToBounds = true
-        
         dialogViewController.barMode = .bottom
         dialogViewController.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         dialogViewController.barView.titleLabel.textColor = UIColor.white
@@ -196,6 +195,27 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
             presentationController in
             presentationController.dimmingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         }
+        
+        guard !isPresentPopover else{
+            return
+        }
+        
+        //override presenting animation
+        let viewToAnimationDuration : TimeInterval = 0.5
+        let viewToAnimation = KOAnimationGroup(animations: [
+            KOFadeInAnimation(fromValue: 0),
+            KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
+            ], duration : viewToAnimationDuration)
+        viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
+        dialogViewController.dimmingTransition.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+        
+        //override dismissing animation
+        let viewFromAnimationDuration : TimeInterval = 0.5
+        let viewFromAnimation = KOAnimationGroup(animations: [
+            KOFadeOutAnimation(),
+            KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
+            ], duration : viewFromAnimationDuration)
+        dialogViewController.dimmingTransition.animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
     }
 }
 
