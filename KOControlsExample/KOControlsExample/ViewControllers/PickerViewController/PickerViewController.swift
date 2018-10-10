@@ -78,7 +78,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     }
     fileprivate var customCountryIndex : Int = 0{
         didSet{
-            customCountryField.text = customCountryCollectionsController.currentVisibleCountries[countryIndex].name
+            customCountryField.text = customCountryCollectionsController.currentVisibleCountries[customCountryIndex].name
         }
     }
     //customCountryIndex
@@ -202,10 +202,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         
         //override presenting animation
         let viewToAnimationDuration : TimeInterval = 0.5
-        let viewToAnimation = KOAnimationGroup(animations: [
-            KOFadeInAnimation(fromValue: 0),
-            KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
-            ], duration : viewToAnimationDuration)
+        let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
         viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
         dialogViewController.dimmingTransition.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
         

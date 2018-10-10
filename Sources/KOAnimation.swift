@@ -171,7 +171,7 @@ open class KOAnimationGroup : KOAnimation{
     
     override open func animation(view : UIView){
         for animation in animations{
-            animation.animate(view: view)
+            animation.animation(view: view)
         }
     }
 }
@@ -283,5 +283,38 @@ open class KOBackgroundColorAnimation : KOFromToAnimation<UIColor>{
         if let fromValue = fromValue{
             view.backgroundColor = fromValue
         }
+    }
+}
+
+open class KOFrameAnimation : KOFromToAnimation<CGRect>{
+    override open func animation(view: UIView) {
+        view.frame = toValue
+    }
+    
+    override open func prepareViewForAnimation(_ view: UIView) {
+        if let fromValue = fromValue{
+            view.frame = fromValue
+        }
+    }
+}
+
+open class KOFrameFromToCurrentAnimation : KOAnimation{
+    private var fromValue : CGRect
+    private var toValue : CGRect?
+    
+    public init(fromValue: CGRect) {
+        self.fromValue = fromValue
+        super.init()
+    }
+    
+    override open func animation(view: UIView) {
+        if let toValue = toValue{
+            view.frame = toValue
+        }
+    }
+    
+    override open func prepareViewForAnimation(_ view: UIView) {
+        toValue = view.frame
+        view.frame = fromValue
     }
 }

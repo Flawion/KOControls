@@ -68,31 +68,47 @@ open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioni
             return
         }
         
-        let runInToAnimation = (viewToAnimation?.duration ?? -1) >= (viewFromAnimation?.duration ?? -1)
+        
+        var runInToAnimation = (viewToAnimation?.duration ?? -1) >= (viewFromAnimation?.duration ?? -1)
         if let viewToAnimation = viewToAnimation, let viewTo = transitionContext.view(forKey: .to){
             viewToAnimation.duration = min(duration, viewToAnimation.duration)
             animatorTo = KOAnimator(view: viewTo)
             animatorTo.runViewAnimation(viewToAnimation, completionHandler: runInToAnimation ? completeTransitionHandler : nil)
+        }else{
+            runInToAnimation = false
         }
         
         if let viewFromAnimation = viewFromAnimation, let viewFrom = transitionContext.view(forKey: .from){
             viewFromAnimation.duration = min(duration, viewFromAnimation.duration)
             animatorFrom = KOAnimator(view: viewFrom)
             animatorFrom.runViewAnimation(viewFromAnimation, completionHandler: !runInToAnimation ? completeTransitionHandler : nil)
+        }else{
+            if !runInToAnimation{
+                transitionContext.completeTransition(true)
+            }
         }
     }
 }
-
 
 public class KODimmingPresentationController : UIPresentationController {
     //MARK: Variables
      //public
     public private(set) var dimmingView : UIView!
+    public private(set) var touchForwardingView : KOTouchForwardingView!
+    
+    public weak var keepFrameOfView : UIView? = nil
     
     public var dimmingShowAnimation : KOAnimation? = KOFadeInAnimation(fromValue: 0)
     public var dimmingHideAnimation : KOAnimation? = KOFadeOutAnimation()
 
     public var dimmingViewTapEvent : (()->Void)? = nil
+    
+    override public var frameOfPresentedViewInContainerView: CGRect{
+        guard let keepFrameOfView = keepFrameOfView else{
+            return super.frameOfPresentedViewInContainerView
+        }
+        return keepFrameOfView.frame
+    }
     
     //MARK: Functions
     override public init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
@@ -101,9 +117,18 @@ public class KODimmingPresentationController : UIPresentationController {
         initialize()
     }
     
+    override public func containerViewWillLayoutSubviews() {
+        super.containerViewWillLayoutSubviews()
+        presentedView?.frame = frameOfPresentedViewInContainerView
+        dimmingView.frame = frameOfPresentedViewInContainerView
+        touchForwardingView.frame = containerView?.frame ?? frameOfPresentedViewInContainerView
+    }
+    
     private func initialize(){
+        touchForwardingView = KOTouchForwardingView()
+        touchForwardingView.backgroundColor = UIColor.clear
+        
         dimmingView = UIView()
-        dimmingView.translatesAutoresizingMaskIntoConstraints = false
         dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dimmingViewTap)))
     }
@@ -112,14 +137,12 @@ public class KODimmingPresentationController : UIPresentationController {
         guard let containerView = containerView else{
             return
         }
+        dimmingView.frame = frameOfPresentedViewInContainerView
         containerView.insertSubview(dimmingView, at: 0)
-        containerView.addConstraints([
-            dimmingView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            dimmingView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            dimmingView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            dimmingView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-            ])
         
+        touchForwardingView.frame = containerView.frame
+        containerView.insertSubview(touchForwardingView, at: 0)
+    
         dimmingShowAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
     }
     

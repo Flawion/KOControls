@@ -1,13 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13142" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12042"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PresentationQueueViewController" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PresentationQueueViewController" customModule="KOControlsExample" customModuleProvider="target">
             <connections>
+                <outlet property="bottomView" destination="6P0-wt-Vnv" id="eQp-YU-BmD"/>
+                <outlet property="presentViewsCountField" destination="vzT-pc-CMX" id="R3J-Ef-IKa"/>
+                <outlet property="presentingView" destination="ovp-tm-UGj" id="OJv-vH-xp2"/>
+                <outlet property="removeIndexField" destination="8Ry-DJ-zEg" id="Oo8-QN-Dog"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -15,7 +23,119 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k33-M1-YCd">
+                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ovp-tm-UGj" userLabel="PresentingView">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="547"/>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6P0-wt-Vnv" userLabel="BottomView">
+                            <rect key="frame" x="0.0" y="547" width="375" height="100"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVL-ws-XsA">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="xb5-oS-aSx"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bu-Gf-Bn2" userLabel="PresentPanel">
+                                    <rect key="frame" x="81.5" y="8" width="212" height="40"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zsk-Q3-qHP">
+                                            <rect key="frame" x="0.0" y="0.0" width="158" height="40"/>
+                                            <state key="normal" title="Present views in queue"/>
+                                            <connections>
+                                                <action selector="presentViewsBttClick:" destination="-1" eventType="touchUpInside" id="qfa-dh-HzO"/>
+                                            </connections>
+                                        </button>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="2" borderStyle="roundedRect" placeholder="count" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vzT-pc-CMX">
+                                            <rect key="frame" x="162" y="5" width="50" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="cSc-xX-7mw"/>
+                                            </constraints>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                        </textField>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="vzT-pc-CMX" secondAttribute="trailing" id="CPj-h3-Hnd"/>
+                                        <constraint firstAttribute="height" constant="40" id="E7F-fR-5a6"/>
+                                        <constraint firstItem="vzT-pc-CMX" firstAttribute="leading" secondItem="zsk-Q3-qHP" secondAttribute="trailing" constant="4" id="HUS-MO-Uos"/>
+                                        <constraint firstItem="vzT-pc-CMX" firstAttribute="centerY" secondItem="5bu-Gf-Bn2" secondAttribute="centerY" id="Is0-sN-aYS"/>
+                                        <constraint firstItem="zsk-Q3-qHP" firstAttribute="leading" secondItem="5bu-Gf-Bn2" secondAttribute="leading" id="PAg-SP-mlO"/>
+                                        <constraint firstItem="zsk-Q3-qHP" firstAttribute="top" secondItem="5bu-Gf-Bn2" secondAttribute="top" id="h5a-u3-9GI"/>
+                                        <constraint firstAttribute="bottom" secondItem="zsk-Q3-qHP" secondAttribute="bottom" id="xjw-WN-qE0"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZK-IT-3Cp" userLabel="RemovePanel">
+                                    <rect key="frame" x="74" y="52" width="227" height="40"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2O8-5E-0J2">
+                                            <rect key="frame" x="0.0" y="0.0" width="173" height="40"/>
+                                            <state key="normal" title="Remove view from queue"/>
+                                            <connections>
+                                                <action selector="removeViewBttClick:" destination="-1" eventType="touchUpInside" id="G0p-rC-86M"/>
+                                            </connections>
+                                        </button>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" placeholder="index" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ry-DJ-zEg">
+                                            <rect key="frame" x="177" y="5" width="50" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="lY8-Th-Y9S"/>
+                                            </constraints>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                        </textField>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="L3u-kf-tfd"/>
+                                        <constraint firstItem="8Ry-DJ-zEg" firstAttribute="leading" secondItem="2O8-5E-0J2" secondAttribute="trailing" constant="4" id="SXB-7U-Zr2"/>
+                                        <constraint firstItem="2O8-5E-0J2" firstAttribute="top" secondItem="ZZK-IT-3Cp" secondAttribute="top" id="VcJ-f5-LCN"/>
+                                        <constraint firstItem="2O8-5E-0J2" firstAttribute="leading" secondItem="ZZK-IT-3Cp" secondAttribute="leading" id="Yy0-CW-6xV"/>
+                                        <constraint firstAttribute="trailing" secondItem="8Ry-DJ-zEg" secondAttribute="trailing" id="eZI-ZP-7hL"/>
+                                        <constraint firstAttribute="bottom" secondItem="2O8-5E-0J2" secondAttribute="bottom" id="fej-YQ-fZ6"/>
+                                        <constraint firstItem="8Ry-DJ-zEg" firstAttribute="centerY" secondItem="ZZK-IT-3Cp" secondAttribute="centerY" id="gwX-JC-9cg"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="5bu-Gf-Bn2" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="D8L-zQ-tgB"/>
+                                <constraint firstItem="5bu-Gf-Bn2" firstAttribute="top" secondItem="6P0-wt-Vnv" secondAttribute="top" constant="8" id="Nkx-Rj-DN6"/>
+                                <constraint firstAttribute="trailing" secondItem="UVL-ws-XsA" secondAttribute="trailing" id="O7r-R8-Ecp"/>
+                                <constraint firstItem="UVL-ws-XsA" firstAttribute="top" secondItem="6P0-wt-Vnv" secondAttribute="top" id="X6w-J2-5Ku"/>
+                                <constraint firstItem="ZZK-IT-3Cp" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="YYs-ct-T5m"/>
+                                <constraint firstItem="UVL-ws-XsA" firstAttribute="leading" secondItem="6P0-wt-Vnv" secondAttribute="leading" id="hAk-sF-YyH"/>
+                                <constraint firstItem="ZZK-IT-3Cp" firstAttribute="top" secondItem="5bu-Gf-Bn2" secondAttribute="bottom" constant="4" id="zrJ-Tq-zUj"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="ovp-tm-UGj" firstAttribute="leading" secondItem="k33-M1-YCd" secondAttribute="leading" id="0W3-Bf-K0h"/>
+                        <constraint firstItem="ovp-tm-UGj" firstAttribute="bottom" secondItem="6P0-wt-Vnv" secondAttribute="top" id="OcC-Zp-V6q"/>
+                        <constraint firstItem="ovp-tm-UGj" firstAttribute="top" secondItem="k33-M1-YCd" secondAttribute="top" id="UNR-eL-S6V"/>
+                        <constraint firstAttribute="bottom" secondItem="6P0-wt-Vnv" secondAttribute="bottom" id="Z12-HT-c2j"/>
+                        <constraint firstAttribute="trailing" secondItem="ovp-tm-UGj" secondAttribute="trailing" id="cdx-kw-8PM"/>
+                        <constraint firstAttribute="trailing" secondItem="6P0-wt-Vnv" secondAttribute="trailing" id="eZK-f6-g7y"/>
+                        <constraint firstItem="6P0-wt-Vnv" firstAttribute="leading" secondItem="k33-M1-YCd" secondAttribute="leading" id="tBF-df-lLu"/>
+                    </constraints>
+                </view>
+            </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="k33-M1-YCd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3BR-8w-xIh"/>
+                <constraint firstAttribute="bottom" secondItem="k33-M1-YCd" secondAttribute="bottom" id="46s-PW-mxD"/>
+                <constraint firstItem="k33-M1-YCd" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="DQe-9i-OaF"/>
+                <constraint firstAttribute="trailing" secondItem="k33-M1-YCd" secondAttribute="trailing" id="ZPf-ei-Jrl"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="ZZK-IT-3Cp" secondAttribute="bottom" constant="8" id="mCC-Os-BoJ"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
         </view>
     </objects>
