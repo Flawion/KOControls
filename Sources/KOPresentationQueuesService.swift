@@ -92,7 +92,7 @@ public class KOPresentationQueuesService{
         
         //checks if one of items, already presented
         if let currentItem = queue.currentPresentedItem{
-            guard currentItem.viewControllerToPresent.presentingViewController == nil else{
+            guard currentItem.viewControllerToPresent.view.window != nil || currentItem.viewControllerToPresent.presentingViewController == nil else{
                 return true
             }
         }
