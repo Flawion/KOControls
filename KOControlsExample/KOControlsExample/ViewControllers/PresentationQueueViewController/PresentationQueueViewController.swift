@@ -13,6 +13,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var presentingView: UIView!
     @IBOutlet weak var bottomView: UIView!
     
+    @IBOutlet weak var viewsCountInQueueLabel: UILabel!
     @IBOutlet weak var presentViewsCountField: UITextField!
     @IBOutlet weak var removeIndexField: UITextField!
     
@@ -21,8 +22,23 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        initialize()
+    }
+    
+    private func initialize(){
         navigationItem.title = "KOPresentationQueueService"
         initializePresentingContainerViewController()
+        initializeViewsCountInQueueLabel()
+    }
+    
+    private func initializeViewsCountInQueueLabel(){
+        KOPresentationQueuesService.shared.queueChangedEvent = {
+            [weak self] queueIndex in
+            guard let sSelf = self else{
+                return
+            }
+            sSelf.viewsCountInQueueLabel.text = "Views count in queue: \(KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: queueIndex) ?? 0)"
+        }
     }
     
     private func initializePresentingContainerViewController(){
@@ -110,10 +126,13 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         guard let count = convertTextToInt(presentViewsCountField.text) else{
             return
         }
-        var itemsCount = KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: 0) ?? 0
-        if KOPresentationQueuesService.shared.isItemPresentedForQueue(withIndex: 0){
+        var itemsCount = 0
+        if let queueCount = KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: 0),  let customDialogViewController = KOPresentationQueuesService.shared.itemFromQueue(withIndex: 0, itemIndex: queueCount - 1)?.viewControllerToPresent as? CustomDialogViewController{
+           itemsCount = customDialogViewController.index + 1
+        }else if KOPresentationQueuesService.shared.itemPresentedForQueue(withIndex: 0) != nil{
             itemsCount += 1
         }
+
         for i in 0..<count{
             let customDialog = CustomDialogViewController(index: i + itemsCount)
             _ = KOPresentationQueuesService.shared.presentInQueue(customDialog, onViewController: presentingContainerViewController, queueIndex: 0, animated: true, animationCompletion: nil)
@@ -130,7 +149,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
 }
 
 class CustomDialogViewController : KODialogViewController{
-    private let index : Int
+    let index : Int
     
     init(index : Int) {
         self.index = index

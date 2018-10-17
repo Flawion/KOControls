@@ -90,20 +90,19 @@ open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioni
     }
 }
 
-public class KODimmingPresentationController : UIPresentationController {
+open class KODimmingPresentationController : UIPresentationController {
     //MARK: Variables
-     //public
+    //public
     public private(set) var dimmingView : UIView!
     public private(set) var touchForwardingView : KOTouchForwardingView!
     
     public weak var keepFrameOfView : UIView? = nil
     
-    public var dimmingShowAnimation : KOAnimation? = KOFadeInAnimation(fromValue: 0)
-    public var dimmingHideAnimation : KOAnimation? = KOFadeOutAnimation()
-
+    public var dimmingShowAnimation : KOAnimation?
+    public var dimmingHideAnimation : KOAnimation?
     public var dimmingViewTapEvent : (()->Void)? = nil
     
-    override public var frameOfPresentedViewInContainerView: CGRect{
+    override open var frameOfPresentedViewInContainerView: CGRect{
         guard let keepFrameOfView = keepFrameOfView else{
             return super.frameOfPresentedViewInContainerView
         }
@@ -117,23 +116,24 @@ public class KODimmingPresentationController : UIPresentationController {
         initialize()
     }
     
-    override public func containerViewWillLayoutSubviews() {
+    open func initialize(){
+        touchForwardingView = KOTouchForwardingView()
+        touchForwardingView.backgroundColor = UIColor.clear
+        
+        dimmingView = createDimmingView()
+        dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dimmingViewTap)))
+    }
+    
+    override open func containerViewWillLayoutSubviews() {
         super.containerViewWillLayoutSubviews()
         presentedView?.frame = frameOfPresentedViewInContainerView
         dimmingView.frame = frameOfPresentedViewInContainerView
         touchForwardingView.frame = containerView?.frame ?? frameOfPresentedViewInContainerView
     }
     
-    private func initialize(){
-        touchForwardingView = KOTouchForwardingView()
-        touchForwardingView.backgroundColor = UIColor.clear
+    override open func presentationTransitionWillBegin() {
+        super.presentationTransitionWillBegin()
         
-        dimmingView = UIView()
-        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dimmingViewTap)))
-    }
-    
-    override public func presentationTransitionWillBegin() {
         guard let containerView = containerView else{
             return
         }
@@ -146,13 +146,36 @@ public class KODimmingPresentationController : UIPresentationController {
         dimmingShowAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
     }
     
-    override public func dismissalTransitionWillBegin() {
+    override open func dismissalTransitionWillBegin() {
+        super.dismissalTransitionWillBegin()
         dimmingHideAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
+    }
+    
+    open func createDimmingView()->UIView{
+        dimmingShowAnimation = KOFadeInAnimation(fromValue: 0)
+        dimmingHideAnimation = KOFadeOutAnimation()
+
+        let dimmingView = UIView()
+        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        return dimmingView
     }
     
     @objc private func dimmingViewTap(){
         dimmingViewTapEvent?()
     }
+}
+
+public class KOVisualEffectDimmingPresentationController : KODimmingPresentationController {
+    //MARK: Functions
+    override public func createDimmingView() -> UIView {
+        dimmingShowAnimation = KOVisualEffectAnimation(toValue: UIBlurEffect(style: .dark))
+        dimmingHideAnimation = KOVisualEffectAnimation(toValue: nil)
+        
+        let dimmingView = UIVisualEffectView(effect: nil)
+        dimmingView.backgroundColor = UIColor.clear
+        return dimmingView
+    }
+    
 }
 
 open class KODimmingTransition : KOCustomTransition{
@@ -164,3 +187,14 @@ open class KODimmingTransition : KOCustomTransition{
         return presentationController
     }
 }
+
+open class KOVisualEffectDimmingTransition : KOCustomTransition{
+    public var setupPresentationControllerEvent : ((KOVisualEffectDimmingPresentationController)->Void)? = nil
+    
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let presentationController = KOVisualEffectDimmingPresentationController(presentedViewController: presented, presenting: presenting)
+        setupPresentationControllerEvent?(presentationController)
+        return presentationController
+    }
+}
+

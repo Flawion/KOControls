@@ -9,48 +9,53 @@
 import UIKit
 
 extension UIViewController{
-    public func present(_ viewController : UIViewController, popoverSettings : KOPopoverSettings, animated : Bool = true, completion : (()->Void)? = nil){
-        popoverSettings.prepareViewController(viewController, presentOnViewController: self)
-        present(viewController, animated: animated, completion: completion)
+    public func present(_ viewControllerToPresent : UIViewController, inQueueWithIndex queueIndex: Int?, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+        if let popoverSettings = popoverSettings{
+            popoverSettings.prepareViewController(viewControllerToPresent, presentOnViewController: self)
+        }
+        
+        guard let queueIndex = queueIndex else{
+            present(viewControllerToPresent, animated: animated, completion: completion)
+            return
+        }
+        _ = KOPresentationQueuesService.shared.presentInQueue(viewControllerToPresent, onViewController: self, queueIndex: queueIndex, animated: animated, animationCompletion: completion)
     }
     
-    public func presentDialog<DialogType : KODialogViewController>(_ dialogViewController : KODialogViewController, viewLoadedAction : KOActionModel<DialogType>, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
-        dialogViewController.viewLoadedEvent = {
+    public func presentDialog<DialogType : KODialogViewController>(_ dialogViewControllerToPresent : KODialogViewController, viewLoadedAction : KOActionModel<DialogType>, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+        dialogViewControllerToPresent.viewLoadedEvent = {
             dialogViewController in
             dialogViewController.barView.titleLabel.text = viewLoadedAction.title
             viewLoadedAction.action(dialogViewController as! DialogType)
         }
-        if let popoverSettings = popoverSettings{
+        if popoverSettings != nil{
             //main view must fill all size
-            dialogViewController.mainViewVerticalAlignment = .fill
-            dialogViewController.mainViewHorizontalAlignment = .fill
-            present(dialogViewController, popoverSettings: popoverSettings, animated: animated, completion: completion)
-        }else{
-            present(dialogViewController, animated: animated, completion: completion)
+            dialogViewControllerToPresent.mainViewVerticalAlignment = .fill
+            dialogViewControllerToPresent.mainViewHorizontalAlignment = .fill
         }
+        present(dialogViewControllerToPresent, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
-    public func presentDatePicker(viewLoadedAction : KOActionModel<KODatePickerViewController>, postInit : ((KODatePickerViewController)->Void)? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+    public func presentDatePicker(viewLoadedAction : KOActionModel<KODatePickerViewController>, postInit : ((KODatePickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
         let datePickerViewController = KODatePickerViewController()
         postInit?(datePickerViewController)
-        presentDialog(datePickerViewController, viewLoadedAction: viewLoadedAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        presentDialog(datePickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
-    public func presentOptionsPicker(withOptions options: [[String]], viewLoadedAction : KOActionModel<KOOptionsPickerViewController>, postInit : ((KOOptionsPickerViewController)->Void)? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+    public func presentOptionsPicker(withOptions options: [[String]], viewLoadedAction : KOActionModel<KOOptionsPickerViewController>, postInit : ((KOOptionsPickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
         let optionsPickerViewController = KOOptionsPickerViewController(options: options)
         postInit?(optionsPickerViewController)
-        presentDialog(optionsPickerViewController, viewLoadedAction: viewLoadedAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        presentDialog(optionsPickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
-    public func presentItemsTablePicker(viewLoadedAction : KOActionModel<KOItemsTablePickerViewController>, postInit : ((KOItemsTablePickerViewController)->Void)? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+    public func presentItemsTablePicker(viewLoadedAction : KOActionModel<KOItemsTablePickerViewController>, postInit : ((KOItemsTablePickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
         let itemsTablePickerViewController = KOItemsTablePickerViewController()
         postInit?(itemsTablePickerViewController)
-        presentDialog(itemsTablePickerViewController, viewLoadedAction: viewLoadedAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        presentDialog(itemsTablePickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
-    public func presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewLayout, viewLoadedAction : KOActionModel<KOItemsCollectionPickerViewController>, postInit : ((KOItemsCollectionPickerViewController)->Void)? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
+    public func presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewLayout, viewLoadedAction : KOActionModel<KOItemsCollectionPickerViewController>, postInit : ((KOItemsCollectionPickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil){
         let itemsCollectionPickerViewController = KOItemsCollectionPickerViewController(itemsCollectionLayout: itemsCollectionLayout)
         postInit?(itemsCollectionPickerViewController)
-        presentDialog(itemsCollectionPickerViewController, viewLoadedAction: viewLoadedAction, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        presentDialog(itemsCollectionPickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
 }

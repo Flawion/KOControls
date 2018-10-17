@@ -61,7 +61,11 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     //public
     @IBOutlet public weak var delegate : KODialogViewControllerDelegate?
     
-    public let dimmingTransition = KODimmingTransition()
+    public var customTransition : KOCustomTransition? = KODimmingTransition() {
+        didSet{
+            transitioningDelegate = customTransition
+        }
+    }
     public var viewLoadedEvent : ((KODialogViewController)->Void)?
     
     //MARK: Main view
@@ -188,7 +192,7 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     
     private func initTransition(){
         modalPresentationStyle =  .custom
-        transitioningDelegate = dimmingTransition
+        transitioningDelegate = customTransition
     }
     
     override open func viewDidLoad() {

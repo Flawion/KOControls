@@ -9,15 +9,24 @@
 import Foundation
 import UIKit
 
-internal class KOPresentationQueueItem : Equatable{
-    internal let id : String
-    internal let animated: Bool
+internal class KOPresentationQueue{
+    internal var items : [KOPresentationQueueItem] = []
+    internal var currentPresentedItem : KOPresentationQueueItem?
+}
+
+public class KOPresentationQueueItem : Equatable{
+    public let id : String
+    public let animated: Bool
     internal let animationCompletion : (()->Void)?
     
     internal weak var viewControllerPresenting : UIViewController?
-    internal var viewControllerToPresent : UIViewController
+    public var viewControllerToPresent : UIViewController
     
-    internal init(viewControllerToPresent : UIViewController, onViewController : UIViewController, animated : Bool, animationCompletion : (()->Void)? = nil) {
+    public var isPresented : Bool{
+        return viewControllerToPresent.view.window != nil && viewControllerToPresent.presentingViewController != nil
+    }
+    
+    public init(viewControllerToPresent : UIViewController, onViewController : UIViewController, animated : Bool, animationCompletion : (()->Void)? = nil) {
         self.id = UUID().uuidString
         self.viewControllerToPresent = viewControllerToPresent
         self.viewControllerPresenting = onViewController
@@ -25,14 +34,9 @@ internal class KOPresentationQueueItem : Equatable{
         self.animationCompletion = animationCompletion
     }
     
-    static func == (lhs: KOPresentationQueueItem, rhs: KOPresentationQueueItem) -> Bool {
+    public static func == (lhs: KOPresentationQueueItem, rhs: KOPresentationQueueItem) -> Bool {
         return lhs.id == rhs.id
     }
-}
-
-internal class KOPresentationQueue{
-    internal var items : [KOPresentationQueueItem] = []
-    internal var currentPresentedItem : KOPresentationQueueItem?
 }
 
 public class KOPresentationQueuesService{
@@ -40,6 +44,9 @@ public class KOPresentationQueuesService{
     public static let shared : KOPresentationQueuesService = {
         return KOPresentationQueuesService()
     }()
+    
+    public var queueChangedEvent : ((_ queueIndex : Int)->Void)?
+    
     private var queues : [Int : KOPresentationQueue] = [:]
     private var processQueuesTimer : Timer?
     
@@ -62,28 +69,53 @@ public class KOPresentationQueuesService{
     
     @objc private func processQueues(){
         var idsToDelete : [Int] = []
+        
         //process queues
         for queue in queues{
             if !processQueue(withIndex: queue.key){
                 idsToDelete.append(queue.key)
             }
         }
-        //delete empty queues
+        
+        //deletes empty queues
         for idToDelete in idsToDelete{
             deleteQueue(withIndex: idToDelete)
         }
     }
     
-    //MARK: Public functions
+    //MARK: - Public functions
+    public subscript(queueIndex : Int, itemId : String)->KOPresentationQueueItem? {
+        get {
+            guard let queue = queues[queueIndex] else{
+                return nil
+            }
+            guard let itemIndex = queue.items.index(where: {$0.id == itemId})  else{
+                return nil
+            }
+            return queue.items[itemIndex]
+        }
+    }
+    
     public func itemsCountForQueue(withIndex index: Int)->Int?{
         return queues[index]?.items.count
     }
     
-    public func isItemPresentedForQueue(withIndex index : Int)->Bool{
-        return queues[index]?.currentPresentedItem != nil
+    public func itemPresentedForQueue(withIndex index : Int)->KOPresentationQueueItem?{
+        guard let queue = queues[index], let currentPresentedItem = queue.currentPresentedItem, currentPresentedItem.isPresented else{
+            return nil
+        }
+        return currentPresentedItem
     }
     
-    //returns "true" if queue can be process
+    public func itemFromQueue(withIndex index: Int, itemIndex : Int)->KOPresentationQueueItem?{
+        guard let queue = queues[index], queue.items.count > itemIndex else{
+            return nil
+        }
+        return queue.items[itemIndex]
+    }
+    
+    //MARK: Presents and processes functions
+    //returns "true" if queue isn't empty and can be processed further
     public func processQueue(withIndex index : Int)->Bool{
         //checks if queue exists
         guard let queue = queues[index] else{
@@ -92,38 +124,36 @@ public class KOPresentationQueuesService{
         
         //checks if one of items, already presented
         if let currentItem = queue.currentPresentedItem{
-            guard currentItem.viewControllerToPresent.view.window != nil || currentItem.viewControllerToPresent.presentingViewController == nil else{
+            guard !currentItem.isPresented else{
                 return true
             }
         }
         queue.currentPresentedItem = nil
         
         var idsToDelete : [String] = []
-        for i in 0..<queue.items.count{
-            let item = queue.items[i]
-            //checks if viewControllers exist
-            guard let vcPresenting = item.viewControllerPresenting, !item.viewControllerToPresent.isBeingPresented else{
-                idsToDelete.append(item.id)
+        for queueItem in queue.items{
+            //checks if viewControllerPresenting exists and is in the view hierarchy
+            guard let viewControllerPresenting = queueItem.viewControllerPresenting, viewControllerPresenting.view.window != nil else{
+                idsToDelete.append(queueItem.id)
                 continue
             }
             
-            //checks if current viewController is in the view hierarchy and presenting something
-            guard vcPresenting.isViewLoaded && vcPresenting.view.window != nil && vcPresenting.presentedViewController == nil else{
+            //checks is current viewController is loaded and presenting something
+            guard viewControllerPresenting.isViewLoaded && viewControllerPresenting.presentedViewController == nil else{
+                //try another time, when view will be loaded or isn't presenting anything
                 continue
             }
             
-            let completionHandler = item.animationCompletion
-            vcPresenting.present(item.viewControllerToPresent, animated: item.animated, completion:{
-                [unowned self] in
-                completionHandler?()
-                _ = self.processQueue(withIndex: index)
-            })
-            queue.currentPresentedItem = item
-            idsToDelete.append(item.id)
+            viewControllerPresenting.present(queueItem.viewControllerToPresent, animated: queueItem.animated, completion: queueItem.animationCompletion)
+            queue.currentPresentedItem = queueItem
+            idsToDelete.append(queueItem.id)
             break
         }
         //delete unnecessary items from queue
-        queue.items = queue.items.filter({!idsToDelete.contains($0.id)})
+        if idsToDelete.count > 0{
+            queue.items = queue.items.filter({!idsToDelete.contains($0.id)})
+            queueChangedEvent?(index)
+        }
         return !(queue.items.count == 0 && queue.currentPresentedItem == nil)
     }
     
@@ -135,26 +165,25 @@ public class KOPresentationQueuesService{
             queues[queueIndex] = KOPresentationQueue()
         }
         queues[queueIndex]!.items.append(item)
+        queueChangedEvent?(queueIndex)
+        
         //force process queue
         _ = processQueue(withIndex: queueIndex)
         
         return item.id
     }
     
-    public func removeFromQueue(withIndex index: Int, itemWithId itemId : String, animated: Bool, animationCompletion : (()->Void)?){
-        //check if queue exists, and item
+    //MARK: Removes functions
+    public func removeFromQueue(withIndex index: Int, itemWithId itemId : String){
+        //checks if queue exists, and item
         guard let queue = queues[index] else{
             return
         }
         guard let itemIndex = queue.items.index(where: {$0.id == itemId})  else{
-            //removes current visibile item with this id if exsits
-            if let currentItem = queue.currentPresentedItem, currentItem.id == itemId{
-                currentItem.viewControllerToPresent.dismiss(animated: animated, completion: animationCompletion)
-                queue.currentPresentedItem = nil
-            }
             return
         }
         queue.items.remove(at: itemIndex)
+        queueChangedEvent?(index)
     }
     
     public func removeFromQueue(withIndex index: Int, itemWithIndex itemIndex : Int){
@@ -162,9 +191,45 @@ public class KOPresentationQueuesService{
             return
         }
         queue.items.remove(at: itemIndex)
+        queueChangedEvent?(index)
     }
     
+    public func removeAllItemsFromQueue(withIndex index: Int, forPresentingViewController presentingViewController : UIViewController){
+        guard let queue = queues[index] else{
+            return
+        }
+        
+        var idsToDelete : [String] = []
+        for queueItem in queue.items{
+            if queueItem.viewControllerPresenting == presentingViewController || queueItem.viewControllerPresenting == nil{
+                idsToDelete.append(queueItem.id)
+            }
+        }
+        
+        //delete items from queue
+        queue.items = queue.items.filter({!idsToDelete.contains($0.id)})
+        queueChangedEvent?(index)
+    }
+    
+    public func removeCurrentVisibleItemForQueue(withIndex index : Int, animated: Bool, animationCompletion : (()->Void)?){
+        guard let queue = queues[index], let currentItem = queue.currentPresentedItem else{
+            return
+        }
+        guard currentItem.isPresented else{
+            queue.currentPresentedItem = nil
+            _ = processQueue(withIndex: index)
+            return
+        }
+        
+        currentItem.viewControllerToPresent.dismiss(animated: animated, completion: {
+            [unowned self] in
+            _ = self.processQueue(withIndex: index)
+            animationCompletion?()
+        })
+    }
+
     public func deleteQueue(withIndex index : Int){
         queues.removeValue(forKey: index)
+        queueChangedEvent?(index)
     }
 }

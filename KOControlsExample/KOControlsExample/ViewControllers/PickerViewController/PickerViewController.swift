@@ -191,7 +191,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         guard isStyleCustomize else{
             return
         }
-        dialogViewController.dimmingTransition.setupPresentationControllerEvent = {
+        (dialogViewController.customTransition as? KODimmingTransition)?.setupPresentationControllerEvent = {
             presentationController in
             presentationController.dimmingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         }
@@ -204,7 +204,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         let viewToAnimationDuration : TimeInterval = 0.5
         let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
         viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
-        dialogViewController.dimmingTransition.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+        dialogViewController.customTransition?.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
         
         //override dismissing animation
         let viewFromAnimationDuration : TimeInterval = 0.5
@@ -212,7 +212,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
             KOFadeOutAnimation(),
             KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
             ], duration : viewFromAnimationDuration)
-        dialogViewController.dimmingTransition.animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
+        dialogViewController.customTransition?.animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
     }
 }
 

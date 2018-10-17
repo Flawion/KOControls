@@ -17,6 +17,7 @@
                 <outlet property="presentingView" destination="ovp-tm-UGj" id="OJv-vH-xp2"/>
                 <outlet property="removeIndexField" destination="8Ry-DJ-zEg" id="Oo8-QN-Dog"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="viewsCountInQueueLabel" destination="wLf-Rz-SVu" id="7TG-lq-9QC"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -28,11 +29,11 @@
                     <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ovp-tm-UGj" userLabel="PresentingView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="547"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="517.5"/>
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6P0-wt-Vnv" userLabel="BottomView">
-                            <rect key="frame" x="0.0" y="547" width="375" height="100"/>
+                            <rect key="frame" x="0.0" y="517.5" width="375" height="129.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVL-ws-XsA">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -41,8 +42,14 @@
                                         <constraint firstAttribute="height" constant="1" id="xb5-oS-aSx"/>
                                     </constraints>
                                 </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Views count in queue: 0" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wLf-Rz-SVu">
+                                    <rect key="frame" x="8" y="9" width="359" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bu-Gf-Bn2" userLabel="PresentPanel">
-                                    <rect key="frame" x="81.5" y="8" width="212" height="40"/>
+                                    <rect key="frame" x="81.5" y="37.5" width="212" height="40"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zsk-Q3-qHP">
                                             <rect key="frame" x="0.0" y="0.0" width="158" height="40"/>
@@ -51,7 +58,7 @@
                                                 <action selector="presentViewsBttClick:" destination="-1" eventType="touchUpInside" id="qfa-dh-HzO"/>
                                             </connections>
                                         </button>
-                                        <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="2" borderStyle="roundedRect" placeholder="count" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vzT-pc-CMX">
+                                        <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="4" borderStyle="roundedRect" placeholder="count" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vzT-pc-CMX">
                                             <rect key="frame" x="162" y="5" width="50" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="cSc-xX-7mw"/>
@@ -76,7 +83,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZK-IT-3Cp" userLabel="RemovePanel">
-                                    <rect key="frame" x="74" y="52" width="227" height="40"/>
+                                    <rect key="frame" x="74" y="81.5" width="227" height="40"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2O8-5E-0J2">
                                             <rect key="frame" x="0.0" y="0.0" width="173" height="40"/>
@@ -113,11 +120,14 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="5bu-Gf-Bn2" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="D8L-zQ-tgB"/>
-                                <constraint firstItem="5bu-Gf-Bn2" firstAttribute="top" secondItem="6P0-wt-Vnv" secondAttribute="top" constant="8" id="Nkx-Rj-DN6"/>
+                                <constraint firstItem="wLf-Rz-SVu" firstAttribute="top" secondItem="UVL-ws-XsA" secondAttribute="bottom" constant="8" id="K2F-xl-4OI"/>
                                 <constraint firstAttribute="trailing" secondItem="UVL-ws-XsA" secondAttribute="trailing" id="O7r-R8-Ecp"/>
+                                <constraint firstItem="wLf-Rz-SVu" firstAttribute="leading" secondItem="6P0-wt-Vnv" secondAttribute="leading" constant="8" id="VHZ-kx-XW2"/>
                                 <constraint firstItem="UVL-ws-XsA" firstAttribute="top" secondItem="6P0-wt-Vnv" secondAttribute="top" id="X6w-J2-5Ku"/>
                                 <constraint firstItem="ZZK-IT-3Cp" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="YYs-ct-T5m"/>
                                 <constraint firstItem="UVL-ws-XsA" firstAttribute="leading" secondItem="6P0-wt-Vnv" secondAttribute="leading" id="hAk-sF-YyH"/>
+                                <constraint firstAttribute="trailing" secondItem="wLf-Rz-SVu" secondAttribute="trailing" constant="8" id="kYC-Br-MRB"/>
+                                <constraint firstItem="5bu-Gf-Bn2" firstAttribute="top" secondItem="wLf-Rz-SVu" secondAttribute="bottom" constant="8" id="unU-G0-SZZ"/>
                                 <constraint firstItem="ZZK-IT-3Cp" firstAttribute="top" secondItem="5bu-Gf-Bn2" secondAttribute="bottom" constant="4" id="zrJ-Tq-zUj"/>
                             </constraints>
                         </view>
@@ -143,6 +153,7 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="ZZK-IT-3Cp" secondAttribute="bottom" constant="8" id="mCC-Os-BoJ"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>
         </view>
     </objects>
 </document>

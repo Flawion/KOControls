@@ -318,3 +318,18 @@ open class KOFrameFromToCurrentAnimation : KOAnimation{
         view.frame = fromValue
     }
 }
+
+open class KOVisualEffectAnimation : KOFromToAnimation<UIVisualEffect?>{
+    override open func animation(view: UIView) {
+        guard let visualEffectView = view as? UIVisualEffectView else{
+            return
+        }
+        visualEffectView.effect = toValue
+    }
+    
+    override open func prepareViewForAnimation(_ view: UIView) {
+        if let visualEffectView = view as? UIVisualEffectView, let fromValue = fromValue{
+            visualEffectView.effect = fromValue
+        }
+    }
+}
