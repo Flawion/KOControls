@@ -227,7 +227,7 @@ extension PickerViewController{
         popoverSettings = KOPopoverSettings(sourceView: birthdayField, sourceRect: birthdayField.bounds)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
+        _ = presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
             [weak self](datePicker) in
             guard let sSelf = self else{
                 return
@@ -238,7 +238,7 @@ extension PickerViewController{
     }
     
     private func showDatePickerNormal(){
-        presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
+        _ = presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
             [weak self](datePicker) in
             self?.initializeDatePicker(datePicker)
         }), postInit: {
@@ -282,7 +282,7 @@ extension PickerViewController{
         popoverSettings = KOPopoverSettings(sourceView: filmTypeField, sourceRect: filmTypeField.bounds)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
+        _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
             [weak self](optionsPicker) in
             guard let sSelf = self else{
                 return
@@ -293,7 +293,7 @@ extension PickerViewController{
     }
     
     private func showOptionsPickerNormal(){
-        presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
+        _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
             [weak self](optionsPicker) in
             self?.initializeOptionsPicker(optionsPicker)
         }), postInit: {
@@ -337,7 +337,7 @@ extension PickerViewController{
     }
     
     private func showItemsTablePickerNormal(){
-        presentItemsTablePicker(viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
+        _ = presentItemsTablePicker(viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
             [weak self](itemsTablePicker) in
             itemsTablePicker.contentHeight = 300
             self?.initializeItemsTablePicker(itemsTablePicker)
@@ -352,7 +352,7 @@ extension PickerViewController{
         popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        presentItemsTablePicker( viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
+        _ = presentItemsTablePicker( viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
             [weak self](itemsTablePicker) in
             guard let sSelf = self else{
                 return
@@ -414,7 +414,7 @@ extension PickerViewController{
     }
     
     private func showItemsCollectionPickerNormal(){
-        presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
+        _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
             [weak self](itemsCollectionPicker) in
             guard let sSelf = self else{
                 return
@@ -433,7 +433,7 @@ extension PickerViewController{
         popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
+        _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
             [weak self](itemsCollectionPicker) in
             guard let sSelf = self else{
                 return
@@ -501,7 +501,7 @@ extension PickerViewController{
     private func showCustomItemsTablePickerNormal(){
         let searchItemsTablePicker = SearchItemsTablePickerViewController()
         customizeTransitionIfNeed(dialogViewController: searchItemsTablePicker)
-        presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
+        _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
             [weak self](itemsTablePicker) in
             guard let sSelf = self else{
                 return
@@ -518,7 +518,7 @@ extension PickerViewController{
         popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
+        _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
             [weak self](itemsTablePicker) in
             guard let sSelf = self else{
                 return

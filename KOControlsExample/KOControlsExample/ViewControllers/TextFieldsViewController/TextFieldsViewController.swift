@@ -50,7 +50,13 @@ class TextFieldsViewController: UIViewController {
             return password.count >= 8 && password.count <= 20
         }))
         
-        //setting custom error view
+        //adds additional image
+        passwordField.errorInfoView.imageWidthConst.constant = 25
+        passwordField.errorInfoView.imageView.image = UIImage(named:"ico_account")
+        passwordField.errorInfoView.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        passwordField.errorInfoView.imageView.contentMode = .scaleAspectFit
+        
+        //sets custom error view
         passwordField.errorInfoHideAnimation = KOAnimationGroup(animations:[
                 KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
                 KOFadeOutAnimation()
@@ -87,7 +93,7 @@ class TextFieldsViewController: UIViewController {
             return password.count >= 8 && password.count <= 20
         }))
         
-        //setting custom error info view
+        //sets custom error info view
         let userNameErrorInfoView = UserNameErrorInfoView()
         userNameErrorInfoView.backgroundColor = UIColor.gray.withAlphaComponent(0.85)
         

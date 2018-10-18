@@ -192,7 +192,7 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     @IBAction func settingsBttClick(_ sender: UIButton) {
         popoverSettings = KOPopoverSettings(sourceView: sender, sourceRect: sender.bounds)
         
-        presentOptionsPicker(withOptions: [scrollOffsetProgressModes, scrollOffsetProgressMaxOffsets], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Choose mode and max offset of calculating scroll offset progress", action: {
+        _ = presentOptionsPicker(withOptions: [scrollOffsetProgressModes, scrollOffsetProgressMaxOffsets], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Choose mode and max offset of calculating scroll offset progress", action: {
             [weak self](optionsPickerViewController) in
             guard let sSelf = self else{
                 return

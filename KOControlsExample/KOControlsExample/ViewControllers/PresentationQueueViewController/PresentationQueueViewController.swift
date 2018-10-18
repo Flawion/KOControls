@@ -78,7 +78,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showPresentViewsCountPicker(){
-        presentOptionsPicker(withOptions: [["1","2","3","4","5"]], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select present views count", action: {
+        _ = presentOptionsPicker(withOptions: [["1","2","3","4","5"]], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select present views count", action: {
             [weak self](picker) in
             guard let sSelf = self else{
                 return
@@ -97,7 +97,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showRemoveIndexPicker(){
-        presentOptionsPicker(withOptions: [["0","1","2","3","4"]], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select remove view index", action: {
+        _ = presentOptionsPicker(withOptions: [["0","1","2","3","4"]], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select remove view index", action: {
             [weak self](picker) in
             guard let sSelf = self else{
                 return

@@ -8,11 +8,13 @@
 
 import UIKit
 
+/// This protocol must be implemented by 'errorInfoView'. It indicates a centerX anchor of marker that pointing a field.
 public protocol KOTextFieldErrorInterface{
     func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?
 }
 
-open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
+/// View that shows information about an error. The minimal effort is to change 'descriptionLabel.text' to match to the error.
+open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInterface {
     //MARK: - Variables
     public private(set) weak var contentView : UIView!
     
@@ -25,6 +27,8 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     }
     
     //image variables
+    
+    /// Additional image, it is positioned before 'descriptionLabel'
     public private(set) weak var imageView : UIImageView!
     public private(set) weak var imageWidthConst : NSLayoutConstraint!
     public private(set) var imageViewEdgesConstraintsInsets : KOEdgesConstraintsInsets!
@@ -34,23 +38,32 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
     }
     
     //marker line variables
+    
+    /// Line that separates 'contentView' from the marker. It is inside the 'contentView'.
     private weak var markerLineView : UIView!
 
+    /// Line thickness
     public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
     
+    /// Default line thickness, can be overridden
     open var defaultMarkerLineHeight : CGFloat{
         return 2
     }
     
     //marker variables
+    
+    /// View that is pointing a field
     private weak var markerView : UIView!
     private weak var markerShapeLayer : CAShapeLayer!
     private weak var markerWidthConst : NSLayoutConstraint!
     private weak var markerHeightConst : NSLayoutConstraint!
     
     //public
+    
+    /// Minimum edges distances from the view border
     public private(set) var markerMinHorizontalConstraintsInsets : KOHorizontalConstraintsInsets!
     
+    /// Shows or hides marker view, before used it you have to turn off 'KOTextField.manageErrorInfoMarkerVisibility'
     public var isMarkerViewHidden : Bool{
         get{
             return markerView.isHidden
@@ -185,6 +198,7 @@ open class KOTextFieldErrorView: UIView, KOTextFieldErrorInterface {
             imageWidthConst
             ])
         imageViewEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageLeftConst, rightConst: imageRightToDescriptionLeftConst), vertical: KOVerticalConstraintsInsets(topConst: imageTopConst, bottomConst: imageBottomConst))
+        self.imageWidthConst = imageWidthConst
 
         //for description
         let descriptionRightConst = descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -defaultDescriptionInsets.right)
