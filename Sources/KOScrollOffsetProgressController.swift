@@ -8,6 +8,10 @@
 
 import UIKit
 
+/// Indicates on which axis it will be doing a calculation
+///
+/// - vertical: vertical
+/// - horizontal: horizontal
 public enum KOScrollOffsetAxis{
     case vertical
     case horizontal
@@ -17,12 +21,18 @@ public enum KOScrollOffsetAxis{
     func scrollOffsetProgressController(_ : KOScrollOffsetProgressController, offsetProgress : CGFloat)
 }
 
+/// Mode of calculating progress
+///
+/// - contentOffsetBased: (default) progress is calculating from current contentOffset
+/// - translationOffsetBased: progress is calculating based on difference between last content offset and new one
+/// - scrollingBlockedUntilProgressMax: progress is calculating based on difference between touches (last and new one), scroll is completely blocked until the progress reaches value 1.0
 public enum KOScrollOffsetProgressModes{
     case contentOffsetBased
     case translationOffsetBased
     case scrollingBlockedUntilProgressMax
 }
 
+/// Controller that calculates progress (0.0 to 1.0) from given range based on scroll view offset and selected calculating 'mode'. If you are handle scrollView delegate by yourself, you have to invoke function scrollViewDidScroll manually to get progress.
 open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UIGestureRecognizerDelegate{
     //MARK: - Variables
     private weak var calculateOffsetGesture : UIPanGestureRecognizer?
@@ -32,46 +42,55 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
         return mode == .scrollingBlockedUntilProgressMax
     }
     
+    //public
+    
     public weak var delegate : KOScrollOffsetProgressControllerDelegate?{
         didSet{
             calculateOffsetProgress()
         }
     }
     
+    /// Scroll view based on which the progress will be calculated
     public weak var scrollView : UIScrollView?{
         didSet{
             refreshScrollView()
         }
     }
     
+    /// Mode of calculating progress
     public var mode : KOScrollOffsetProgressModes = .contentOffsetBased{
         didSet{
             refreshMode()
         }
     }
     
+    /// Indicates on which axis it will be doing a calculation
     public var scrollOffsetAxis : KOScrollOffsetAxis = .vertical{
         didSet{
             calculateOffsetProgress()
         }
     }
     
+    /// Initial offset that must be reach to start the calculation
     public var minOffset : CGFloat = 0{
         didSet{
             calculateOffsetProgress()
         }
     }
     
+    /// End offset that must be reach to get maximum progress, must be greater than minOffset
     public var maxOffset: CGFloat = 0{
         didSet{
             calculateOffsetProgress()
         }
     }
     
+    /// Offset between max and min, where progress is changing
     public var offsetRange : CGFloat{
         return maxOffset - minOffset
     }
     
+    /// Calculated progress
     public private(set) var progress : CGFloat = 0{
         didSet{
             progressChangedEvent?(progress)
@@ -79,6 +98,7 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
         }
     }
     
+    /// Event that will be invoked when progress was change. It is getting progress as parameter.
     public var progressChangedEvent : ((_ : CGFloat)->Void)? = nil
     
     //MARK: - Functions
@@ -216,6 +236,10 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     }
     
     //MARK: Public
+    
+    /// When scroll delegate is handle by class outside, developer have to invokes this function manually
+    ///
+    /// - Parameter scrollView: scrollView
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard !isScrollBlockedUntilProgressMax else{
             //prevent from scroll until progress is max
