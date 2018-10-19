@@ -51,6 +51,10 @@ public class KOPresentationQueueItem : Equatable{
 
 /// A queue of views to present. It presents next viewController after current dismissed.
 public class KOPresentationQueuesService{
+    //MARK: - Variables
+    private var queues : [Int : KOPresentationQueue] = [:]
+    private var processQueuesTimer : Timer?
+    
     /// Shared instance
     public static let shared : KOPresentationQueuesService = {
         return KOPresentationQueuesService()
@@ -59,9 +63,14 @@ public class KOPresentationQueuesService{
     /// This event will be invoked after some changes in queue: added/deleted item or delete queue. It takes the queueIndex as the parameter.
     public var queueChangedEvent : ((_ queueIndex : Int)->Void)?
     
-    private var queues : [Int : KOPresentationQueue] = [:]
-    private var processQueuesTimer : Timer?
-    
+    /// Timer interval between processing the queues
+    public var processQueuesTimerInterval : TimeInterval = 0.1{
+        didSet{
+            refreshProcessQueuesTimer()
+        }
+    }
+  
+    //MARK: - Functions
     private init(){
         startProcessQueuesTimer()
     }
@@ -70,8 +79,13 @@ public class KOPresentationQueuesService{
         stopProcessQueuesTimer()
     }
     
+    private func refreshProcessQueuesTimer(){
+        stopProcessQueuesTimer()
+        startProcessQueuesTimer()
+    }
+    
     private func startProcessQueuesTimer(){
-        processQueuesTimer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(processQueues), userInfo: nil, repeats: true)
+        processQueuesTimer = Timer.scheduledTimer(timeInterval: processQueuesTimerInterval, target: self, selector: #selector(processQueues), userInfo: nil, repeats: true)
     }
     
     private func stopProcessQueuesTimer(){

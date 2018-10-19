@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Spring animation settings
 public struct KOAnimationSpringSettings{
     public var damping : CGFloat = 1.0
     public var velocity : CGFloat = 1.0
@@ -18,12 +19,14 @@ public struct KOAnimationSpringSettings{
     }
 }
 
+/// Manages animation
 open class KOAnimator{
     private weak var view : UIView?
     
     public private(set) var currentViewAnimation : KOAnimation?
     public private(set) var currentPropertyAnimator : UIViewPropertyAnimator?
     
+    /// Runs before animation.prepareViewForAnimation and playViewAnimation
     public var prepareViewForAnimationEvent : ((_ : UIView)->Void)?
     
     public var isRunning : Bool {
@@ -34,7 +37,12 @@ open class KOAnimator{
         self.view = view
     }
 
-    open func runViewAnimation(_ animation : KOAnimation, completionHandler : ((UIViewAnimatingPosition)->Void)?){
+    /// Stops current animation and recreates 'UIViewPropertyAnimator' for the new animation
+    ///
+    /// - Parameters:
+    ///   - animation: animation to set
+    ///   - completionHandler: animation completion handler
+    open func setViewAnimation(_ animation : KOAnimation, completionHandler : ((UIViewAnimatingPosition)->Void)?){
         stopViewAnimation()
         
         if let view = view{
@@ -53,9 +61,24 @@ open class KOAnimator{
         if let completionHandler = completionHandler{
             currentPropertyAnimator?.addCompletion(completionHandler)
         }
+    }
+    
+    /// Sets the new animation and play it
+    ///
+    /// - Parameters:
+    ///   - animation: animation to set
+    ///   - completionHandler: animation completion handler
+    open func runViewAnimation(_ animation : KOAnimation, completionHandler : ((UIViewAnimatingPosition)->Void)?){
+        setViewAnimation(animation, completionHandler: completionHandler)
         playViewAnimation()
     }
     
+    /// Runs animation at 'UIViewControllerTransitionCoordinator', this function dosen't create 'UIViewPropertyAnimator' for animation. So you can't control animation by this property.
+    ///
+    /// - Parameters:
+    ///   - animation: animation to run at coordinator
+    ///   - coordinator: coordinator of presented view
+    ///   - completionHandler: animation completion handler
     open func runAnimationAlongsideTransition(_ animation : KOAnimation, coordinator : UIViewControllerTransitionCoordinator?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?){
         guard let view = view else{
             return
@@ -86,6 +109,7 @@ open class KOAnimator{
     }
 }
 
+/// Base class for animation, it should be used only for inheritance
 open class KOAnimation{
     //MARK: Variables
     public var duration : TimeInterval

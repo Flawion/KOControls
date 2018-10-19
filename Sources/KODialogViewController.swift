@@ -61,6 +61,8 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     //public
     @IBOutlet public weak var delegate : KODialogViewControllerDelegate?
     
+    public var statusBarStyleWhenCapturesAppearance : UIStatusBarStyle = .lightContent
+    
     public var customTransition : KOCustomTransition? = KODimmingTransition() {
         didSet{
             transitioningDelegate = customTransition
@@ -177,6 +179,11 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     open var defaultBarButtonInsets : UIEdgeInsets{
         return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     }
+    
+    override open var preferredStatusBarStyle: UIStatusBarStyle{
+        return statusBarStyleWhenCapturesAppearance
+    }
+    
     
     //MARK: - Functions
     //MARK: Initialization

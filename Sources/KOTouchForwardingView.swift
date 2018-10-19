@@ -8,7 +8,10 @@
 
 import UIKit
 
+/// View that forwards touches to the 'passthroughViews'
 public class KOTouchForwardingView : UIView{
+    
+    /// Views that will get touches from this class
     public var passthroughViews : [UIView] = []
     
     public init(passthroughViews : [UIView] = []) {

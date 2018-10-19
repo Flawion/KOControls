@@ -8,6 +8,30 @@
 
 import UIKit
 
+/// Observes a property of type 'Value' from object of type 'Subject'
+public class KOPropertyObserver<Subject : NSObject, Value> {
+    private let options : NSKeyValueObservingOptions
+    private var token : Any?
+    
+    /// object to observe
+    public weak var subject: Subject?
+    
+    
+    /// Initialize observer
+    ///
+    /// - Parameters:
+    ///   - subject: object to observe
+    ///   - propertyPath: keyPath to property of subject to observe
+    ///   - propertyChangedEvent: event that will be invoking after property changed
+    ///   - options: observing options
+    public init(subject: Subject, propertyPath : KeyPath<Subject, Value>, propertyChangedEvent : @escaping (Subject, NSKeyValueObservedChange<Value>)->Void , options : NSKeyValueObservingOptions = [.new]) {
+        self.options = options
+        self.subject = subject
+        
+        token = subject.observe(propertyPath, options: options, changeHandler: propertyChangedEvent)
+    }
+}
+
 /// Indicates on which axis it will be doing a calculation
 ///
 /// - vertical: vertical
@@ -32,8 +56,8 @@ public enum KOScrollOffsetProgressModes{
     case scrollingBlockedUntilProgressMax
 }
 
-/// Controller that calculates progress (0.0 to 1.0) from given range based on scroll view offset and selected calculating 'mode'. If you are handle scrollView delegate by yourself, you have to invoke function scrollViewDidScroll manually to get progress.
-open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UIGestureRecognizerDelegate{
+/// Controller that calculates progress (0.0 to 1.0) from given range based on scroll view offset and selected calculating 'mode'.
+open class KOScrollOffsetProgressController : NSObject, UIGestureRecognizerDelegate{
     //MARK: - Variables
     private weak var calculateOffsetGesture : UIPanGestureRecognizer?
     private var contentOffset : CGFloat = 0
@@ -41,6 +65,8 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     private var isScrollBlockedUntilProgressMax : Bool{
         return mode == .scrollingBlockedUntilProgressMax
     }
+    
+    private var scrollOffsetObserver : KOPropertyObserver<UIScrollView, CGPoint>?
     
     //public
     
@@ -52,8 +78,11 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     
     /// Scroll view based on which the progress will be calculated
     public weak var scrollView : UIScrollView?{
-        didSet{
-            refreshScrollView()
+        set{
+            bindScrollView(scrollView)
+        }
+        get{
+            return scrollOffsetObserver?.subject
         }
     }
     
@@ -102,6 +131,21 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     public var progressChangedEvent : ((_ : CGFloat)->Void)? = nil
     
     //MARK: - Functions
+    
+    /// Init
+    ///
+    /// - Parameters:
+    ///   - scrollView: scroll view based on which the progress will be calculated
+    ///   - minOffset: initial offset that must be reach to start the calculation
+    ///   - maxOffset: end offset that must be reach to get maximum progress, must be greater than minOffset
+    public init(scrollView : UIScrollView?, minOffset : CGFloat, maxOffset : CGFloat){
+        super.init()
+
+        self.minOffset = minOffset
+        self.maxOffset = maxOffset
+        bindScrollView(scrollView)
+    }
+    
     private func refreshMode(){
         scrollView?.setContentOffset(CGPoint.zero, animated: false)
         calculateOffsetGesture?.isEnabled = mode == .scrollingBlockedUntilProgressMax
@@ -111,11 +155,16 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
     }
     
     //MARK: Scroll view
-    private func refreshScrollView(){
+    private func bindScrollView(_ scrollView : UIScrollView?){
         guard let scrollView = scrollView else{
             return
         }
-        scrollView.delegate = self
+        
+        scrollOffsetObserver = KOPropertyObserver<UIScrollView, CGPoint>(subject: scrollView, propertyPath: \UIScrollView.contentOffset, propertyChangedEvent: {
+            [weak self](subject, property) in
+            self?.scrollView(subject, newContentOffset: property.newValue ?? subject.contentOffset)
+        })
+        
         contentOffset = 0
         lastContentOffset = 0
         calculateContentOffsetAndProgress()
@@ -235,23 +284,18 @@ open class KOScrollOffsetProgressController : NSObject, UIScrollViewDelegate, UI
         progress = min(max(offset, 0.0), 1.0)
     }
     
-    //MARK: Public
-    
-    /// When scroll delegate is handle by class outside, developer have to invokes this function manually
-    ///
-    /// - Parameter scrollView: scrollView
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    private func scrollView(_ scrollView: UIScrollView, newContentOffset contentOffset : CGPoint) {
         guard !isScrollBlockedUntilProgressMax else{
             //prevent from scroll until progress is max
             if progress < 1{
                 switch scrollOffsetAxis{
                 case .horizontal:
-                    if scrollView.contentOffset.x > 0{
-                        scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y), animated: false)
+                    if contentOffset.x > 0{
+                        scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset.y), animated: false)
                     }
                 case .vertical:
-                    if scrollView.contentOffset.y > 0{
-                        scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: 0), animated: false)
+                    if contentOffset.y > 0{
+                        scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
                     }
                 }
             }

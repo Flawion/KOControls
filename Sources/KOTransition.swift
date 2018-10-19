@@ -8,8 +8,14 @@
 
 import UIKit
 
+
+/// Custom view transition, set it in 'transitioningDelegate' of viewController or like a 'customTransition' of 'DialogViewController'
 open class KOCustomTransition :  NSObject, UIViewControllerTransitioningDelegate{
+    
+    /// Animation controller that will be used for presenting a view
     public var animationControllerPresenting : KOAnimationController?
+    
+    /// Animation controller that will be used for dismissing a view
     public var animationControllerDismissing : KOAnimationController?
     
     public init(animationControllerPresenting : KOAnimationController? = nil, animationControllerDismissing : KOAnimationController? = nil) {
@@ -27,15 +33,52 @@ open class KOCustomTransition :  NSObject, UIViewControllerTransitioningDelegate
     }
 }
 
+/// Transition that uses presentation with dimming view
+open class KODimmingTransition : KOCustomTransition{
+    
+    /// Event that will be invoked after created a presentationController
+    public var setupPresentationControllerEvent : ((KODimmingPresentationController)->Void)? = nil
+    
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let presentationController = KODimmingPresentationController(presentedViewController: presented, presenting: presenting)
+        setupPresentationControllerEvent?(presentationController)
+        return presentationController
+    }
+}
 
+// Transition that uses presentation with dimming view with visual effect
+open class KOVisualEffectDimmingTransition : KOCustomTransition{
+    private let effect : UIVisualEffect
+    
+    /// Event that will be invoked after created a presentationController
+    public var setupPresentationControllerEvent : ((KOVisualEffectDimmingPresentationController)->Void)? = nil
+    
+    public init(effect: UIVisualEffect, animationControllerPresenting : KOAnimationController? = nil, animationControllerDismissing : KOAnimationController? = nil) {
+        self.effect = effect
+        super.init(animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+    }
+    
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        let presentationController = KOVisualEffectDimmingPresentationController(effect: effect, presentedViewController: presented, presenting: presenting)
+        setupPresentationControllerEvent?(presentationController)
+        return presentationController
+    }
+}
+
+/// Manages animations of transition from and to views
 open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioning{
     private var animatorTo : KOAnimator!
     private var animatorFrom : KOAnimator!
     
     public private(set) var duration : TimeInterval
+    
+    /// If it is a presenting animation, it will be a new view
     public private(set) var viewToAnimation : KOAnimation?
+    
+    /// If it is a presenting animation, it will be a presenting view. For dismissing animation it will be a current presented view.
     public private(set) var viewFromAnimation : KOAnimation?
     
+    /// Duration of animations
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
@@ -56,7 +99,7 @@ open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioni
         transitionContext.containerView.addSubview(viewTo)
     }
     
-    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    open func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         addViewTo(using: transitionContext)
         
         let completeTransitionHandler : (UIViewAnimatingPosition)->Void = {
@@ -90,16 +133,25 @@ open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioni
     }
 }
 
+/// Presentation that adds a 'dimmingView' before presented view
 open class KODimmingPresentationController : UIPresentationController {
     //MARK: Variables
     //public
     public private(set) var dimmingView : UIView!
+    
+    /// This view will be always at the bottom. It has a full screen frame, and can forward touches to the other views outside presentedViewController. It works well in mixed solution, when you cut the view by setting 'keepFrameOfView' and forwards touches to the viewController bellow presentedViewController by settings 'passthroughViews'
     public private(set) var touchForwardingView : KOTouchForwardingView!
     
+    /// Frame of this view will be keeped for presented view, so you can cut the view at the bottom or where you want..
     public weak var keepFrameOfView : UIView? = nil
     
+    /// Animation of showing 'dimmingView'
     public var dimmingShowAnimation : KOAnimation?
+    
+    /// Animation of hidding 'dimmingView'
     public var dimmingHideAnimation : KOAnimation?
+    
+    /// Event that will be invoked when user clicked at the 'dimmingView'
     public var dimmingViewTapEvent : (()->Void)? = nil
     
     override open var frameOfPresentedViewInContainerView: CGRect{
@@ -151,6 +203,7 @@ open class KODimmingPresentationController : UIPresentationController {
         dimmingHideAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
     }
     
+    /// You can override this function to create your own dimmingView
     open func createDimmingView()->UIView{
         dimmingShowAnimation = KOFadeInAnimation(fromValue: 0)
         dimmingHideAnimation = KOFadeOutAnimation()
@@ -165,10 +218,21 @@ open class KODimmingPresentationController : UIPresentationController {
     }
 }
 
+
+/// Presentation that adds a 'dimmingView' with visual effect before presented view
 public class KOVisualEffectDimmingPresentationController : KODimmingPresentationController {
+    private let effect : UIVisualEffect
+    
     //MARK: Functions
+    public init(effect : UIVisualEffect, presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+        self.effect = effect
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+        
+        initialize()
+    }
+    
     override public func createDimmingView() -> UIView {
-        dimmingShowAnimation = KOVisualEffectAnimation(toValue: UIBlurEffect(style: .dark))
+        dimmingShowAnimation = KOVisualEffectAnimation(toValue: effect)
         dimmingHideAnimation = KOVisualEffectAnimation(toValue: nil)
         
         let dimmingView = UIVisualEffectView(effect: nil)
@@ -176,25 +240,5 @@ public class KOVisualEffectDimmingPresentationController : KODimmingPresentation
         return dimmingView
     }
     
-}
-
-open class KODimmingTransition : KOCustomTransition{
-    public var setupPresentationControllerEvent : ((KODimmingPresentationController)->Void)? = nil
-    
-    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let presentationController = KODimmingPresentationController(presentedViewController: presented, presenting: presenting)
-        setupPresentationControllerEvent?(presentationController)
-        return presentationController
-    }
-}
-
-open class KOVisualEffectDimmingTransition : KOCustomTransition{
-    public var setupPresentationControllerEvent : ((KOVisualEffectDimmingPresentationController)->Void)? = nil
-    
-    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        let presentationController = KOVisualEffectDimmingPresentationController(presentedViewController: presented, presenting: presenting)
-        setupPresentationControllerEvent?(presentationController)
-        return presentationController
-    }
 }
 

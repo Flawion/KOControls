@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Settings of popover presentation
 open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate{
     //MARK: Variables
     
@@ -18,9 +19,14 @@ open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate
     public private(set) var sourceRect : CGRect?
     
     //others
-    public var calculatePreferredContentSizeByLayoutSizeFitting : CGSize? = UIView.layoutFittingCompressedSize
-    public var overridePreferredContentSize : CGSize? = nil
     
+    /// Preferred content size can be calculated automatically if this variable isn't nil. But view size must be calculable.
+    public var calculatePreferredContentSizeByLayoutSizeFitting : CGSize? = UIView.layoutFittingCompressedSize
+    
+    /// Preferred content size of view
+    public var preferredContentSize : CGSize? = nil
+    
+    /// This event will be invoked before view presented
     public var setupPopoverPresentationControllerEvent : ((UIPopoverPresentationController)->Void)? = nil
     
     //MARK: Functions
@@ -35,19 +41,16 @@ open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate
         self.sourceRect = sourceRect
     }
     
-    public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
-    }
-    
-    public func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
-    }
-    
+    /// If you use overriden 'present' function with parameter 'popoverSettings' this function will be invoked before view presented
+    ///
+    /// - Parameters:
+    ///   - viewController: presented view controller
+    ///   - presentOnViewController: presenting view controller
     public func prepareViewController(_ viewController : UIViewController, presentOnViewController : UIViewController ){
         viewController.modalPresentationStyle = .popover
         
         //calculate preferred content size
-        if let overridePreferredContentSize = overridePreferredContentSize{
+        if let overridePreferredContentSize = preferredContentSize{
             viewController.preferredContentSize = overridePreferredContentSize
         }else if let calculatePreferredContentSizeByLayoutSizeFitting = calculatePreferredContentSizeByLayoutSizeFitting{
             viewController.loadViewIfNeeded()
@@ -66,5 +69,19 @@ open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate
             popoverPresentationController.delegate = self
             setupPopoverPresentationControllerEvent?(popoverPresentationController)
         }
+    }
+    
+    /// Override this function if you don't want to show popover over iPhone and return other 'UIModalPresentationStyle'
+    ///
+    /// - Parameter controller: presentation controller
+    open func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+    /// Override this function if you don't want to show popover over iPhone and return other 'UIModalPresentationStyle'
+    ///
+    /// - Parameter controller: presentation controller
+    open func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }

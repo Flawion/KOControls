@@ -8,12 +8,14 @@
 
 import UIKit
 
+/// Helps to manage horizonstal constraints
 public class KOHorizontalConstraintsInsets{
     private weak var leftConst : NSLayoutConstraint!
     private weak var rightConst : NSLayoutConstraint!
     private let leftMultipler : CGFloat
     private let rightMultipler : CGFloat
     
+    /// Left constraint's constant
     public var left : CGFloat{
         get{
             return leftMultipler * leftConst.constant
@@ -23,6 +25,7 @@ public class KOHorizontalConstraintsInsets{
         }
     }
     
+    /// Right constraint's constant
     public var right : CGFloat{
         get{
             return rightConst.constant * rightMultipler
@@ -41,12 +44,14 @@ public class KOHorizontalConstraintsInsets{
     }
 }
 
+/// Helps to manage vertical constraints
 public class KOVerticalConstraintsInsets{
     private weak var topConst : NSLayoutConstraint!
     private weak var bottomConst : NSLayoutConstraint!
     private let topMultipler : CGFloat
     private let bottomMultipler : CGFloat
     
+    /// Top constraint's constant
     public var top : CGFloat{
         get{
             return topConst.constant * topMultipler
@@ -56,6 +61,7 @@ public class KOVerticalConstraintsInsets{
         }
     }
     
+    /// Bottom constraint's constant
     public var bottom : CGFloat{
         get{
             return bottomConst.constant * bottomMultipler
@@ -78,6 +84,7 @@ public class KOEdgesConstraintsInsets{
     private var horizontal : KOHorizontalConstraintsInsets!
     private var vertical : KOVerticalConstraintsInsets!
     
+    /// Left constraint's constant
     public var left : CGFloat{
         get{
             return horizontal.left
@@ -87,6 +94,7 @@ public class KOEdgesConstraintsInsets{
         }
     }
     
+    /// Top constraint's constant
     public var top : CGFloat{
         get{
             return vertical.top
@@ -96,6 +104,7 @@ public class KOEdgesConstraintsInsets{
         }
     }
     
+    /// Right constraint's constant
     public var right : CGFloat{
         get{
             return horizontal.right
@@ -105,6 +114,7 @@ public class KOEdgesConstraintsInsets{
         }
     }
     
+    /// Bottom constraint's constant
     public var bottom : CGFloat{
         get{
             return vertical.bottom
@@ -114,6 +124,7 @@ public class KOEdgesConstraintsInsets{
         }
     }
     
+    /// Changes all constants of the constraints to match the insets
     public var insets : UIEdgeInsets {
         get{
             return UIEdgeInsets(top: vertical.top, left: horizontal.left, bottom: vertical.bottom, right: horizontal.right)

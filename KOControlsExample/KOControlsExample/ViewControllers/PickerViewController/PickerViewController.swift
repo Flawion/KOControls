@@ -164,6 +164,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     //MARK: Additionals customizations
     private func customize(dialogViewController : KODialogViewController){
         if !isPresentPopover{
+            dialogViewController.modalPresentationCapturesStatusBarAppearance = true
             dialogViewController.backgroundVisualEffect = UIBlurEffect(style: .dark)
             dialogViewController.mainViewHorizontalAlignment = .center
             dialogViewController.mainViewVerticalAlignment = .center
@@ -204,7 +205,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
         let viewToAnimationDuration : TimeInterval = 0.5
         let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
         viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
-        dialogViewController.customTransition?.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+        let animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
         
         //override dismissing animation
         let viewFromAnimationDuration : TimeInterval = 0.5
@@ -212,7 +213,9 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
             KOFadeOutAnimation(),
             KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
             ], duration : viewFromAnimationDuration)
-        dialogViewController.customTransition?.animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
+        let animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
+        
+        dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
     }
 }
 
@@ -349,7 +352,7 @@ extension PickerViewController{
     
     private func showItemsTablePickerPopover(){
         popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
-        popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
+        popoverSettings!.preferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
         _ = presentItemsTablePicker( viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
@@ -430,7 +433,7 @@ extension PickerViewController{
     private func showItemsCollectionPickerPopover(){
         //creates popover's settings
         popoverSettings = KOPopoverSettings(sourceView: countryField, sourceRect: countryField.bounds)
-        popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
+        popoverSettings!.preferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
         _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
@@ -515,7 +518,7 @@ extension PickerViewController{
         let searchItemsTablePicker = SearchItemsTablePickerViewController()
         
         popoverSettings = KOPopoverSettings(sourceView: customCountryField, sourceRect: customCountryField.bounds)
-        popoverSettings!.overridePreferredContentSize = CGSize(width: 320, height: 320)
+        popoverSettings!.preferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
         _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {

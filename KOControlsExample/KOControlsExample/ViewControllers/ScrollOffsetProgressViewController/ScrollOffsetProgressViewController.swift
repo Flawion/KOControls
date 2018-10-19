@@ -142,11 +142,8 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     }
     
     private func initializeScrollOffsetBasedView(){
-        scrollOffsetProgressController = KOScrollOffsetProgressController()
+        scrollOffsetProgressController = KOScrollOffsetProgressController(scrollView: collectionView, minOffset: 0, maxOffset: 300)
         scrollOffsetProgressController.delegate = self
-        scrollOffsetProgressController.scrollView = collectionView
-        scrollOffsetProgressController.maxOffset = 300
-        scrollOffsetProgressController.mode = .contentOffsetBased
     }
     
     private func recalculateSizeIfNeed(){
