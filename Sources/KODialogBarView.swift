@@ -8,12 +8,15 @@
 
 import UIKit
 
+/// Dialog bar
 open class KODialogBarView : UIView{
     //MARK: - Variables
     private weak var containerView : UIView!
     private weak var containerForCustomView : UIView!
     
     //public
+    
+    /// View that can replaces standard bar view
     public var customView : UIView?{
         didSet{
             refreshCustomView()
@@ -27,9 +30,12 @@ open class KODialogBarView : UIView{
     private var titleLabelInContainerViewConsts : [NSLayoutConstraint] = []
     
     //public
+    
+    /// 'Text' parameter should be changed to match the dialog
     public private(set) weak var titleLabel : UILabel!
     public private(set) var titleContainerEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
+    /// Is title view will be always centered between the left and right views
     public var isTitleLabelCentered : Bool = true{
         didSet{
             refreshTitleLabelConstraints()
@@ -45,6 +51,8 @@ open class KODialogBarView : UIView{
     private weak var leftContainerForViewWidthConst : NSLayoutConstraint!
     
     //public
+    
+    /// View positioned at left of titleLabel
     public var leftView : UIView?{
         didSet{
             refreshLeftView()
@@ -53,9 +61,10 @@ open class KODialogBarView : UIView{
     
     public var leftViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
-    open var defaultLeftViewWidth : CGFloat = 0{
+    /// It will be considered, if size of the left view can't be calculated
+    open var defaultLeftViewContainerWidth : CGFloat = 0{
         didSet{
-            leftContainerForViewWidthConst.constant = defaultLeftViewWidth
+            leftContainerForViewWidthConst.constant = defaultLeftViewContainerWidth
             layoutIfNeeded()
         }
     }
@@ -65,6 +74,9 @@ open class KODialogBarView : UIView{
     private weak var rightContainerForViewWidthConst : NSLayoutConstraint!
     
     //public
+    
+    
+    /// View positioned at right of titleLabel
     public var rightView : UIView?{
         didSet{
             refreshRightView()
@@ -73,9 +85,10 @@ open class KODialogBarView : UIView{
     
     public var rightViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
-    open var defaultRightViewWidth : CGFloat = 0{
+    /// It will be considered, if size of the right view can't be calculated
+    open var defaultRightViewContainerWidth : CGFloat = 0{
         didSet{
-            rightContainerForViewWidthConst.constant = defaultRightViewWidth
+            rightContainerForViewWidthConst.constant = defaultRightViewContainerWidth
             layoutIfNeeded()
         }
     }
@@ -175,7 +188,7 @@ open class KODialogBarView : UIView{
         let leftContainerForViewBottomtConst = leftContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         leftViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewLeftConst, rightConst: leftContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: leftContainerForViewTopConst, bottomConst: leftContainerForViewBottomtConst))
         
-        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: defaultLeftViewWidth)
+        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: defaultLeftViewContainerWidth)
         leftContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
         leftContainerForView.addConstraint(leftContainerForViewWidthConst)
         self.leftContainerForViewWidthConst = leftContainerForViewWidthConst
@@ -187,7 +200,7 @@ open class KODialogBarView : UIView{
         let rightContainerForViewBottomConst = rightContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         rightViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: rightContainerForViewLeftConst, rightConst: rightContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: rightContainerForViewTopConst, bottomConst: rightContainerForViewBottomConst))
         
-        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: defaultRightViewWidth)
+        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: defaultRightViewContainerWidth)
         rightContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
         rightContainerForView.addConstraint(rightContainerForViewWidthConst)
         self.rightContainerForViewWidthConst = rightContainerForViewWidthConst

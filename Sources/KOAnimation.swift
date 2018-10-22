@@ -23,7 +23,10 @@ public struct KOAnimationSpringSettings{
 open class KOAnimator{
     private weak var view : UIView?
     
+    /// Current setted animation
     public private(set) var currentViewAnimation : KOAnimation?
+    
+    /// Property animator for current setted animation
     public private(set) var currentPropertyAnimator : UIViewPropertyAnimator?
     
     /// Runs before animation.prepareViewForAnimation and playViewAnimation
@@ -131,6 +134,13 @@ open class KOAnimation{
         self.init(duration: duration, delay: delay, timingParameters: UISpringTimingParameters(dampingRatio: dampingRatio))
     }
     
+    /// Old style animation, before iOS 10. This function just runs animation on view with the 'UIView.AnimationOptions' it doesn't use 'timingParameters'
+    ///
+    /// - Parameters:
+    ///   - view: view associated with the animation
+    ///   - options: animation options
+    ///   - springSettings: dummping settings
+    ///   - completionHandler: animation completion handler
     public func animate(view : UIView, options : UIView.AnimationOptions = [], springSettings : KOAnimationSpringSettings? = nil, completionHandler : ((Bool)->Void)? = nil){
         prepareViewForAnimation(view)
         guard let springSettings = springSettings else{
@@ -147,6 +157,12 @@ open class KOAnimation{
         }, completion: completionHandler)
     }
     
+    /// Runs animation at 'UIViewControllerTransitionCoordinator'
+    ///
+    /// - Parameters:
+    ///   - view: view associated with the animation
+    ///   - coordinator: coordinator of presented view
+    ///   - completionHandler: animation completion handler
     public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
         prepareViewForAnimation(view)
         guard let coordinator = coordinator else{
@@ -161,18 +177,34 @@ open class KOAnimation{
     }
     
     //MARK: Functions to override
+    
+    
+    /// Used before start of view animation. Developer can override this function to set the initial parameters of the view.
+    ///
+    /// - Parameter view: view associated with the animation
     open func prepareViewForAnimation(_ view: UIView){
         //to override
     }
     
+    /// Animation block. This function should be overridden to set the view property in animation.
+    ///
+    /// - Parameter view: view associated with the animation
     open func animation(view : UIView){
         //to override
     }
 }
 
+///  Group of animations, it will be treated like a one animation. Specific parameters for each animation will be avoided, only parameters setted for whole group will be used.
 open class KOAnimationGroup : KOAnimation{
     private let animations : [KOAnimation]
     
+    /// Init
+    ///
+    /// - Parameters:
+    ///   - animations: grouped animations
+    ///   - duration: total duration of animation
+    ///   - delay: animation delay
+    ///   - timingParameters: animation parameters
     public init(animations : [KOAnimation], duration: TimeInterval = 0.5, delay : TimeInterval = 0, timingParameters : UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)){
         self.animations = animations
         super.init(duration: duration, delay: delay, timingParameters: timingParameters)
@@ -200,10 +232,16 @@ open class KOAnimationGroup : KOAnimation{
     }
 }
 
+/// Custom animation class. Can be used to create keyframes animations etc.
 open class KOCustomAnimation : KOAnimation{
     private var animationEvent : (UIView)->Void
     private var prepareViewForAnimationEvent : ((UIView)->Void)?
     
+    /// Init
+    ///
+    /// - Parameters:
+    ///   - animation: animation block, it has to set the final parameters of animation at the view. In example: view.alpha = 1.0.
+    ///   - prepareViewForAnimation: it should be used to set the initial parameters of the view before animation
     public init(animation : @escaping (UIView)->Void, prepareViewForAnimation : ((UIView)->Void)?) {
         self.animationEvent = animation
         self.prepareViewForAnimationEvent = prepareViewForAnimation
@@ -220,6 +258,7 @@ open class KOCustomAnimation : KOAnimation{
     }
 }
 
+/// Base class for animation that will set initial view parameters
 open class KOFromToAnimation<ValueType> : KOAnimation{
     public var toValue : ValueType
     public var fromValue : ValueType?

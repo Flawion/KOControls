@@ -55,14 +55,6 @@ class CountryCollectionsController: NSObject, UICollectionViewDataSource, UITabl
         collectionView?.reloadData()
     }
     
-    func startSearchedCountries(byName name: String){
-        
-    }
-    
-    func stopSearchedCountries(byName name : String){
-        
-    }
-    
     func calculateCollectionSize(_ collectionView : UICollectionView, availableWidth : CGFloat, itemMaxWidth : Double){
         let inset : CGFloat = 4
         let itemMargin = 2.0
