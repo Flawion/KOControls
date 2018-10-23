@@ -189,17 +189,18 @@ class ScrollOffsetProgressViewController: UIViewController, KOScrollOffsetProgre
     @IBAction func settingsBttClick(_ sender: UIButton) {
         popoverSettings = KOPopoverSettings(sourceView: sender, sourceRect: sender.bounds)
         
-        _ = presentOptionsPicker(withOptions: [scrollOffsetProgressModes, scrollOffsetProgressMaxOffsets], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Choose mode and max offset of calculating scroll offset progress", action: {
-            [weak self](optionsPickerViewController) in
+        _ = presentOptionsPicker(withOptions: [scrollOffsetProgressModes, scrollOffsetProgressMaxOffsets], viewLoadedAction: KODialogActionModel(title: "Choose mode and max offset of calculating scroll offset progress", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
             
+            let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
             optionsPickerViewController.optionsPicker.selectRow(sSelf.selectedScrollOffsetProgressModeIndex, inComponent: 0, animated: false)
             optionsPickerViewController.optionsPicker.selectRow(sSelf.selectedScrollOffsetProgressMaxOffsetIndex, inComponent: 1, animated: false)
             optionsPickerViewController.mainView.backgroundColor = UIColor.clear
-            optionsPickerViewController.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction(withTitle: "Cancel")
-            optionsPickerViewController.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(withTitle: "Done", action: {
+            optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction(withTitle: "Cancel")
+            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(withTitle: "Done", action: {
                 [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
                 guard let sSelf = self else{
                     return

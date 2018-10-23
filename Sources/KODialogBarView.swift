@@ -61,7 +61,7 @@ open class KODialogBarView : UIView{
     
     public var leftViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
-    /// It will be considered, if size of the left view can't be calculated
+    /// Width will be considered, if size of the left view can't be calculated
     open var defaultLeftViewContainerWidth : CGFloat = 0{
         didSet{
             leftContainerForViewWidthConst.constant = defaultLeftViewContainerWidth
@@ -75,7 +75,6 @@ open class KODialogBarView : UIView{
     
     //public
     
-    
     /// View positioned at right of titleLabel
     public var rightView : UIView?{
         didSet{
@@ -85,7 +84,7 @@ open class KODialogBarView : UIView{
     
     public var rightViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
     
-    /// It will be considered, if size of the right view can't be calculated
+    /// Width will be considered, if size of the right view can't be calculated
     open var defaultRightViewContainerWidth : CGFloat = 0{
         didSet{
             rightContainerForViewWidthConst.constant = defaultRightViewContainerWidth

@@ -230,31 +230,33 @@ extension PickerViewController{
         popoverSettings = KOPopoverSettings(sourceView: birthdayField, sourceRect: birthdayField.bounds)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        _ = presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
-            [weak self](datePicker) in
+        _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your birthday", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            datePicker.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeDatePicker(datePicker)
+            
+            let datePickerViewController = dialogViewController as! KODatePickerViewController
+            datePickerViewController.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeDatePicker(datePickerViewController)
         }), popoverSettings: popoverSettings!)
     }
     
     private func showDatePickerNormal(){
-        _ = presentDatePicker(viewLoadedAction: KOActionModel<KODatePickerViewController>(title: "Select your birthday", action: {
-            [weak self](datePicker) in
-            self?.initializeDatePicker(datePicker)
+        _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your birthday", action: {
+            [weak self](dialogViewController) in
+            self?.initializeDatePicker(dialogViewController as! KODatePickerViewController)
         }), postInit: {
-            [weak self] datePicker in
-            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+            [weak self] datePickerViewController in
+            self?.customizeTransitionIfNeed(dialogViewController: datePickerViewController)
         })
     }
     
     private func initializeDatePicker(_ datePicker : KODatePickerViewController){
-        datePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
-        datePicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+        datePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
+        datePicker.rightBarButtonAction = KODialogActionModel.doneAction(action:{
             [weak self](datePickerViewController : KODatePickerViewController) in
-            self?.birthdayDate =  datePickerViewController.datePicker.date
+            self?.birthdayDate = datePickerViewController.datePicker.date
         })
         
         datePicker.datePicker.date = birthdayDate
@@ -265,7 +267,7 @@ extension PickerViewController{
     }
     
     //MARK: Customization
-    private func customizeIfNeed(datePicker : KODatePickerViewController){
+    private func customizeIfNeed(datePicker: KODatePickerViewController){
         guard isStyleCustomize else{
             return
         }
@@ -285,30 +287,31 @@ extension PickerViewController{
         popoverSettings = KOPopoverSettings(sourceView: filmTypeField, sourceRect: filmTypeField.bounds)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
-            [weak self](optionsPicker) in
+        _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            optionsPicker.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeOptionsPicker(optionsPicker)
+            let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
+            optionsPickerViewController.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeOptionsPicker(optionsPickerViewController)
         }), popoverSettings: popoverSettings!)
     }
     
     private func showOptionsPickerNormal(){
-        _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select your favorite film type", action: {
-            [weak self](optionsPicker) in
-            self?.initializeOptionsPicker(optionsPicker)
+        _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: {
+            [weak self](dialogViewController) in
+            self?.initializeOptionsPicker(dialogViewController as! KOOptionsPickerViewController)
         }), postInit: {
-            [weak self] datePicker in
-            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+            [weak self] optionsPickerViewController in
+            self?.customizeTransitionIfNeed(dialogViewController: optionsPickerViewController)
         })
     }
     
     private func initializeOptionsPicker(_ optionsPicker : KOOptionsPickerViewController){
         optionsPicker.optionsPicker.selectRow(favoriteFilmTypeIndex, inComponent: 0, animated: false)
-        optionsPicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
-        optionsPicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+        optionsPicker.leftBarButtonAction = KODialogActionModel.cancelAction()
+        optionsPicker.rightBarButtonAction = KODialogActionModel.doneAction(action:{
             [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
             guard let sSelf = self else{
                 return
@@ -323,7 +326,7 @@ extension PickerViewController{
         guard isStyleCustomize else{
             return
         }
-        (optionsPicker.optionsPickerDelegateInstance as! KOOptionsPickerSimpleDelegate).titleAttributesForRowInComponents =
+        (optionsPicker.optionsPickerDelegateInstance as! KOOptionsPickerSimpleDelegate).titleAttributesForRowInComponentsEvent =
             { (_, _) in
                 return [NSAttributedString.Key.foregroundColor : UIColor.orange]
             }
@@ -340,13 +343,14 @@ extension PickerViewController{
     }
     
     private func showItemsTablePickerNormal(){
-        _ = presentItemsTablePicker(viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
-            [weak self](itemsTablePicker) in
-            itemsTablePicker.contentHeight = 300
-            self?.initializeItemsTablePicker(itemsTablePicker)
+        _ = presentItemsTablePicker(viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+            [weak self](dialogViewController) in
+            let itemsTablePickerViewController = dialogViewController as! KOItemsTablePickerViewController
+            itemsTablePickerViewController.contentHeight = 300
+            self?.initializeItemsTablePicker(itemsTablePickerViewController)
         }), postInit: {
-            [weak self] datePicker in
-            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+            [weak self] itemsTablePickerViewController in
+            self?.customizeTransitionIfNeed(dialogViewController: itemsTablePickerViewController)
         })
     }
     
@@ -355,19 +359,20 @@ extension PickerViewController{
         popoverSettings!.preferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        _ = presentItemsTablePicker( viewLoadedAction: KOActionModel<KOItemsTablePickerViewController>(title: "Select your country", action: {
-            [weak self](itemsTablePicker) in
+        _ = presentItemsTablePicker( viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            itemsTablePicker.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeItemsTablePicker(itemsTablePicker)
+            let itemsTablePickerViewController = dialogViewController as! KOItemsTablePickerViewController
+            itemsTablePickerViewController.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeItemsTablePicker(itemsTablePickerViewController)
         }), popoverSettings: popoverSettings!)
     }
     
     private func initializeItemsTablePicker(_ itemsTablePicker : KOItemsTablePickerViewController){
-        itemsTablePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
-        itemsTablePicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+        itemsTablePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
+        itemsTablePicker.rightBarButtonAction = KODialogActionModel.doneAction(action:{
             [weak self](itemsTablePickerViewController : KOItemsTablePickerViewController) in
             guard let sSelf = self else{
                 return
@@ -417,16 +422,18 @@ extension PickerViewController{
     }
     
     private func showItemsCollectionPickerNormal(){
-        _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
-            [weak self](itemsCollectionPicker) in
+        _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            itemsCollectionPicker.contentHeight = 300
-            sSelf.initializeItemsCollectionPicker(itemsCollectionPicker, availableWidth: sSelf.view.bounds.width, itemMaxWidth: 120)
+            
+            let itemsCollectionPickerViewController = dialogViewController as! KOItemsCollectionPickerViewController
+            itemsCollectionPickerViewController.contentHeight = 300
+            sSelf.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: sSelf.view.bounds.width, itemMaxWidth: 120)
         }), postInit: {
-            [weak self] datePicker in
-            self?.customizeTransitionIfNeed(dialogViewController: datePicker)
+            [weak self] itemsCollectionPickerViewController in
+            self?.customizeTransitionIfNeed(dialogViewController: itemsCollectionPickerViewController)
         })
     }
     
@@ -436,19 +443,20 @@ extension PickerViewController{
         popoverSettings!.preferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KOActionModel<KOItemsCollectionPickerViewController>(title: "Select your country", action: {
-            [weak self](itemsCollectionPicker) in
+        _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            itemsCollectionPicker.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeItemsCollectionPicker(itemsCollectionPicker, availableWidth: 320, itemMaxWidth: 80)
+            let itemsCollectionPickerViewController =  dialogViewController as! KOItemsCollectionPickerViewController
+            itemsCollectionPickerViewController.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: 320, itemMaxWidth: 80)
         }), popoverSettings: popoverSettings!)
     }
     
     private func initializeItemsCollectionPicker(_ itemsCollectionPicker : KOItemsCollectionPickerViewController, availableWidth : CGFloat, itemMaxWidth : Double){
-        itemsCollectionPicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
-        itemsCollectionPicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+        itemsCollectionPicker.leftBarButtonAction = KODialogActionModel.cancelAction()
+        itemsCollectionPicker.rightBarButtonAction = KODialogActionModel.doneAction(action:{
             [weak self](itemsCollectionPicker : KOItemsCollectionPickerViewController) in
             guard let sSelf = self else{
                 return
@@ -504,13 +512,14 @@ extension PickerViewController{
     private func showCustomItemsTablePickerNormal(){
         let searchItemsTablePicker = SearchItemsTablePickerViewController()
         customizeTransitionIfNeed(dialogViewController: searchItemsTablePicker)
-        _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
-            [weak self](itemsTablePicker) in
+        _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            itemsTablePicker.contentHeight = 300
-            sSelf.initializeCustomItemsTablePicker(itemsTablePicker)
+            let searchItemsTablePickerViewController = dialogViewController as! SearchItemsTablePickerViewController
+            searchItemsTablePickerViewController.contentHeight = 300
+            sSelf.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
         }))
     }
     
@@ -521,21 +530,22 @@ extension PickerViewController{
         popoverSettings!.preferredContentSize = CGSize(width: 320, height: 320)
         customizeIfNeed(popoverSettings: popoverSettings!)
         
-        _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KOActionModel<SearchItemsTablePickerViewController>(title: "Select your country", action: {
-            [weak self](itemsTablePicker) in
+        _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            itemsTablePicker.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeItemsTablePicker(itemsTablePicker)
-            sSelf.initializeCustomItemsTablePicker(itemsTablePicker)
             
+            let searchItemsTablePickerViewController = dialogViewController as! SearchItemsTablePickerViewController
+            searchItemsTablePickerViewController.mainView.backgroundColor = UIColor.clear
+            sSelf.initializeItemsTablePicker(searchItemsTablePickerViewController)
+            sSelf.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
         }), popoverSettings: popoverSettings)
     }
     
     private func initializeCustomItemsTablePicker(_ itemsTablePicker : SearchItemsTablePickerViewController){
-        itemsTablePicker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
-        itemsTablePicker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action:{
+        itemsTablePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
+        itemsTablePicker.rightBarButtonAction = KODialogActionModel.doneAction(action:{
             [weak self](itemsTablePickerViewController : KOItemsTablePickerViewController) in
             guard let sSelf = self else{
                 return

@@ -78,40 +78,42 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func showPresentViewsCountPicker(){
-        _ = presentOptionsPicker(withOptions: [["1","2","3","4","5"]], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select present views count", action: {
-            [weak self](picker) in
+        _ = presentOptionsPicker(withOptions: [["1","2","3","4","5"]], viewLoadedAction: KODialogActionModel(title: "Select present views count", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            picker.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.presentViewsCountField.text) ?? 0) - 1) , inComponent: 0, animated: false)
-            picker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action: {
-                [weak self](dialog) in
+            
+            let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
+            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.presentViewsCountField.text) ?? 0) - 1) , inComponent: 0, animated: false)
+            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: {
+                [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
                 guard let sSelf = self else{
                     return
                 }
-                let optionsPicker = dialog as! KOOptionsPickerViewController
-                sSelf.presentViewsCountField.text = "\(optionsPicker.optionsPicker.selectedRow(inComponent: 0) + 1)"
+                sSelf.presentViewsCountField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0) + 1)"
             })
-            picker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+            optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
         }))
     }
     
     private func showRemoveIndexPicker(){
-        _ = presentOptionsPicker(withOptions: [["0","1","2","3","4"]], viewLoadedAction: KOActionModel<KOOptionsPickerViewController>(title: "Select remove view index", action: {
-            [weak self](picker) in
+        _ = presentOptionsPicker(withOptions: [["0","1","2","3","4"]], viewLoadedAction: KODialogActionModel(title: "Select index of view to remove", action: {
+            [weak self](dialogViewController) in
             guard let sSelf = self else{
                 return
             }
-            picker.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.removeIndexField.text) ?? 0)) , inComponent: 0, animated: false)
-            picker.rightBarButtonAction = KODialogViewControllerActionModel.doneAction(action: {
-                [weak self](dialog) in
+            
+            let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
+            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.removeIndexField.text) ?? 0)) , inComponent: 0, animated: false)
+            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: {
+                [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
                 guard let sSelf = self else{
                     return
                 }
-                let optionsPicker = dialog as! KOOptionsPickerViewController
-                sSelf.removeIndexField.text = "\(optionsPicker.optionsPicker.selectedRow(inComponent: 0))"
+                sSelf.removeIndexField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0))"
             })
-            picker.leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+            optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
         }))
     }
     
@@ -176,7 +178,7 @@ class CustomDialogViewController : KODialogViewController{
         contentWidth = 300
         mainView.layer.cornerRadius = 5
         barView.titleLabel.text = "Dialog number \(index)"
-        leftBarButtonAction = KODialogViewControllerActionModel.cancelAction()
+        leftBarButtonAction = KODialogActionModel.cancelAction()
     }
     
     override func createContentView() -> UIView {

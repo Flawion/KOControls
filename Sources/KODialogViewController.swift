@@ -8,34 +8,44 @@
 
 import UIKit
 
-public class KOActionModel<Parameter> : NSObject{
-    public let title : String
-    public let action : (Parameter)->Void
+/// Dialog action
+public class KODialogActionModel : NSObject{
     
-    public init(title : String, action : @escaping (Parameter)->Void) {
+    /// Title used for barView: left/right buttons or for titleLabel.text
+    public let title : String
+    
+    /// Action that will be invoked
+    public let action : (KODialogViewController)->Void
+    
+    public init(title : String, action : @escaping (KODialogViewController)->Void) {
         self.title = title
         self.action = action
         super.init()
     }
-}
-
-public class KODialogViewControllerActionModel : KOActionModel<KODialogViewController>{
-    public static func cancelAction(withTitle title: String = "Cancel")->KODialogViewControllerActionModel{
-        return KODialogViewControllerActionModel(title: title, action: {
+    
+    /// Action that will dismiss the dialog
+    ///
+    /// - Parameter title: title used for barView: left/right buttons or for titleLabel.text
+    public static func cancelAction(withTitle title: String = "Cancel")->KODialogActionModel{
+        return KODialogActionModel(title: title, action: {
             (dialog) in
             dialog.dismiss(animated: true, completion: nil)
         })
     }
     
-    public static func doneAction<controllerType : KODialogViewController>(withTitle title: String = "Done", action : @escaping (controllerType)->Void)->KODialogViewControllerActionModel{
-        return KODialogViewControllerActionModel(title: title, action: {
+    /// Action that will invoke a function and then dismiss the dialog
+    ///
+    /// - Parameter title: title used for barView: left/right buttons or for titleLabel.text
+    public static func doneAction<Parameter : KODialogViewController>(withTitle title: String = "Done", action : @escaping (Parameter)->Void)->KODialogActionModel{
+        return KODialogActionModel(title: title, action: {
             (dialog) in
-            action(dialog as! controllerType)
+            action(dialog as! Parameter)
             dialog.dismiss(animated: true, completion: nil)
         })
     }
 }
 
+/// Mode of 'barView' visibility
 public enum KODialogBarModes {
     case top
     case bottom
@@ -43,17 +53,22 @@ public enum KODialogBarModes {
 }
 
 @objc public protocol KODialogViewControllerDelegate : NSObjectProtocol{
-    //user is responsible for set a title on the button, after implemented one of these methods
+    //developer is responsible for set a title on the button, after implemented one of these methods
+    
+    /// Developer can create a button manually by implementing this function. Button will be created after setted leftBarButtonAction.
     @objc optional func dialogViewControllerCreateLeftButton(_ dialogViewController : KODialogViewController)->UIButton
+    
+    /// Developer can create a button manually by implementing this function. Button will be created after setted rightBarButtonAction.
     @objc optional func dialogViewControllerCreateRightButton(_ dialogViewController : KODialogViewController)->UIButton
     
     @objc optional func dialogViewControllerLeftButtonClicked(_ dialogViewController : KODialogViewController)
     @objc optional func dialogViewControllerRightButtonClicked(_ dialogViewController : KODialogViewController)
     
+    /// This function will be invoked at the of viewDidLoad, you can use 'viewLoadedEvent' instead
     @objc optional func dialogViewControllerInitialized(_ dialogViewController : KODialogViewController)
-    @objc optional func dialogViewControllerDone(_ dialogViewController : KODialogViewController)
 }
 
+/// Dialog view with the bar and content view. Content can be changed by override function 'createContentView'. BarView title should be changed by assign text to the 'barView.titleLabel.text'. 'Left/Right BarButtonAction' should be used to get the result or dismiss.
 open class KODialogViewController : UIViewController, UIGestureRecognizerDelegate{
     //MARK: - Variables
     private var allConstraints : [NSLayoutConstraint] = []
@@ -63,11 +78,14 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     
     public var statusBarStyleWhenCapturesAppearance : UIStatusBarStyle = .lightContent
     
+    /// Custom view transition used when modalPresentationStyle is set to '.custom'
     public var customTransition : KOCustomTransition? = KODimmingTransition() {
         didSet{
             transitioningDelegate = customTransition
         }
     }
+    
+    /// Event that will be invoked when view is loaded
     public var viewLoadedEvent : ((KODialogViewController)->Void)?
     
     //MARK: Main view
@@ -82,37 +100,46 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     private var dismissOnTapRecognizer : UITapGestureRecognizer!
 
     //public
+    
+    /// Main view of dialog, the view of viewController is the container for that view that fills the background
     public weak var mainView : UIView!{
         loadViewIfNeeded()
         return pMainView
     }
     
+    /// Is the dialog will be dismissed when user clicked at the view of viewController
     public var dismissWhenUserTapAtBackground : Bool = true{
         didSet{
             refreshDismissOnTapRecognizer()
         }
     }
     
+    /// Vertical alignment of the main view in the view of viewController
     public var mainViewVerticalAlignment :  UIControl.ContentVerticalAlignment = .bottom{
         didSet{
             refreshMainViewVerticalAlignment()
         }
     }
     
+    /// Horizontal alignment of the main view in the view of viewController
     public var mainViewHorizontalAlignment :  UIControl.ContentHorizontalAlignment = .fill{
         didSet{
             refreshMainViewHorizontalAlignment()
         }
     }
     
+    /// This parameter will be reseted when alignments were refresh, so use it after viewDidLoad and refresh manually when you changed alignments
     public var mainViewEdgesConstraintsInsets : KOEdgesConstraintsInsets!
     
     //MARK: Background visual effect view
     private var backgroundVisualEffectConsts : [NSLayoutConstraint] = []
     
     //public
+    
+    /// To get the background with the visual effect you have to set the parameter 'backgroundVisualEffect', if you want to have the rounded corners at the dialog you have to set clipBounds at 'mainView'
     public private(set) weak var backgroundVisualEffectView : UIVisualEffectView?
     
+    /// This parameter can be setted to create background with the visual effect like blur, after setting it background of the main view will be changed to clear
     public var backgroundVisualEffect : UIVisualEffect?{
         didSet{
             refreshBackgroundVisualEffect()
@@ -126,6 +153,8 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     private weak var contentHeightConst : NSLayoutConstraint!
     
     //public
+    
+    /// The main content of the view, developer should override 'createContentView' to change it
     public weak var contentView : UIView!{
         loadViewIfNeeded()
         return pContentView
@@ -133,12 +162,14 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     
     public var contentEdgesConstraintsInsets : KOEdgesConstraintsInsets!
     
+    /// It should be setted if the height of the view can't be calculated from the constraints or intrinsic content size. If mainViewVerticalAlignment == .fill you dont need to set it.
     public var contentHeight : CGFloat? = nil{
         didSet{
             refreshContentHeight()
         }
     }
     
+    /// It should be setted if the width of the view can't be calculated from the constraints or intrinsic content size. If mainViewHorizontalAlignment == .fill you dont need to set it.
     public var contentWidth : CGFloat? = nil{
         didSet{
             refreshContentWidth()
@@ -153,24 +184,29 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     private var pBarView : KODialogBarView!
     
     //public
+    
+    /// BarView title should be changed by assign text to the 'barView.titleLabel.text'
     public var barView : KODialogBarView!{
         loadViewIfNeeded()
         return pBarView
     }
-
+    
+    /// Mode of 'barView' visibility
     public var barMode : KODialogBarModes = .top{
         didSet{
             refreshBarMode()
         }
     }
     
-    public var leftBarButtonAction : KODialogViewControllerActionModel?{
+    /// After setted this action will be created the left button. This action should be setted to get the result or dismiss the dialog after button clicked.
+    public var leftBarButtonAction : KODialogActionModel?{
         didSet{
             refreshLeftBarButtonAction()
         }
     }
     
-    public var rightBarButtonAction : KODialogViewControllerActionModel?{
+    /// After setted this action will be created the right button. This action should be setted to get the result or dismiss the dialog after button clicked.
+    public var rightBarButtonAction : KODialogActionModel?{
         didSet{
             refreshRightBarButtonAction()
         }
