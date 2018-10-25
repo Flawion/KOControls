@@ -63,7 +63,7 @@ open class KODimmingTransition : KOCustomTransition{
     }
 }
 
-// Transition that uses presentation with dimming view with visual effect
+// Transition uses presentation with dimming view with visual effect
 open class KOVisualEffectDimmingTransition : KOCustomTransition{
     private let effect : UIVisualEffect
     

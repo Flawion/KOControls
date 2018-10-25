@@ -66,7 +66,7 @@ public class KOPresentationQueueItem : Equatable{
 }
 
 
-/// A queue of views to present. It presents next viewController after current dismissed.
+/// Service manages the queues of views to present. It presents next viewController after current dismissed for queue.
 public class KOPresentationQueuesService{
     //MARK: - Variables
     private var queues : [Int : KOPresentationQueue] = [:]
