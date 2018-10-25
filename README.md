@@ -51,7 +51,13 @@ pod install
 
 ### Manually
 
+You can use KOControls manually and customize how you like. One of the simplest way to do that.
 
+1. Download repository.
+2. Copy the KOControls.xcodeproj and folder Sources to the your project directory.
+3. In project explorer click "Add Files to 'Your project'" -> choose KOControls.xcodeproj. Xcode will add automatically KOControls as a sub-project.
+4. In project settings -> Target -> Add embeded library ->  choose 'Your project' -> KOControls.xcodeproj -> Products -> KOControls.framework.
+5. And thats all! If you don't want to build KOControl manually every time when you change something. Go to the scheme settings of your target to the build section and add KOControls build target.
 
 
 ## License
