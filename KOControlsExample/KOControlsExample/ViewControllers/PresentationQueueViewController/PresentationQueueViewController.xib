@@ -29,11 +29,11 @@
                     <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ovp-tm-UGj" userLabel="PresentingView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="517.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="479.5"/>
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6P0-wt-Vnv" userLabel="BottomView">
-                            <rect key="frame" x="0.0" y="517.5" width="375" height="129.5"/>
+                            <rect key="frame" x="0.0" y="479.5" width="375" height="167.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVL-ws-XsA">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -112,13 +112,23 @@
                                         <constraint firstItem="2O8-5E-0J2" firstAttribute="top" secondItem="ZZK-IT-3Cp" secondAttribute="top" id="VcJ-f5-LCN"/>
                                         <constraint firstItem="2O8-5E-0J2" firstAttribute="leading" secondItem="ZZK-IT-3Cp" secondAttribute="leading" id="Yy0-CW-6xV"/>
                                         <constraint firstAttribute="trailing" secondItem="8Ry-DJ-zEg" secondAttribute="trailing" id="eZI-ZP-7hL"/>
-                                        <constraint firstAttribute="bottom" secondItem="2O8-5E-0J2" secondAttribute="bottom" id="fej-YQ-fZ6"/>
                                         <constraint firstItem="8Ry-DJ-zEg" firstAttribute="centerY" secondItem="ZZK-IT-3Cp" secondAttribute="centerY" id="gwX-JC-9cg"/>
+                                        <constraint firstAttribute="bottom" secondItem="2O8-5E-0J2" secondAttribute="bottom" id="r10-Zc-e1w"/>
                                     </constraints>
                                 </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WcC-eA-jB7">
+                                    <rect key="frame" x="88" y="129.5" width="199" height="30"/>
+                                    <state key="normal" title="Remove all views from queue"/>
+                                    <connections>
+                                        <action selector="removeAllViewsBttClick:" destination="-1" eventType="touchUpInside" id="fyQ-My-EqZ"/>
+                                        <action selector="removeViewBttClick:" destination="-1" eventType="touchUpInside" id="2j2-B5-xqr"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
+                                <constraint firstItem="WcC-eA-jB7" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="2bi-ea-og2"/>
+                                <constraint firstItem="WcC-eA-jB7" firstAttribute="top" secondItem="ZZK-IT-3Cp" secondAttribute="bottom" constant="8" id="6Vp-EL-92v"/>
                                 <constraint firstItem="5bu-Gf-Bn2" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="D8L-zQ-tgB"/>
                                 <constraint firstItem="wLf-Rz-SVu" firstAttribute="top" secondItem="UVL-ws-XsA" secondAttribute="bottom" constant="8" id="K2F-xl-4OI"/>
                                 <constraint firstAttribute="trailing" secondItem="UVL-ws-XsA" secondAttribute="trailing" id="O7r-R8-Ecp"/>
@@ -149,8 +159,8 @@
                 <constraint firstItem="k33-M1-YCd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3BR-8w-xIh"/>
                 <constraint firstAttribute="bottom" secondItem="k33-M1-YCd" secondAttribute="bottom" id="46s-PW-mxD"/>
                 <constraint firstItem="k33-M1-YCd" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="DQe-9i-OaF"/>
+                <constraint firstItem="WcC-eA-jB7" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" constant="-8" id="FVh-pn-Fdi"/>
                 <constraint firstAttribute="trailing" secondItem="k33-M1-YCd" secondAttribute="trailing" id="ZPf-ei-Jrl"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="ZZK-IT-3Cp" secondAttribute="bottom" constant="8" id="mCC-Os-BoJ"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="53.600000000000001" y="48.125937031484263"/>

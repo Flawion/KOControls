@@ -165,6 +165,10 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         }
         KOPresentationQueuesService.shared.removeFromQueue(withIndex: 0, itemWithIndex: index)
     }
+    
+    @IBAction func removeAllViewsBttClick(_ sender: Any) {
+        KOPresentationQueuesService.shared.removeAllItemsFromQueue(withIndex: 0, forPresentingViewController: presentingContainerViewController)
+    }
 }
 
 class CustomDialogViewController : KODialogViewController{

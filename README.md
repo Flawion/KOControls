@@ -94,6 +94,37 @@ Or index of item in queue.
 KOPresentationQueuesService.shared.removeFromQueue(withIndex: messageQueueIndex, itemWithIndex: indexOfItemInQueue)
 ```
 
+Another functions let you to remove multiple items from the queue.
+
+```swift
+
+//delete all items from queue that would be presented at 'presentingViewController'
+KOPresentationQueuesService.shared.removeAllItemsFromQueue(withIndex: messageQueueIndex, forPresentingViewController: presentingViewController)
+
+//just deletes queue with all of items
+KOPresentationQueuesService.shared.deleteQueue(withIndex: messageQueueIndex)
+```
+The current presented item isn't in the queue, but you can check is something is presented for the queue or delete presented item if you want.
+
+```swift
+if KOPresentationQueuesService.shared.itemPresentedForQueue(withIndex: messageQueueIndex) != nil{
+    //do something...
+}
+
+//dismisses current presented viewController if is
+KOPresentationQueuesService.shared.removeCurrentVisibleItemForQueue(withIndex: messageQueueIndex, animated: true, animationCompletion: nil)
+```
+If you want to do something when queue was change (new items were add / remove, queue created / deleted), you can use ```queueChangedEvent```.
+
+```swift
+KOPresentationQueuesService.shared.queueChangedEvent = {
+    queueIndex in
+    
+    //it will print count of queue items
+    print(KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: queueIndex) ?? 0)
+}
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
