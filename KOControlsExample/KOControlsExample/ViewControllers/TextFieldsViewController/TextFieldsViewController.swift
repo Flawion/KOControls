@@ -26,7 +26,7 @@
 import UIKit
 import KOControls
 
-class UserNameErrorInfoView : UIView, KOTextFieldErrorInterface{
+class UserNameErrorInfoView : UIView, KOTextFieldErrorInfoInterface{
     func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         return nil
     }
@@ -62,27 +62,33 @@ class TextFieldsViewController: UIViewController {
         passwordField.borderSettings = AppSettings.fieldBorder
         passwordField.errorInfoView.descriptionLabel.text = "Password should contains 8 to 20 chars"
         passwordField.validateMode = .validateOnTextChanged
+        
+        //simple function validation
         passwordField.add(validator: KOFunctionTextValidator(function: {
             (password) -> Bool in
             return password.count >= 8 && password.count <= 20
         }))
         
-        //adds additional image
-        passwordField.errorInfoView.imageWidthConst.constant = 25
-        passwordField.errorInfoView.imageView.image = UIImage(named:"ico_account")
-        passwordField.errorInfoView.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        passwordField.errorInfoView.imageView.contentMode = .scaleAspectFit
+        //or regex validation
+        //passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
         
-        //sets custom error view
+        //changes animations
         passwordField.errorInfoHideAnimation = KOAnimationGroup(animations:[
-                KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
-                KOFadeOutAnimation()
+            KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
+            KOFadeOutAnimation()
             ])
         passwordField.errorInfoShowAnimation = KOAnimationGroup(animations: [
             KOTranslationAnimation(toValue: CGPoint.zero, fromValue: CGPoint(x: -200, y: 20)),
             KOFadeInAnimation(fromValue: 0)
             ], dampingRatio: 0.6)
         
+        //adds additional icon
+        passwordField.errorInfoView.imageWidthConst.constant = 25
+        passwordField.errorInfoView.imageView.image = UIImage(named:"ico_account")
+        passwordField.errorInfoView.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        passwordField.errorInfoView.imageView.contentMode = .scaleAspectFit
+        
+        //other adjustments
         passwordField.errorInfoView.descriptionLabel.textColor = UIColor.black
         passwordField.errorInfoView.contentView.backgroundColor = UIColor.white
         passwordField.errorInfoView.layer.shadowColor = UIColor.black.cgColor
@@ -90,7 +96,8 @@ class TextFieldsViewController: UIViewController {
         passwordField.errorInfoView.layer.shadowRadius = 5
         passwordField.errorInfoView.layer.shadowOpacity = 0.7
         passwordField.errorInfoView.markerColor = UIColor.white
-        
+
+         //sets custom error view
         let passwordErrorLabel = UILabel()
         passwordErrorLabel.backgroundColor = UIColor.red
         passwordErrorLabel.textColor = UIColor.black
@@ -105,10 +112,6 @@ class TextFieldsViewController: UIViewController {
         //- user name field
         userNameField.borderSettings = AppSettings.fieldBorder
         userNameField.validateMode = .manual
-        userNameField.add(validator: KOFunctionTextValidator(function: {
-            (password) -> Bool in
-            return password.count >= 8 && password.count <= 20
-        }))
         
         //sets custom error info view
         let userNameErrorInfoView = UserNameErrorInfoView()

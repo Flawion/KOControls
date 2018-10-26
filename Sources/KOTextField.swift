@@ -221,7 +221,7 @@ open class KOTextField : UITextField{
     }
 
     /// View that can replaces default 'errorInfoView'
-    public var customErrorInfoView : (UIView & KOTextFieldErrorInterface)?{
+    public var customErrorInfoView : (UIView & KOTextFieldErrorInfoInterface)?{
         didSet{
             refreshCustomErrorInfoView()
         }

@@ -26,12 +26,12 @@
 import UIKit
 
 /// This protocol must be implemented by 'errorInfoView'. It indicates a centerX anchor of marker that pointing a field.
-public protocol KOTextFieldErrorInterface{
+public protocol KOTextFieldErrorInfoInterface{
     func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?
 }
 
 /// View that shows information about an error. The minimal effort is to change 'descriptionLabel.text' to match to the error.
-open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInterface {
+open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
     //MARK: - Variables
     public private(set) weak var contentView : UIView!
     
