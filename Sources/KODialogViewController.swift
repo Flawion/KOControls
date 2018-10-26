@@ -105,6 +105,12 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     /// Event that will be invoked when view is loaded
     public var viewLoadedEvent : ((KODialogViewController)->Void)?
     
+    /// Event that will be invoked when view is disappearing
+    public var viewWillDisappearEvent : ((KODialogViewController)->Void)?
+    
+     /// Event that will be invoked when view disappeared
+    public var viewDidDisappearEvent : ((KODialogViewController)->Void)?
+
     //MARK: Main view
     private weak var pMainView : UIView!
     
@@ -253,6 +259,16 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     private func initTransition(){
         modalPresentationStyle =  .custom
         transitioningDelegate = customTransition
+    }
+    
+    override open func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewWillDisappearEvent?(self)
+    }
+    
+    override open func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewDidDisappearEvent?(self)
     }
     
     override open func viewDidLoad() {

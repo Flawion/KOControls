@@ -10,8 +10,8 @@ Right now it contains only the few features but it will be getting the new stuff
 - [KOTextField](#kotextfield) - Text field supports showing and validating an error.
 - [KOScrollOffsetProgressController](#koscrolloffsetprogresscontroller) - Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
 - KODialogViewController -  High customizable dialog view, that can be used to create you own dialog in simply way.
-- KODatePickerViewController - Simple way to get the date from the user.
-- KOOptionsPickerViewController - Simple way to get the selected option from the user.
+- [KODatePickerViewController](#kodatepickerviewcontroller) - Simple way to get the date from the user.
+- [KOOptionsPickerViewController](#kooptionspickerviewController) - Simple way to get the selected option from the user.
 - KOItemsTablePickerViewController -  Simple way to get the selected option from the user from table.
 - KOItemsCollectionPickerViewController -  Simple way to get the selected option from the user from collection.
 - KODimmingTransition - Transition uses presentation with dimming view.
@@ -71,7 +71,7 @@ import KOControls
 ### KOPresentationQueuesService
 
 You can add viewController to queue of presenting, to avoid a situation when there can be multiple viewControllers to present at the same time, and only one will be presented.
-The simplest way to add the viewController to queue of presenting is to use the overloading of function present for the presenting viewController.
+The simplest way to add the viewController to queue of presenting is to use the overridden function ```present``` for the presenting viewController.
 
 ```swift
 let itemIdInQueue = present(viewControllerToPresent, inQueueWithIndex: messageQueueIndex)
@@ -126,7 +126,7 @@ KOPresentationQueuesService.shared.queueChangedEvent = {
 
 ### KOTextField
 
-This textField supports showing an error with the validation. 
+Text field supports showing and validating an error.
 
 You always have to set the error description before show it. To show an error manually you need to change the default ```validateMode``` to manual and just change the flag ```isShowingError``` to true. 
 
@@ -136,7 +136,7 @@ errorField.validateMode = .manual
 errorField.isShowingError = true
 ```
 
-To don't worry about setting the flag manually, you can use validation feature. The default validation mode is ```validateOnLostFocus```. So in example if you want to show error when the email isn't correct you need to only add the predefinied validator.
+To don't worry about setting the flag manually, you can use auto validation feature. The default validation mode is ```validateOnLostFocus```. So in example if you want to show error when the email isn't correct you need to only add the predefinied validator.
 
 ```swift
 emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
@@ -167,7 +167,7 @@ Regex based validator.
 ```swift
 passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
 ```
-Error info in default is showing in the field's superview, but you can change this by set manually  ```showErrorInfoInView```. If you want to show error info always or manually when there is an error you can do this by change ```showErrorInfoMode```. In manually mode you show or hide error info by function  ```showErrorInfoIfCan()``` or  ```hideErrorInfoIfCan()```.
+Error info in default is showing in the field's superview, but you can change this by setting manually  ```showErrorInfoInView```. If you want to show error info always or manually when there is an error you can do this by change ```showErrorInfoMode```. In manually mode you show or hide error info by function  ```showErrorInfoIfCan()``` or  ```hideErrorInfoIfCan()```.
 
 Showing error info can be customized by changing ```errorInfoView``` and its show / hide animation.
 
@@ -244,6 +244,94 @@ passwordField.errorWidth = 100
 ```
 
 ### KOScrollOffsetProgressController
+
+Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
+
+First declare variable.
+
+```swift
+private var scrollOffsetProgressController: KOScrollOffsetProgressController!
+```
+
+Initialize "KOScrollOffsetProgressController", and handle progress event or delegate. Controller based on scrollView and min/max offset will be calculating progress (from 0.0 to 1.0) of translation. Axis can be changed by parameter ```scrollOffsetAxis```.
+
+```swift
+
+scrollOffsetProgressController = KOScrollOffsetProgressController(scrollView: collectionView, minOffset: 0, maxOffset: 300)
+
+//user have to scroll content by 300 points in y axis 
+//to change topBar's height to smallest 
+//and to completely show minTopBarView and hide maxTopBarView
+scrollOffsetProgressController.progressChangedEvent = {
+    [weak self] progress in
+    guard let sSelf = self else{
+        return
+    }
+    let entryProgress = (1.0 - progress)
+    sSelf.topBarHeight.constant = entryProgress * sSelf.maxSize + progress * sSelf.minSize
+    sSelf.maxTopBarView.alpha = entryProgress
+    sSelf.minTopBarView.alpha = progress
+    sSelf.view.layoutIfNeeded()
+}
+```
+
+Depending on selected ```mode```, progress can be different:
+* ```contentOffsetBased```: (default) progress is calculating from current contentOffset
+* ```translationOffsetBased```: progress is calculating based on difference between last content offset and new one
+* ```scrollingBlockedUntilProgressMax```: progress is calculating based on difference between touches (last and new one), scroll is completely blocked until the progress reaches value 1.0
+
+### KODatePickerViewController
+
+Simple way to get the date from the user.
+
+You can use predefined function to present date picker at the screen like below. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
+
+```swift
+_ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your birthday", action: {
+    [weak self](dialogViewController) in
+    let datePickerViewController = dialogViewController as! KODatePickerViewController
+    //sets the cancel button
+    datePickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    //sets the done button
+    datePickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
+        [weak self](datePickerViewController : KODatePickerViewController) in
+        //get the new date from the picker
+        self?.birthdayDate = datePickerViewController.datePicker.date
+    })
+
+    //additional customization of datePicker
+    datePickerViewController.datePicker.datePickerMode = .date
+    datePickerViewController.datePicker.maximumDate = Date()
+    datePickerViewController.datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
+    datePickerViewController.datePicker.date = self?.date
+    }))
+```
+
+### KOOptionsPickerViewController
+
+Simple way to get the selected option from the user.
+
+You can use predefined function to present option picker at the screen like below. Options is the arrays of categories / components, that user can select. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
+
+```swift
+_ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: {
+    [weak self](dialogViewController) in
+    let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
+    //sets the cancel button
+    optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    //sets the done button
+    optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
+        [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
+        //get the selected option
+        self?.favoriteFilmTypeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
+    })
+    
+    //additional, sets the start value
+    if let favoriteFilmTypeIndex = self?.favoriteFilmTypeIndex{
+        optionsPickerViewController.optionsPicker.selectRow(favoriteFilmTypeIndex, inComponent: 0, animated: false)
+    }
+    }))
+```
 
 ## License
 
