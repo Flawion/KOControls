@@ -6,9 +6,9 @@ Right now it contains only the few features but it will be getting the new stuff
 
 ## Features
 
-- [KOPresentationQueuesService](#KOPresentationQueuesService) - Service manages the queues of views to present. 
-- [KOTextField](#KOTextField) - Text field supports showing and validating an error.
-- [KOScrollOffsetProgressController](#KOScrollOffsetProgressController) - Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
+- [KOPresentationQueuesService](#kopresentationqueuesservice) - Service manages the queues of views to present. 
+- [KOTextField](#kotextfield) - Text field supports showing and validating an error.
+- [KOScrollOffsetProgressController](#koscrolloffsetprogresscontroller) - Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
 - KODialogViewController -  High customizable dialog view, that can be used to create you own dialog in simply way.
 - KODatePickerViewController - Simple way to get the date from the user.
 - KOOptionsPickerViewController - Simple way to get the selected option from the user.
