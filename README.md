@@ -11,7 +11,7 @@ Right now it contains only the few features but it will be getting the new stuff
 - [KOScrollOffsetProgressController](#koscrolloffsetprogresscontroller) - Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
 - KODialogViewController -  High customizable dialog view, that can be used to create you own dialog in simply way.
 - [KODatePickerViewController](#kodatepickerviewcontroller) - Simple way to get the date from the user.
-- [KOOptionsPickerViewController](#kooptionspickerviewController) - Simple way to get the selected option from the user.
+- [KOOptionsPickerViewController](#kooptionspickerviewcontroller) - Simple way to get the selected option from the user.
 - KOItemsTablePickerViewController -  Simple way to get the selected option from the user from table.
 - KOItemsCollectionPickerViewController -  Simple way to get the selected option from the user from collection.
 - KODimmingTransition - Transition uses presentation with dimming view.
