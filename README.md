@@ -314,6 +314,11 @@ Simple way to get the selected option from the user.
 You can use predefined function to present option picker at the screen like below. Options is the arrays of categories / components, that user can select. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
 
 ```swift
+
+fileprivate var filmTypes : [String] = [ "Action", "Adventure", "Biographical", "Comedy", "Crime", "Drama", "Family", "Horror", "Musical", "Romance", "Spy", "Thriller", "War", "Incorrect type"]
+
+//...
+
 _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: {
     [weak self](dialogViewController) in
     let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
