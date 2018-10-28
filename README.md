@@ -129,7 +129,7 @@ KOPresentationQueuesService.shared.queueChangedEvent = {
 Text field supports showing and validating an error.
 
 <p align="center">
-  <img src="ReadmeImages/emailfield1.png" width="500">
+  <img src="ReadmeImages/emailfield3.png" width="500">
 </p>
 
 You always have to set the error description before show it. To show an error manually you need to change the default ```validateMode``` to manual and just change the flag ```isShowingError``` to true. 
@@ -204,7 +204,7 @@ passwordField.errorInfoView.markerColor = UIColor.white
 ```
 
 <p align="center">
-  <img src="ReadmeImages/passwordfield1.png" width="500">
+  <img src="ReadmeImages/passwordfield3.png" width="500">
 </p>
 
 You can replace ```errorInfoView``` completely by ```customErrorInfoView```, but new view need to implement  ```KOTextFieldErrorInfoInterface```.
@@ -236,7 +236,7 @@ userNameField.customErrorInfoView = userNameErrorInfoView
 ```
 
 <p align="center">
-  <img src="ReadmeImages/userfield1.png" width="500">
+  <img src="ReadmeImages/userfield3.png" width="500">
 </p>
 
 Error view that is showing at the right corner of the field, can be customized by changing ```errorIconView``` or replacing it by ```customErrorView```.
@@ -300,6 +300,11 @@ Depending on selected ```mode```, progress can be different:
 ### KODialogViewController
 
 High customizable dialog view, that can be used to create you own dialog in simply way.
+
+<p align="center">
+  <img src="ReadmeImages/customitemstablepicker3.png" width="500" title="Default and after customization">
+</p>
+
 
 You can create your own content by inherit from ```KODialogViewController``` or from its descendants. In below example we want to create items table picker with search field. The first step will be create a class that inherit from ```KOItemsTablePickerViewController```, then we need to override function ```createContentView``` to add our searchField to the contentView.
 
