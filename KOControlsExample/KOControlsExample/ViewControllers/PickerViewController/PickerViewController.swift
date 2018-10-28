@@ -587,32 +587,31 @@ extension PickerViewController{
 class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
     private(set) weak var searchField : KOTextField!
     
-    
     override func createContentView() -> UIView {
-        let containerView = UIView()
+        let contentView = UIView()
         
         let itemsTable = super.createContentView()
-        containerView.addSubview(itemsTable)
+        contentView.addSubview(itemsTable)
         itemsTable.translatesAutoresizingMaskIntoConstraints = false
         
         let searchField = KOTextField()
         searchField.borderStyle = .roundedRect
         searchField.borderSettings = AppSettings.fieldBorder
         searchField.placeholder = "Search country"
-        containerView.addSubview(searchField)
+        contentView.addSubview(searchField)
         searchField.translatesAutoresizingMaskIntoConstraints = false
         self.searchField = searchField
         
-        containerView.addConstraints([
-            searchField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8),
-            searchField.rightAnchor.constraint(equalTo: containerView.rightAnchor,  constant: -8),
-            searchField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+        contentView.addConstraints([
+            searchField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
+            searchField.rightAnchor.constraint(equalTo: contentView.rightAnchor,  constant: -8),
+            searchField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             itemsTable.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 4),
-            itemsTable.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            itemsTable.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            itemsTable.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            itemsTable.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            itemsTable.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            itemsTable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
         
-        return containerView
+        return contentView
     }
 }

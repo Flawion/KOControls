@@ -9,11 +9,11 @@ Right now it contains only the few features but it will be getting the new stuff
 - [KOPresentationQueuesService](#kopresentationqueuesservice) - Service manages the queues of views to present. 
 - [KOTextField](#kotextfield) - Text field supports showing and validating an error.
 - [KOScrollOffsetProgressController](#koscrolloffsetprogresscontroller) - Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
-- KODialogViewController -  High customizable dialog view, that can be used to create you own dialog in simply way.
+- [KODialogViewController](#kodialogviewcontroller) - High customizable dialog view, that can be used to create you own dialog in simply way.
 - [KODatePickerViewController](#kodatepickerviewcontroller) - Simple way to get the date from the user.
 - [KOOptionsPickerViewController](#kooptionspickerviewcontroller) - Simple way to get the selected option from the user.
-- KOItemsTablePickerViewController -  Simple way to get the selected option from the user from table.
-- KOItemsCollectionPickerViewController -  Simple way to get the selected option from the user from collection.
+- [KOItemsTablePickerViewController](#koitemstablepickerviewcontroller) -  Simple way to get the selected option from the user from table.
+- [KOItemsCollectionPickerViewController](#koitemscollectionpickerviewcontroller) -  Simple way to get the selected option from the user from collection.
 - KODimmingTransition - Transition uses presentation with dimming view.
 - KOVisualEffectDimmingTransition - Transition uses presentation with dimming view with visual effect.
 
@@ -280,6 +280,64 @@ Depending on selected ```mode```, progress can be different:
 * ```translationOffsetBased```: progress is calculating based on difference between last content offset and new one
 * ```scrollingBlockedUntilProgressMax```: progress is calculating based on difference between touches (last and new one), scroll is completely blocked until the progress reaches value 1.0
 
+### KODialogViewController
+
+High customizable dialog view, that can be used to create you own dialog in simply way.
+
+You can create your own content by inherit from ```KODialogViewController``` or from its descendants. In below example we want to create items table picker with search field. The first step will be create a class that inherit from ```KOItemsTablePickerViewController```, then we need to override function ```createContentView``` to add our searchField to the contentView.
+
+```swift
+class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
+    //our search field
+    private(set) weak var searchField : KOTextField!
+
+    override func createContentView() -> UIView {
+        //new contentView
+        let contentView = UIView()
+    
+        //create default contentView for KOItemsTablePickerViewController
+        let itemsTable = super.createContentView()
+        contentView.addSubview(itemsTable)
+        itemsTable.translatesAutoresizingMaskIntoConstraints = false
+    
+        let searchField = KOTextField()
+        searchField.borderStyle = .roundedRect
+        searchField.borderSettings = AppSettings.fieldBorder
+        searchField.placeholder = "Search country"
+        contentView.addSubview(searchField)
+        searchField.translatesAutoresizingMaskIntoConstraints = false
+        self.searchField = searchField
+    
+        contentView.addConstraints([
+            searchField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
+            searchField.rightAnchor.constraint(equalTo: contentView.rightAnchor,  constant: -8),
+            searchField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            itemsTable.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 4),
+            itemsTable.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            itemsTable.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            itemsTable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        return contentView
+    }
+}
+```
+
+We can additional customize our picker by changing its parameters.
+
+```swift
+dialogViewController.modalPresentationCapturesStatusBarAppearance = true
+dialogViewController.backgroundVisualEffect = UIBlurEffect(style: .dark)
+dialogViewController.mainViewHorizontalAlignment = .center
+dialogViewController.mainViewVerticalAlignment = .center
+dialogViewController.mainView.layer.cornerRadius = 12
+dialogViewController.mainView.clipsToBounds = true
+dialogViewController.barMode = .bottom
+dialogViewController.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+dialogViewController.barView.titleLabel.textColor = UIColor.white
+(dialogViewController.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+(dialogViewController.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+```
+
 ### KODatePickerViewController
 
 Simple way to get the date from the user.
@@ -306,6 +364,8 @@ _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your 
     datePickerViewController.datePicker.date = self?.date
     }))
 ```
+
+Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
 
 ### KOOptionsPickerViewController
 
@@ -337,6 +397,74 @@ _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogAc
     }
     }))
 ```
+
+Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
+
+### KOItemsTablePickerViewController
+
+Simple way to get the selected option from the user from table.
+
+You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UITableView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UITableDataSource need to be handle by the user.
+
+```swift
+_ = presentItemsTablePicker(viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+    [weak self](dialogViewController) in
+    let itemsTablePickerViewController = dialogViewController as! KOItemsTablePickerViewController
+    //sets contentHeight, because mainViewVerticalAlignment is other than .fill
+    itemsTablePickerViewController.contentHeight = 300
+    //sets the cancel button
+    itemsTablePickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    //sets the done button
+    itemsTablePickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
+        [weak self](itemsTablePickerViewController : KOItemsTablePickerViewController) in
+        if let countryIndex = itemsTablePickerViewController.itemsTable.indexPathForSelectedRow?.row{
+            self?.countryIndex = countryIndex
+        }
+    })
+    itemsTablePickerViewController.itemsTable.allowsSelection = true
+
+    //handle UITableViewDataSource
+    self?.countryCollectionsController.attach(tableView: itemsTablePickerViewController.itemsTable)
+    }))
+```
+
+Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
+
+### KOItemsCollectionPickerViewController
+
+Simple way to get the selected option from the user from collection.
+
+You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UICollectionView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UICollectionViewDataSource need to be handle by the user.
+
+```swift
+_ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
+    [weak self](dialogViewController) in
+    guard let sSelf = self else{
+        return
+    }
+
+    let itemsCollectionPickerViewController = dialogViewController as! KOItemsCollectionPickerViewController
+    //sets contentHeight, because mainViewVerticalAlignment is other than .fill
+    itemsCollectionPickerViewController.contentHeight = 300
+    //sets the cancel button
+    itemsCollectionPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    //sets the done button
+    itemsCollectionPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
+        [weak self](itemsCollectionPickerViewController : KOItemsCollectionPickerViewController) in
+        if let countryIndex = itemsCollectionPickerViewController.itemsCollection.indexPathsForSelectedItems?.first?.row{
+            self?.countryIndex = countryIndex
+        }
+    })
+    itemsCollectionPickerViewController.itemsCollection.allowsSelection = true
+
+    //handle UICollectionViewDataSource
+    sSelf.countryCollectionsController.attach(collectionView: itemsCollectionPickerViewController.itemsCollection)
+    //calculate collection size
+    sSelf.countryCollectionsController.calculateCollectionSize(itemsCollectionPickerViewController.itemsCollection, availableWidth: sSelf.view.bounds.width, itemMaxWidth: 120)
+    }))
+```
+
+Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
 
 ## License
 
