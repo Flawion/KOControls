@@ -128,6 +128,10 @@ KOPresentationQueuesService.shared.queueChangedEvent = {
 
 Text field supports showing and validating an error.
 
+<p align="center">
+  <img src="ReadmeImages/emailfield1.png" width="500">
+</p>
+
 You always have to set the error description before show it. To show an error manually you need to change the default ```validateMode``` to manual and just change the flag ```isShowingError``` to true. 
 
 ```swift
@@ -141,6 +145,7 @@ To don't worry about setting the flag manually, you can use auto validation feat
 ```swift
 emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
 emailField.add(validator: KORegexTextValidator.mailValidator)
+
 ```
 You can always adjust the border of the field to the state of: normal, error, focus; by setting ```borderSettings```.
 
@@ -198,6 +203,10 @@ passwordField.errorInfoView.layer.shadowOpacity = 0.7
 passwordField.errorInfoView.markerColor = UIColor.white
 ```
 
+<p align="center">
+  <img src="ReadmeImages/passwordfield1.png" width="500">
+</p>
+
 You can replace ```errorInfoView``` completely by ```customErrorInfoView```, but new view need to implement  ```KOTextFieldErrorInfoInterface```.
 
 ```swift
@@ -226,6 +235,10 @@ userNameErrorInfoView.addConstraints([
 userNameField.customErrorInfoView = userNameErrorInfoView
 ```
 
+<p align="center">
+  <img src="ReadmeImages/userfield1.png" width="500">
+</p>
+
 Error view that is showing at the right corner of the field, can be customized by changing ```errorIconView``` or replacing it by ```customErrorView```.
 
 ```swift
@@ -246,6 +259,10 @@ passwordField.errorWidth = 100
 ### KOScrollOffsetProgressController
 
 Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
+
+<p align="center">
+  <img src="ReadmeImages/scrolloffsetprogress1.gif" width="250">
+</p>
 
 First declare variable.
 
@@ -342,6 +359,10 @@ dialogViewController.barView.titleLabel.textColor = UIColor.white
 
 Simple way to get the date from the user.
 
+<p align="center">
+  <img src="ReadmeImages/datepicker3.png" width="500" title="Default and after customization">
+</p>
+
 You can use predefined function to present date picker at the screen like below. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
 
 ```swift
@@ -367,13 +388,13 @@ _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your 
 
 Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
 
-<p align="center">
-  <img src="ReadmeImages/datepicker3.png" width="500" title="KODatePickerViewController default and after customization">
-</p>
-
 ### KOOptionsPickerViewController
 
 Simple way to get the selected option from the user.
+
+<p align="center">
+  <img src="ReadmeImages/optionspicker3.png" width="500" title="Default and after customization">
+</p>
 
 You can use predefined function to present option picker at the screen like below. Options is the arrays of categories / components, that user can select. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
 
@@ -404,9 +425,14 @@ _ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogAc
 
 Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
 
+
 ### KOItemsTablePickerViewController
 
 Simple way to get the selected option from the user from table.
+
+<p align="center">
+  <img src="ReadmeImages/itemstablepicker3.png" width="500" title="Default and after customization">
+</p>
 
 You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UITableView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UITableDataSource need to be handle by the user.
 
@@ -437,6 +463,10 @@ Please go to section about [KODialogViewController](#kodialogviewcontroller) to 
 ### KOItemsCollectionPickerViewController
 
 Simple way to get the selected option from the user from collection.
+
+<p align="center">
+  <img src="ReadmeImages/itemscollectionpicker3.png" width="500" title="Default and after customization">
+</p>
 
 You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UICollectionView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UICollectionViewDataSource need to be handle by the user.
 
@@ -469,6 +499,7 @@ _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLay
 ```
 
 Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
+
 
 ## License
 
