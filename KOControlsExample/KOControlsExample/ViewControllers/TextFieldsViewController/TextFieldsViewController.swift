@@ -112,6 +112,7 @@ class TextFieldsViewController: UIViewController {
         //- user name field
         userNameField.borderSettings = AppSettings.fieldBorder
         userNameField.validateMode = .manual
+        userNameField.errorInfoInsets.top = 2
         
         //sets custom error info view
         let userNameErrorInfoView = UserNameErrorInfoView()

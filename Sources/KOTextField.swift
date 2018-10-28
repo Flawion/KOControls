@@ -226,7 +226,7 @@ open class KOTextField : UITextField{
             refreshCustomErrorInfoView()
         }
     }
-    public var errorInfoInsets : UIEdgeInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
+    public var errorInfoInsets : UIEdgeInsets = UIEdgeInsets(top: -4, left: 0, bottom: 0, right: 0)
     
     /// Flag that indicates if the field manages the visibility of 'errorInfoView' marker
     public var manageErrorInfoMarkerVisibility : Bool = true
