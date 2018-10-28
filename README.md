@@ -367,6 +367,10 @@ _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your 
 
 Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
 
+<p align="center">
+  <img src="ReadmeImages/datepicker3.png" width="500" title="KODatePickerViewController default and after customization">
+</p>
+
 ### KOOptionsPickerViewController
 
 Simple way to get the selected option from the user.
