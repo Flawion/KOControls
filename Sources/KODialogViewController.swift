@@ -83,6 +83,12 @@ public enum KODialogBarModes {
     
     /// This function will be invoked at the of viewDidLoad, you can use 'viewLoadedEvent' instead
     @objc optional func dialogViewControllerInitialized(_ dialogViewController : KODialogViewController)
+    
+    /// This function will be invoked at the of viewWillDisappear, you can use 'viewWillDisappearEvent' instead
+    @objc optional func dialogViewControllerViewWillDisappear(_ dialogViewController : KODialogViewController)
+    
+    /// This function will be invoked at the of viewDidDisappear, you can use 'viewDidDisappearEvent' instead
+    @objc optional func dialogViewControllerViewDidDisappear(_ dialogViewController : KODialogViewController)
 }
 
 /// Dialog view with the bar and content view. Content can be changed by override function 'createContentView'. BarView title should be changed by assign text to the 'barView.titleLabel.text'. 'Left/Right BarButtonAction' should be used to get the result or dismiss.
@@ -263,11 +269,13 @@ open class KODialogViewController : UIViewController, UIGestureRecognizerDelegat
     
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        delegate?.dialogViewControllerViewWillDisappear?(self)
         viewWillDisappearEvent?(self)
     }
     
     override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        delegate?.dialogViewControllerViewDidDisappear?(self)
         viewDidDisappearEvent?(self)
     }
     

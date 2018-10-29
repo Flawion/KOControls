@@ -14,8 +14,8 @@ Right now it contains only the few features but it will be getting the new stuff
 - [KOOptionsPickerViewController](#kooptionspickerviewcontroller) - Simple way to get the selected option from the user.
 - [KOItemsTablePickerViewController](#koitemstablepickerviewcontroller) -  Simple way to get the selected option from the user from table.
 - [KOItemsCollectionPickerViewController](#koitemscollectionpickerviewcontroller) -  Simple way to get the selected option from the user from collection.
-- KODimmingTransition - Transition uses presentation with dimming view.
-- KOVisualEffectDimmingTransition - Transition uses presentation with dimming view with visual effect.
+- [KODimmingTransition](#kodimmingtransition) - Transition uses presentation with dimming view.
+- [KOVisualEffectDimmingTransition](#kovisualeffectdimmingtransition) - Transition uses presentation with dimming view with visual effect.
 
 ## Requirements
 
@@ -360,6 +360,26 @@ dialogViewController.barView.titleLabel.textColor = UIColor.white
 (dialogViewController.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
 ```
 
+Or we can change the transition.
+
+```swift
+//override presenting animation
+let viewToAnimationDuration : TimeInterval = 0.5
+let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
+viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
+let animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+
+//override dismissing animation
+let viewFromAnimationDuration : TimeInterval = 0.5
+let viewFromAnimation = KOAnimationGroup(animations: [
+    KOFadeOutAnimation(),
+    KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
+], duration : viewFromAnimationDuration)
+let animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
+
+dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+```
+
 ### KODatePickerViewController
 
 Simple way to get the date from the user.
@@ -504,6 +524,55 @@ _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLay
 ```
 
 Please go to section about [KODialogViewController](#kodialogviewcontroller) to find more about customization.
+
+### KODimmingTransition
+
+Transition uses presentation with dimming view.
+
+Is very simple to use, you need only to set the ```transitioningDelegate``` of UIViewController. 
+
+```swift
+let dimmingTransition = KODimmingTransition()
+...
+viewController.transitioningDelegate = dimmingTransition
+viewController.modalPresentationStyle = .custom
+```
+
+```KODialogViewController``` has special field for that, named ```customTransition```.
+
+```swift
+dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark))
+```
+
+Additional settings can be changed by handle ```setupPresentationControllerEvent``` and tweaking ```KODimmingPresentationController```. It have to be done before presentating view, in example in ```postInit``` parameter of func present.
+
+```swift
+(dialogViewController.customTransition as! KODimmingTransition).setupPresentationControllerEvent = {
+    presentationController in
+    //changes dimmingView color
+    presentationController.dimmingView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+    //changes the animations
+    presentationController.dimmingShowAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
+    presentationController.dimmingHideAnimation = KOScaleAnimation(toValue: CGPoint.zero)
+}
+```
+
+Presentation animations can be changed by parameters  ```animationControllerPresenting``` and ```animationControllerDismissing``` like that.
+
+```swift
+let viewToAnimationDuration : TimeInterval = 0.5
+let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
+viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
+dialogViewController.customTransition?.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+```
+
+You need to remember that in iOS ```UIModalPresentationStyle.custom``` has a fullscreen context, so the view will be always have full screen frame. You can change this by setting ```KODimmingPresentationController.keepFrameOfView```. But the touches outside will not be forwarded to below until you seted ```KODimmingPresentationController.touchForwardingView.passthroughViews```.
+
+### KOVisualEffectDimmingTransition
+
+Transition uses presentation with dimming view with visual effect. 
+
+It works the same as [KODimmingTransition](#kodimmingtransition). But ```UIVisualEffect``` is setting by the parameter ```KODimmingPresentationController.dimmingShowAnimation```, so don't change it manually.
 
 
 ## License

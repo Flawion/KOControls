@@ -5,6 +5,9 @@
       location = "group:KOControlsExample.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:../KOControls.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

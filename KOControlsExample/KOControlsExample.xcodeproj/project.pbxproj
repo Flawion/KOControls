@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0508F23B217A03AE001DDB41 /* KOControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053ED2782116304A0016ABC4 /* KOControls.framework */; };
-		0508F23C217A03AE001DDB41 /* KOControls.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 053ED2782116304A0016ABC4 /* KOControls.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05191DC1215A237000C45D14 /* CountryCollectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05191DC0215A237000C45D14 /* CountryCollectionsController.swift */; };
+		052BCFD221873E5A005578D4 /* KOControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052BCFD121873E5A005578D4 /* KOControls.framework */; };
+		052BCFD321873E5A005578D4 /* KOControls.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 052BCFD121873E5A005578D4 /* KOControls.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED26021162FAB0016ABC4 /* AppDelegate.swift */; };
 		053ED26821162FAC0016ABC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26721162FAC0016ABC4 /* Assets.xcassets */; };
 		053ED26B21162FAC0016ABC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */; };
@@ -31,34 +31,17 @@
 		05CCFDD421256BE800208BD5 /* ScrollOffsetProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05CCFDD221256BE800208BD5 /* ScrollOffsetProgressViewController.xib */; };
 		05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC48AC2124AEBF00D0E7F6 /* PresentationQueueViewController.swift */; };
 		05DC48AF2124AEBF00D0E7F6 /* PresentationQueueViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05DC48AD2124AEBF00D0E7F6 /* PresentationQueueViewController.xib */; };
-		9F45914085E1F01861D130BF /* Pods_KOControlsExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */; };
+		67EF9F68C8CC960E9C51848D /* Pods_KOControlsExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		0508F23D217A03AE001DDB41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 053ED2732116304A0016ABC4 /* KOControls.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 053ED24421162C2E0016ABC4;
-			remoteInfo = KOControls;
-		};
-		053ED2772116304A0016ABC4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 053ED2732116304A0016ABC4 /* KOControls.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 053ED24521162C2E0016ABC4;
-			remoteInfo = KOControls_iOS;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
-		0508F23F217A03AE001DDB41 /* Embed Frameworks */ = {
+		052BCFC921873CF9005578D4 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0508F23C217A03AE001DDB41 /* KOControls.framework in Embed Frameworks */,
+				052BCFD321873E5A005578D4 /* KOControls.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,12 +50,12 @@
 
 /* Begin PBXFileReference section */
 		05191DC0215A237000C45D14 /* CountryCollectionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCollectionsController.swift; sourceTree = "<group>"; };
+		052BCFD121873E5A005578D4 /* KOControls.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = KOControls.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		053ED25D21162FAB0016ABC4 /* KOControlsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KOControlsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		053ED26021162FAB0016ABC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		053ED26721162FAC0016ABC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		053ED26A21162FAC0016ABC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		053ED26C21162FAC0016ABC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		053ED2732116304A0016ABC4 /* KOControls.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KOControls.xcodeproj; path = ../KOControls.xcodeproj; sourceTree = "<group>"; };
 		053ED27F211631B10016ABC4 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		053ED280211631B10016ABC4 /* MenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
 		053ED284211632AD0016ABC4 /* TextFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldsViewController.swift; sourceTree = "<group>"; };
@@ -101,8 +84,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F45914085E1F01861D130BF /* Pods_KOControlsExample.framework in Frameworks */,
-				0508F23B217A03AE001DDB41 /* KOControls.framework in Frameworks */,
+				052BCFD221873E5A005578D4 /* KOControls.framework in Frameworks */,
+				67EF9F68C8CC960E9C51848D /* Pods_KOControlsExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +95,7 @@
 		053ED25421162FAB0016ABC4 = {
 			isa = PBXGroup;
 			children = (
+				052BCFD121873E5A005578D4 /* KOControls.framework */,
 				053ED25F21162FAB0016ABC4 /* KOControlsExample */,
 				053ED25E21162FAB0016ABC4 /* Products */,
 				053ED272211630490016ABC4 /* Frameworks */,
@@ -147,18 +131,9 @@
 		053ED272211630490016ABC4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				053ED2732116304A0016ABC4 /* KOControls.xcodeproj */,
 				38DF199CD968645C38609452 /* Pods_KOControlsExample.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		053ED2742116304A0016ABC4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				053ED2782116304A0016ABC4 /* KOControls.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		053ED27D211631900016ABC4 /* ViewControllers */ = {
@@ -259,12 +234,11 @@
 				053ED25A21162FAB0016ABC4 /* Frameworks */,
 				053ED25B21162FAB0016ABC4 /* Resources */,
 				8978A039642240129207158B /* [CP] Embed Pods Frameworks */,
-				0508F23F217A03AE001DDB41 /* Embed Frameworks */,
+				052BCFC921873CF9005578D4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0508F23E217A03AE001DDB41 /* PBXTargetDependency */,
 			);
 			name = KOControlsExample;
 			productName = KOControlsExample;
@@ -298,28 +272,12 @@
 			mainGroup = 053ED25421162FAB0016ABC4;
 			productRefGroup = 053ED25E21162FAB0016ABC4 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 053ED2742116304A0016ABC4 /* Products */;
-					ProjectRef = 053ED2732116304A0016ABC4 /* KOControls.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				053ED25C21162FAB0016ABC4 /* KOControlsExample */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		053ED2782116304A0016ABC4 /* KOControls.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KOControls.framework;
-			remoteRef = 053ED2772116304A0016ABC4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		053ED25B21162FAB0016ABC4 /* Resources */ = {
@@ -401,14 +359,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		0508F23E217A03AE001DDB41 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = KOControls;
-			targetProxy = 0508F23D217A03AE001DDB41 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */ = {
@@ -540,7 +490,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 225CD39FF36CAF788AEED0CF /* Pods-KOControlsExample.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
@@ -561,7 +510,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AB2D0AEFF12A205491FE6B09 /* Pods-KOControlsExample.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";

@@ -206,15 +206,7 @@ class PickerViewController: UIViewController, UITextFieldDelegate{
     }
     
     private func customizeTransitionIfNeed(dialogViewController : KODialogViewController){
-        guard isStyleCustomize else{
-            return
-        }
-        (dialogViewController.customTransition as? KODimmingTransition)?.setupPresentationControllerEvent = {
-            presentationController in
-            presentationController.dimmingView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        }
-        
-        guard !isPresentPopover else{
+        guard isStyleCustomize && !isPresentPopover else{
             return
         }
         
