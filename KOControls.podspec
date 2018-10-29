@@ -17,4 +17,5 @@ Pod::Spec.new do |s|
   s.resources = 'Sources/*.{png,jpeg,jpg,storyboard,xib,xcassets}'
 
   s.requires_arc = true
+  s.swift_version = '4.2'
 end
