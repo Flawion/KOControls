@@ -128,7 +128,6 @@ open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioni
             return
         }
         
-        
         var runInToAnimation = (viewToAnimation?.duration ?? -1) >= (viewFromAnimation?.duration ?? -1)
         if let viewToAnimation = viewToAnimation, let viewTo = transitionContext.view(forKey: .to){
             viewToAnimation.duration = min(duration, viewToAnimation.duration)
@@ -153,6 +152,9 @@ open class KOAnimationController : NSObject, UIViewControllerAnimatedTransitioni
 /// Presentation that adds a 'dimmingView' before presented view
 open class KODimmingPresentationController : UIPresentationController {
     //MARK: Variables
+    private var dimmingShowAnimator : KOAnimator?
+    private var dimmingHideAnimator : KOAnimator?
+    
     //public
     public private(set) var dimmingView : UIView!
     
@@ -165,8 +167,14 @@ open class KODimmingPresentationController : UIPresentationController {
     /// Animation of showing 'dimmingView'
     public var dimmingShowAnimation : KOAnimation?
     
+    /// Is animation is running alongside with the transition, this can make some rendering problems with the UIVisualEffect
+    public var dimmingShowAnimationSyncWithTransition : Bool = true
+    
     /// Animation of hidding 'dimmingView'
     public var dimmingHideAnimation : KOAnimation?
+    
+    /// Is animation is running alongside with the transition, this can make some rendering problems with the UIVisualEffect
+    public var dimmingHideAnimationSyncWithTransition : Bool = true
     
     /// Event that will be invoked when user clicked at the 'dimmingView'
     public var dimmingViewTapEvent : (()->Void)? = nil
@@ -212,12 +220,25 @@ open class KODimmingPresentationController : UIPresentationController {
         touchForwardingView.frame = containerView.frame
         containerView.insertSubview(touchForwardingView, at: 0)
     
-        dimmingShowAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
+        if dimmingShowAnimationSyncWithTransition{
+            dimmingShowAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
+        }else if let dimmingShowAnimation = dimmingShowAnimation{
+            dimmingShowAnimator = KOAnimator(view: dimmingView)
+            dimmingShowAnimator!.runViewAnimation(dimmingShowAnimation, completionHandler: nil)
+        }
     }
     
     override open func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()
-        dimmingHideAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
+        
+        if dimmingShowAnimationSyncWithTransition{
+              dimmingHideAnimation?.animateAlongsideTransition(view: dimmingView, coordinator: presentedViewController.transitionCoordinator, completionHandler: nil)
+        }else if let dimmingHideAnimation = dimmingHideAnimation{
+            dimmingShowAnimator?.stopViewAnimation()
+            dimmingHideAnimator = KOAnimator(view: dimmingView)
+            dimmingHideAnimator!.runViewAnimation(dimmingHideAnimation, completionHandler: nil)
+        }
+      
     }
     
     /// You can override this function to create your own dimmingView
@@ -250,10 +271,10 @@ public class KOVisualEffectDimmingPresentationController : KODimmingPresentation
     
     override public func createDimmingView() -> UIView {
         dimmingShowAnimation = KOVisualEffectAnimation(toValue: effect)
+        dimmingShowAnimationSyncWithTransition = false
         dimmingHideAnimation = KOVisualEffectAnimation(toValue: nil)
         
         let dimmingView = UIVisualEffectView(effect: nil)
-        dimmingView.backgroundColor = UIColor.clear
         return dimmingView
     }
     
