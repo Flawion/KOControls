@@ -129,7 +129,7 @@ KOPresentationQueuesService.shared.queueChangedEvent = {
 Text field supports showing and validating an error.
 
 <p align="center">
-  <img src="ReadmeImages/emailfield3.png" width="500">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/emailfield3.png" width="500">
 </p>
 
 You always have to set the error description before show it. To show an error manually you need to change the default ```validateMode``` to manual and just change the flag ```isShowingError``` to true. 
@@ -204,7 +204,7 @@ passwordField.errorInfoView.markerColor = UIColor.white
 ```
 
 <p align="center">
-  <img src="ReadmeImages/passwordfield3.png" width="500">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/passwordfield3.png" width="500">
 </p>
 
 You can replace ```errorInfoView``` completely by ```customErrorInfoView```, but new view need to implement  ```KOTextFieldErrorInfoInterface```.
@@ -236,7 +236,7 @@ userNameField.customErrorInfoView = userNameErrorInfoView
 ```
 
 <p align="center">
-  <img src="ReadmeImages/userfield3.png" width="500">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/userfield3.png" width="500">
 </p>
 
 Error view that is showing at the right corner of the field, can be customized by changing ```errorIconView``` or replacing it by ```customErrorView```.
@@ -261,7 +261,7 @@ passwordField.errorWidth = 100
 Controller that calculates progress from given range based on scroll view offset and selected calculating 'mode'. 
 
 <p align="center">
-  <img src="ReadmeImages/scrolloffsetprogress1.gif" width="250">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/scrolloffsetprogress1.gif" width="250">
 </p>
 
 First declare variable.
@@ -302,7 +302,7 @@ Depending on selected ```mode```, progress can be different:
 High customizable dialog view, that can be used to create you own dialog in simply way.
 
 <p align="center">
-  <img src="ReadmeImages/customitemstablepicker3.png" width="500" title="Default and after customization">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/customitemstablepicker3.png" width="500" title="Default and after customization">
 </p>
 
 
@@ -385,7 +385,7 @@ dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: 
 Simple way to get the date from the user.
 
 <p align="center">
-  <img src="ReadmeImages/datepicker3.png" width="500" title="Default and after customization">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/datepicker3.png" width="500" title="Default and after customization">
 </p>
 
 You can use predefined function to present date picker at the screen like below. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
@@ -418,7 +418,7 @@ Please go to section about [KODialogViewController](#kodialogviewcontroller) to 
 Simple way to get the selected option from the user.
 
 <p align="center">
-  <img src="ReadmeImages/optionspicker3.png" width="500" title="Default and after customization">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/optionspicker3.png" width="500" title="Default and after customization">
 </p>
 
 You can use predefined function to present option picker at the screen like below. Options is the arrays of categories / components, that user can select. Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result.
@@ -456,7 +456,7 @@ Please go to section about [KODialogViewController](#kodialogviewcontroller) to 
 Simple way to get the selected option from the user from table.
 
 <p align="center">
-  <img src="ReadmeImages/itemstablepicker3.png" width="500" title="Default and after customization">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/itemstablepicker3.png" width="500" title="Default and after customization">
 </p>
 
 You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UITableView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UITableDataSource need to be handle by the user.
@@ -490,7 +490,7 @@ Please go to section about [KODialogViewController](#kodialogviewcontroller) to 
 Simple way to get the selected option from the user from collection.
 
 <p align="center">
-  <img src="ReadmeImages/itemscollectionpicker3.png" width="500" title="Default and after customization">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/itemscollectionpicker3.png" width="500" title="Default and after customization">
 </p>
 
 You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UICollectionView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UICollectionViewDataSource need to be handle by the user.
