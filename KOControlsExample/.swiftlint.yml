@@ -1,0 +1,15 @@
+disabled_rules:
+ - force_cast
+ - force_try
+ - trailing_whitespace
+ - line_length
+
+included:
+    - ../Sources
+
+excluded:
+ - Pods
+
+identifier_name: 
+ excluded:
+  - id
