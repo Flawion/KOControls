@@ -26,33 +26,33 @@
 import UIKit
 
 /// Settings of popover presentation
-open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate{
-    //MARK: Variables
+open class KOPopoverSettings: NSObject, UIPopoverPresentationControllerDelegate {
+    // MARK: Variables
     
     //base needed variables
-    public private(set) weak var barButtonItem : UIBarButtonItem?
+    public private(set) weak var barButtonItem: UIBarButtonItem?
     //or
-    public private(set) weak var sourceView : UIView?
-    public private(set) var sourceRect : CGRect?
+    public private(set) weak var sourceView: UIView?
+    public private(set) var sourceRect: CGRect?
     
     //others
     
     /// Preferred content size can be calculated automatically if this variable isn't nil. But view size must be calculable.
-    public var calculatePreferredContentSizeByLayoutSizeFitting : CGSize? = UIView.layoutFittingCompressedSize
+    public var calculatePreferredContentSizeByLayoutSizeFitting: CGSize? = UIView.layoutFittingCompressedSize
     
     /// Preferred content size of view
-    public var preferredContentSize : CGSize? = nil
+    public var preferredContentSize: CGSize?
     
     /// This event will be invoked before view presented
-    public var setupPopoverPresentationControllerEvent : ((UIPopoverPresentationController)->Void)? = nil
+    public var setupPopoverPresentationControllerEvent: ((UIPopoverPresentationController) -> Void)?
     
-    //MARK: Functions
-    public init(barButtonItem : UIBarButtonItem){
+    // MARK: Functions
+    public init(barButtonItem: UIBarButtonItem) {
         super.init()
         self.barButtonItem = barButtonItem
     }
     
-    public init(sourceView : UIView, sourceRect : CGRect){
+    public init(sourceView: UIView, sourceRect: CGRect) {
         super.init()
         self.sourceView = sourceView
         self.sourceRect = sourceRect
@@ -63,23 +63,23 @@ open class KOPopoverSettings : NSObject, UIPopoverPresentationControllerDelegate
     /// - Parameters:
     ///   - viewController: presented view controller
     ///   - presentOnViewController: presenting view controller
-    public func prepareViewController(_ viewController : UIViewController, presentOnViewController : UIViewController ){
+    public func prepareViewController(_ viewController: UIViewController, presentOnViewController: UIViewController ) {
         viewController.modalPresentationStyle = .popover
         
         //calculate preferred content size
-        if let overridePreferredContentSize = preferredContentSize{
+        if let overridePreferredContentSize = preferredContentSize {
             viewController.preferredContentSize = overridePreferredContentSize
-        }else if let calculatePreferredContentSizeByLayoutSizeFitting = calculatePreferredContentSizeByLayoutSizeFitting{
+        } else if let calculatePreferredContentSizeByLayoutSizeFitting = calculatePreferredContentSizeByLayoutSizeFitting {
             viewController.loadViewIfNeeded()
             let size = viewController.view.systemLayoutSizeFitting(calculatePreferredContentSizeByLayoutSizeFitting)
             viewController.preferredContentSize = size
         }
         
         //set popover settings
-        if let popoverPresentationController = viewController.popoverPresentationController{
-            if let barButtonItem = barButtonItem{
+        if let popoverPresentationController = viewController.popoverPresentationController {
+            if let barButtonItem = barButtonItem {
                 popoverPresentationController.barButtonItem = barButtonItem
-            }else if let sourceView = sourceView, let sourceRect = sourceRect{
+            } else if let sourceView = sourceView, let sourceRect = sourceRect {
                 popoverPresentationController.sourceView = sourceView
                 popoverPresentationController.sourceRect = sourceRect
             }

@@ -25,13 +25,13 @@
 
 import UIKit
 
-class CountryTableViewCell: UITableViewCell {
+final class CountryTableViewCell: UITableViewCell {
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    weak var countryModel : CountryModel?{
-        didSet{
-            guard let countryModel = self.countryModel else{
+    weak var countryModel: CountryModel? {
+        didSet {
+            guard let countryModel = self.countryModel else {
                 return
             }
             titleLabel.text = countryModel.name

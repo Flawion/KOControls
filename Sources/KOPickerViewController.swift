@@ -25,32 +25,32 @@
 
 import UIKit
 
-//MARK - KODatePickerViewController
+// MARK: - KODatePickerViewController
 
 /// Date picker, you can use dateChangedEvent to get the new setted date
-open class KODatePickerViewController : KODialogViewController{
-    //MARK: Variables
-    private weak var pDatePicker : UIDatePicker!
+open class KODatePickerViewController: KODialogViewController {
+    // MARK: Variables
+    private weak var pDatePicker: UIDatePicker!
 
     //public
-    public var datePickerTextColor : UIColor?{
-        get{
+    public var datePickerTextColor: UIColor? {
+        get {
             return datePicker.value(forKey: "textColor") as? UIColor
         }
-        set{
-            datePicker.setValue(UIColor.orange, forKey: "textColor")
+        set {
+            datePicker.setValue(newValue, forKey: "textColor")
         }
     }
     
-    public var datePicker : UIDatePicker{
+    public var datePicker: UIDatePicker {
         loadViewIfNeeded()
         return pDatePicker
     }
     
     /// You can use it to get the new setted date
-    public var dateChangedEvent : ((Date?)->Void)?
+    public var dateChangedEvent: ((Date?) -> Void)?
     
-    //MARK: Methods
+    // MARK: Methods
     override open func createContentView() -> UIView {
         let datePicker = UIDatePicker()
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
@@ -58,48 +58,48 @@ open class KODatePickerViewController : KODialogViewController{
         return datePicker
     }
     
-    @objc private func dateChanged(){
+    @objc private func dateChanged() {
         dateChangedEvent?(pDatePicker.date)
     }
 }
 
-//MARK: - KOOptionsPickerViewDelegates
+// MARK: - KOOptionsPickerViewDelegates
 
 /// Default used delegate, allows to show title or attributedTitle in a row of picker
-open class KOOptionsPickerSimpleDelegate : NSObject, UIPickerViewDelegate{
-    fileprivate weak var optionsPickerViewController : KOOptionsPickerViewController!
+open class KOOptionsPickerSimpleDelegate: NSObject, UIPickerViewDelegate {
+    fileprivate weak var optionsPickerViewController: KOOptionsPickerViewController!
     
     /// It allows for create an attributed text for the row
-    public var titleAttributesForRowInComponentsEvent : ((_ row : Int, _ component : Int)->[NSAttributedString.Key : Any])?
+    public var titleAttributesForRowInComponentsEvent : ((_ row: Int, _ component: Int) -> [NSAttributedString.Key: Any])?
     
-    public init(optionsPickerViewController : KOOptionsPickerViewController){
+    public init(optionsPickerViewController: KOOptionsPickerViewController) {
         self.optionsPickerViewController = optionsPickerViewController
         super.init()
     }
     
-    //MARK: UIPickerViewDelegate
+    // MARK: UIPickerViewDelegate
     public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return optionsPickerViewController.options[component][row]
     }
     
     public func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        guard let optionsPickerTitleAttributes = titleAttributesForRowInComponentsEvent?(row, component) else{
+        guard let optionsPickerTitleAttributes = titleAttributesForRowInComponentsEvent?(row, component) else {
             return nil
         }
         return NSAttributedString(string: optionsPickerViewController.options[component][row], attributes: optionsPickerTitleAttributes)
     }
     
     public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        optionsPickerViewController.selectionChangedEvent?(row,component)
+        optionsPickerViewController.selectionChangedEvent?(row, component)
     }
 }
 
 /// More advanced version of simple delegate, allows additionally to change the height and width of the rows
-open class KOOptionsPickerResizableDelegate : KOOptionsPickerSimpleDelegate{
-    private let widthForComponent : (_ component : Int)->CGFloat
-    private let heightForComponent : (_ component : Int)->CGFloat
+open class KOOptionsPickerResizableDelegate: KOOptionsPickerSimpleDelegate {
+    private let widthForComponent : (_ component: Int) -> CGFloat
+    private let heightForComponent : (_ component: Int) -> CGFloat
     
-    public init(optionsPickerViewController : KOOptionsPickerViewController, widthForComponent : @escaping (Int)->CGFloat, heightForComponent : @escaping (Int)->CGFloat){
+    public init(optionsPickerViewController: KOOptionsPickerViewController, widthForComponent: @escaping (Int) -> CGFloat, heightForComponent: @escaping (Int) -> CGFloat) {
         self.widthForComponent = widthForComponent
         self.heightForComponent = heightForComponent
         super.init(optionsPickerViewController: optionsPickerViewController)
@@ -115,10 +115,10 @@ open class KOOptionsPickerResizableDelegate : KOOptionsPickerSimpleDelegate{
 }
 
 /// Most advanced version of simple delegate, allows additionally to change the height and width of the rows and to return a custom view of the row
-open class KOOptionsPickerCustomViewDelegate : KOOptionsPickerResizableDelegate{
-    private let viewForRowInComponent : (_ row : Int, _ component : Int, _ title : String, _ reusableView : UIView?)->UIView
+open class KOOptionsPickerCustomViewDelegate: KOOptionsPickerResizableDelegate {
+    private let viewForRowInComponent : (_ row: Int, _ component: Int, _ title: String, _ reusableView: UIView?) -> UIView
     
-    public init(optionsPickerViewController : KOOptionsPickerViewController, widthForComponent : @escaping (Int)->CGFloat, heightForComponent : @escaping (Int)->CGFloat, viewForRowInComponent : @escaping (Int, Int, String, UIView?)->UIView){
+    public init(optionsPickerViewController: KOOptionsPickerViewController, widthForComponent: @escaping (Int) -> CGFloat, heightForComponent: @escaping (Int) -> CGFloat, viewForRowInComponent: @escaping (Int, Int, String, UIView?) -> UIView) {
         self.viewForRowInComponent = viewForRowInComponent
         super.init(optionsPickerViewController: optionsPickerViewController, widthForComponent: widthForComponent, heightForComponent: heightForComponent)
     }
@@ -128,23 +128,23 @@ open class KOOptionsPickerCustomViewDelegate : KOOptionsPickerResizableDelegate{
     }
 }
 
-//MARK: - KOOptionsPickerViewController
+// MARK: - KOOptionsPickerViewController
 
 /// Options picker, you can use selectionChangedEvent to get the new setted date
-open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewDataSource{
-    //MARK: Variables
-    private weak var pOptionsPicker : UIPickerView!
+open class KOOptionsPickerViewController: KODialogViewController, UIPickerViewDataSource {
+    // MARK: Variables
+    private weak var pOptionsPicker: UIPickerView!
     
     //public
-    public var optionsPicker : UIPickerView{
+    public var optionsPicker: UIPickerView {
         loadViewIfNeeded()
         return pOptionsPicker
     }
     
     /// Instance of pickerview delegate that handles showing of options
-    public var optionsPickerDelegateInstance : UIPickerViewDelegate!{
-        didSet{
-            guard isViewLoaded else{
+    public var optionsPickerDelegateInstance: UIPickerViewDelegate! {
+        didSet {
+            guard isViewLoaded else {
                 return
             }
             pOptionsPicker.delegate = optionsPickerDelegateInstance
@@ -152,23 +152,23 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
     }
     
     /// Grouped options to select
-    public var options : [[String]] = []{
-        didSet{
-            guard isViewLoaded else{
+    public var options: [[String]] = [] {
+        didSet {
+            guard isViewLoaded else {
                 return
             }
             optionsPicker.reloadAllComponents()
         }
     }
     
-    public var selectionChangedEvent : ((_ row : Int, _ inComponent : Int)->Void)?
+    public var selectionChangedEvent: ((_ row: Int, _ inComponent: Int) -> Void)?
     
-    //MARK: Methods
-    public init(){
+    // MARK: Methods
+    public init() {
         super.init(nibName: nil, bundle: nil)
     }
     
-    public init(options : [[String]]) {
+    public init(options: [[String]]) {
         super.init(nibName: nil, bundle: nil)
         self.options = options
     }
@@ -181,15 +181,15 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
         let optionsPicker = UIPickerView()
         optionsPicker.dataSource = self
         self.pOptionsPicker = optionsPicker
-        if let optionsPickerDelegate = optionsPickerDelegateInstance{
+        if let optionsPickerDelegate = optionsPickerDelegateInstance {
             optionsPicker.delegate = optionsPickerDelegate
-        }else{
+        } else {
             optionsPickerDelegateInstance = KOOptionsPickerSimpleDelegate(optionsPickerViewController: self)
         }
         return optionsPicker
     }
     
-    //MARK: UIPickerViewDataSource, UIPickerViewDelegate
+    // MARK: UIPickerViewDataSource, UIPickerViewDelegate
     public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return options.count
     }
@@ -199,20 +199,20 @@ open class KOOptionsPickerViewController : KODialogViewController, UIPickerViewD
     }
 }
 
-//MARK: - KOItemsTablePickerViewController
+// MARK: - KOItemsTablePickerViewController
 
 /// Developer have to handle UITableViewDataSource. 'contentHeight' or 'contentWidth' parameters have to be setted depending on alignments of the main view. With default settings 'contentHeight' is needed to properly show the dialog.
-open class KOItemsTablePickerViewController : KODialogViewController{
-    //MARK: Variables
-    private weak var pItemsTable : UITableView!
+open class KOItemsTablePickerViewController: KODialogViewController {
+    // MARK: Variables
+    private weak var pItemsTable: UITableView!
     
     //public
-    public var itemsTable : UITableView{
+    public var itemsTable: UITableView {
         loadViewIfNeeded()
         return pItemsTable
     }
     
-    //MARK: Methods
+    // MARK: Methods
     override open func createContentView() -> UIView {
         let itemsTable = UITableView()
         itemsTable.tableFooterView = UIView()
@@ -221,24 +221,23 @@ open class KOItemsTablePickerViewController : KODialogViewController{
     }
 }
 
-//MARK: - KOItemsCollectionPickerViewController
+// MARK: - KOItemsCollectionPickerViewController
 
 /// Developer have to handle UICollectionViewDataSource. 'contentHeight' or 'contentWidth' parameters have to be setted depending on alignments of the main view. With default settings 'contentHeight' is needed to properly show the dialog.
-open class KOItemsCollectionPickerViewController : KODialogViewController{
-    //MARK: Variables
-    private weak var pItemsCollection : UICollectionView!
+open class KOItemsCollectionPickerViewController: KODialogViewController {
+    // MARK: Variables
+    private weak var pItemsCollection: UICollectionView!
     
-    private var itemsCollectionLayoutAtStart : UICollectionViewLayout!
+    private var itemsCollectionLayoutAtStart: UICollectionViewLayout!
 
-    
     //public
-    public var itemsCollection : UICollectionView{
+    public var itemsCollection: UICollectionView {
         loadViewIfNeeded()
         return pItemsCollection
     }
     
-    //MARK: Methods
-    public init(itemsCollectionLayout : UICollectionViewLayout) {
+    // MARK: Methods
+    public init(itemsCollectionLayout: UICollectionViewLayout) {
         super.init(nibName: nil, bundle: nil)
         postInit(itemsCollectionLayout: itemsCollectionLayout)
     }
@@ -248,7 +247,7 @@ open class KOItemsCollectionPickerViewController : KODialogViewController{
         postInit(itemsCollectionLayout: UICollectionViewFlowLayout())
     }
 
-    private func postInit(itemsCollectionLayout : UICollectionViewLayout){
+    private func postInit(itemsCollectionLayout: UICollectionViewLayout) {
         itemsCollectionLayoutAtStart = itemsCollectionLayout
     }
     

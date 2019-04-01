@@ -26,94 +26,94 @@
 import UIKit
 
 /// This protocol must be implemented by 'errorInfoView'. It indicates a centerX anchor of marker that pointing a field.
-public protocol KOTextFieldErrorInfoInterface{
-    func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?
+public protocol KOTextFieldErrorInfoInterface {
+    func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint?
 }
 
 /// View that shows information about an error. The minimal effort is to change 'descriptionLabel.text' to match to the error.
 open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
-    //MARK: - Variables
-    public private(set) weak var contentView : UIView!
+    // MARK: - Variables
+    public private(set) weak var contentView: UIView!
     
     //description variables
-    public private(set) weak var descriptionLabel : UILabel!
-    public private(set) var descriptionLabelEdgesConstraintsInsets : KOEdgesConstraintsInsets!
+    public private(set) weak var descriptionLabel: UILabel!
+    public private(set) var descriptionLabelEdgesConstraintsInsets: KOEdgesConstraintsInsets!
     
-    open var defaultDescriptionInsets : UIEdgeInsets{
+    open var defaultDescriptionInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
     }
     
     //image variables
     
     /// Additional image, it is positioned before 'descriptionLabel'
-    public private(set) weak var imageView : UIImageView!
-    public private(set) weak var imageWidthConst : NSLayoutConstraint!
-    public private(set) var imageViewEdgesConstraintsInsets : KOEdgesConstraintsInsets!
+    public private(set) weak var imageView: UIImageView!
+    public private(set) weak var imageWidthConst: NSLayoutConstraint!
+    public private(set) var imageViewEdgesConstraintsInsets: KOEdgesConstraintsInsets!
     
-    open var defaultImageInsets : UIEdgeInsets{
+    open var defaultImageInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
     }
     
     //marker line variables
     
     /// Line that separates 'contentView' from the marker. It is inside the 'contentView'.
-    private weak var markerLineView : UIView!
+    private weak var markerLineView: UIView!
 
     /// Line thickness
-    public private(set) weak var markerLineHeightConst : NSLayoutConstraint!
+    public private(set) weak var markerLineHeightConst: NSLayoutConstraint!
     
     /// Default line thickness, can be overridden
-    open var defaultMarkerLineHeight : CGFloat{
+    open var defaultMarkerLineHeight: CGFloat {
         return 2
     }
     
     //marker variables
     
     /// View that is pointing a field
-    private weak var markerView : UIView!
-    private weak var markerShapeLayer : CAShapeLayer!
-    private weak var markerWidthConst : NSLayoutConstraint!
-    private weak var markerHeightConst : NSLayoutConstraint!
+    private weak var markerView: UIView!
+    private weak var markerShapeLayer: CAShapeLayer!
+    private weak var markerWidthConst: NSLayoutConstraint!
+    private weak var markerHeightConst: NSLayoutConstraint!
     
     //public
     
     /// Minimum edges distances from the view border
-    public private(set) var markerMinHorizontalConstraintsInsets : KOHorizontalConstraintsInsets!
+    public private(set) var markerMinHorizontalConstraintsInsets: KOHorizontalConstraintsInsets!
     
     /// Shows or hides marker view, before used it you have to turn off 'KOTextField.manageErrorInfoMarkerVisibility'
-    public var isMarkerViewHidden : Bool{
-        get{
+    public var isMarkerViewHidden: Bool {
+        get {
             return markerView.isHidden
         }
-        set{
+        set {
             markerView.isHidden = newValue
         }
     }
     
-    public var markerWidth : CGFloat = 12 {
-        didSet{
+    public var markerWidth: CGFloat = 12 {
+        didSet {
             recreateMarkerShape()
         }
     }
     
-    public var markerHeight : CGFloat = 9 {
-        didSet{
+    public var markerHeight: CGFloat = 9 {
+        didSet {
             recreateMarkerShape()
         }
     }
     
-    public var markerColor : UIColor = UIColor.red{
-        didSet{
+    public var markerColor: UIColor = UIColor.red {
+        didSet {
             markerShapeLayer.fillColor = markerColor.cgColor
             markerLineView.backgroundColor = markerColor
         }
     }
     
-    open var defaultMarkerMinHorizontalInsets : CGFloat{
+    open var defaultMarkerMinHorizontalInsets: CGFloat {
         return 4
     }
     
-    //MARK: - Functions
+    // MARK: - Functions
     public convenience init() {
         self.init(frame: CGRect.zero)
     }
@@ -128,12 +128,12 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
         initialize()
     }
     
-    private func initialize(){
+    private func initialize() {
         initializeViewAndConstraints()
         initializeAppearance()
     }
 
-    private func initializeViewAndConstraints(){
+    private func initializeViewAndConstraints() {
         //create views
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -203,7 +203,7 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
         
         //for image view
         let imageLeftConst = imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: defaultImageInsets.left)
-        let imageRightToDescriptionLeftConst = imageView.rightAnchor.constraint(equalTo: descriptionLabel.leftAnchor, constant:  (-defaultImageInsets.right) + (-defaultDescriptionInsets.left))
+        let imageRightToDescriptionLeftConst = imageView.rightAnchor.constraint(equalTo: descriptionLabel.leftAnchor, constant: (-defaultImageInsets.right) + (-defaultDescriptionInsets.left))
         let imageTopConst = imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: defaultImageInsets.top)
         let imageBottomConst = imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -defaultImageInsets.bottom)
         let imageWidthConst = imageView.widthAnchor.constraint(equalToConstant: 0)
@@ -229,7 +229,7 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
         descriptionLabelEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageRightToDescriptionLeftConst, rightConst: descriptionRightConst, leftMultipler: -1.0), vertical: KOVerticalConstraintsInsets(topConst: descriptionTopConst, bottomConst: descriptionBottomConst))
     }
     
-    private func initializeAppearance(){
+    private func initializeAppearance() {
         backgroundColor = UIColor.clear
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 4
@@ -238,14 +238,14 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
         markerLineView.backgroundColor = markerColor
     }
     
-    private func recreateMarkerShape(){
+    private func recreateMarkerShape() {
         let bezierPath = UIBezierPath()
-        bezierPath.move(to: CGPoint(x:0, y:markerHeight))
-        bezierPath.addLine(to: CGPoint(x:markerWidth / 2, y:0))
-        bezierPath.addLine(to: CGPoint(x:markerWidth, y:markerHeight))
+        bezierPath.move(to: CGPoint(x: 0, y: markerHeight))
+        bezierPath.addLine(to: CGPoint(x: markerWidth / 2, y: 0))
+        bezierPath.addLine(to: CGPoint(x: markerWidth, y: markerHeight))
         bezierPath.close()
         
-        if let shape = self.markerShapeLayer{
+        if let shape = self.markerShapeLayer {
             shape.removeFromSuperlayer()
         }
         let markerShapeLayer = CAShapeLayer()
@@ -258,7 +258,7 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
         markerWidthConst.constant = markerWidth
     }
     
-    open func markerCenterXEqualTo(_ constraint : NSLayoutXAxisAnchor)->NSLayoutConstraint?{
+    open func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         let const = markerView.centerXAnchor.constraint(equalTo: constraint)
         const.priority = UILayoutPriority(rawValue: 900)
         return const

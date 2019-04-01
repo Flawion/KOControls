@@ -25,12 +25,12 @@
 
 import UIKit
 
-class CountryModel{
-    let code : String
-    let name : String
-    let image : UIImage
+final class CountryModel {
+    let code: String
+    let name: String
+    let image: UIImage
     
-    init(code : String, name: String, image : UIImage) {
+    init(code: String, name: String, image: UIImage) {
         self.code = code
         self.name = name
         self.image = image

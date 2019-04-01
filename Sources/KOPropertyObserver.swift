@@ -26,13 +26,12 @@
 import UIKit
 
 /// Observes a property of type 'Value' from object of type 'Subject'
-public class KOPropertyObserver<Subject : NSObject, Value> {
-    private let options : NSKeyValueObservingOptions
-    private var token : Any?
+public class KOPropertyObserver<Subject: NSObject, Value> {
+    private let options: NSKeyValueObservingOptions
+    private var token: Any?
     
     /// object to observe
     public weak var subject: Subject?
-    
     
     /// Initialize observer
     ///
@@ -41,7 +40,7 @@ public class KOPropertyObserver<Subject : NSObject, Value> {
     ///   - propertyPath: keyPath to property of subject to observe
     ///   - propertyChangedEvent: event that will be invoking after property changed
     ///   - options: observing options
-    public init(subject: Subject, propertyPath : KeyPath<Subject, Value>, propertyChangedEvent : @escaping (Subject, NSKeyValueObservedChange<Value>)->Void , options : NSKeyValueObservingOptions = [.new]) {
+    public init(subject: Subject, propertyPath: KeyPath<Subject, Value>, propertyChangedEvent: @escaping (Subject, NSKeyValueObservedChange<Value>) -> Void, options: NSKeyValueObservingOptions = [.new]) {
         self.options = options
         self.subject = subject
         

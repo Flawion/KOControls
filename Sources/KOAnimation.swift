@@ -26,34 +26,34 @@
 import Foundation
 
 /// Spring animation settings
-public struct KOAnimationSpringSettings{
-    public var damping : CGFloat = 1.0
-    public var velocity : CGFloat = 1.0
+public struct KOAnimationSpringSettings {
+    public var damping: CGFloat = 1.0
+    public var velocity: CGFloat = 1.0
     
-    public init(damping : CGFloat, velocity : CGFloat){
+    public init(damping: CGFloat, velocity: CGFloat) {
         self.damping = damping
         self.velocity = velocity
     }
 }
 
 /// Manages animation
-open class KOAnimator{
-    private weak var view : UIView?
+open class KOAnimator {
+    private weak var view: UIView?
     
     /// Current setted animation
-    public private(set) var currentViewAnimation : KOAnimation?
+    public private(set) var currentViewAnimation: KOAnimation?
     
     /// Property animator for current setted animation
-    public private(set) var currentPropertyAnimator : UIViewPropertyAnimator?
+    public private(set) var currentPropertyAnimator: UIViewPropertyAnimator?
     
     /// Runs before animation.prepareViewForAnimation and playViewAnimation
-    public var prepareViewForAnimationEvent : ((_ : UIView)->Void)?
+    public var prepareViewForAnimationEvent: ((_ : UIView) -> Void)?
     
-    public var isRunning : Bool {
+    public var isRunning: Bool {
         return currentPropertyAnimator?.isRunning ?? false
     }
     
-    public init(view : UIView){
+    public init(view: UIView) {
         self.view = view
     }
 
@@ -62,23 +62,22 @@ open class KOAnimator{
     /// - Parameters:
     ///   - animation: animation to set
     ///   - completionHandler: animation completion handler
-    open func setViewAnimation(_ animation : KOAnimation, completionHandler : ((UIViewAnimatingPosition)->Void)?){
+    open func setViewAnimation(_ animation: KOAnimation, completionHandler: ((UIViewAnimatingPosition) -> Void)?) {
         stopViewAnimation()
         
-        if let view = view{
+        if let view = view {
             prepareViewForAnimationEvent?(view)
             animation.prepareViewForAnimation(view)
         }
         currentViewAnimation = animation
         currentPropertyAnimator = UIViewPropertyAnimator(duration: animation.duration, timingParameters: animation.timingParameters)
-        currentPropertyAnimator?.addAnimations {
-            [weak self] in
-            guard let view = self?.view else{
+        currentPropertyAnimator?.addAnimations { [weak self] in
+            guard let view = self?.view else {
                 return
             }
             animation.animation(view: view)
         }
-        if let completionHandler = completionHandler{
+        if let completionHandler = completionHandler {
             currentPropertyAnimator?.addCompletion(completionHandler)
         }
     }
@@ -88,7 +87,7 @@ open class KOAnimator{
     /// - Parameters:
     ///   - animation: animation to set
     ///   - completionHandler: animation completion handler
-    open func runViewAnimation(_ animation : KOAnimation, completionHandler : ((UIViewAnimatingPosition)->Void)?){
+    open func runViewAnimation(_ animation: KOAnimation, completionHandler: ((UIViewAnimatingPosition) -> Void)?) {
         setViewAnimation(animation, completionHandler: completionHandler)
         playViewAnimation()
     }
@@ -99,30 +98,30 @@ open class KOAnimator{
     ///   - animation: animation to run at coordinator
     ///   - coordinator: coordinator of presented view
     ///   - completionHandler: animation completion handler
-    open func runAnimationAlongsideTransition(_ animation : KOAnimation, coordinator : UIViewControllerTransitionCoordinator?, completionHandler : ((UIViewControllerTransitionCoordinatorContext?)->Void)?){
-        guard let view = view else{
+    open func runAnimationAlongsideTransition(_ animation: KOAnimation, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)?) {
+        guard let view = view else {
             return
         }
         animation.prepareViewForAnimation(view)
         animation.animateAlongsideTransition(view: view, coordinator: coordinator, completionHandler: completionHandler)
     }
     
-    public func pauseViewAnimation(){
-        guard let currentPropertyAnimator = currentPropertyAnimator else{
+    public func pauseViewAnimation() {
+        guard let currentPropertyAnimator = currentPropertyAnimator else {
             return
         }
         currentPropertyAnimator.pauseAnimation()
     }
     
-    public func stopViewAnimation(){
-        guard let currentPropertyAnimator = currentPropertyAnimator, currentPropertyAnimator.state != .stopped else{
+    public func stopViewAnimation() {
+        guard let currentPropertyAnimator = currentPropertyAnimator, currentPropertyAnimator.state != .stopped else {
             return
         }
         currentPropertyAnimator.stopAnimation(false)
     }
     
-    public func playViewAnimation(){
-        guard let currentViewAnimation = currentViewAnimation, let currentPropertyAnimator = currentPropertyAnimator else{
+    public func playViewAnimation() {
+        guard let currentViewAnimation = currentViewAnimation, let currentPropertyAnimator = currentPropertyAnimator else {
             return
         }
         currentPropertyAnimator.startAnimation(afterDelay: currentViewAnimation.delay)
@@ -130,24 +129,24 @@ open class KOAnimator{
 }
 
 /// Base class for animation, it should be used only for inheritance
-open class KOAnimation{
-    //MARK: Variables
-    public var duration : TimeInterval
-    public var delay : TimeInterval
-    public var timingParameters : UITimingCurveProvider
+open class KOAnimation {
+    // MARK: Variables
+    public var duration: TimeInterval
+    public var delay: TimeInterval
+    public var timingParameters: UITimingCurveProvider
     
-    //MARK: Functions
-    public init(duration: TimeInterval = 0.5, delay : TimeInterval = 0, timingParameters : UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)){
+    // MARK: Functions
+    public init(duration: TimeInterval = 0.5, delay: TimeInterval = 0, timingParameters: UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)) {
         self.duration = duration
         self.delay = delay
         self.timingParameters = timingParameters
     }
     
-    public convenience init(duration: TimeInterval = 0.5, delay : TimeInterval = 0, animationCurve : UIView.AnimationCurve){
+    public convenience init(duration: TimeInterval = 0.5, delay: TimeInterval = 0, animationCurve: UIView.AnimationCurve) {
         self.init(duration: duration, delay: delay, timingParameters: UICubicTimingParameters(animationCurve: .easeInOut))
     }
     
-    public convenience init(duration: TimeInterval = 0.5, delay : TimeInterval = 0, dampingRatio : CGFloat){
+    public convenience init(duration: TimeInterval = 0.5, delay: TimeInterval = 0, dampingRatio: CGFloat) {
         self.init(duration: duration, delay: delay, timingParameters: UISpringTimingParameters(dampingRatio: dampingRatio))
     }
     
@@ -158,9 +157,9 @@ open class KOAnimation{
     ///   - options: animation options
     ///   - springSettings: dummping settings
     ///   - completionHandler: animation completion handler
-    public func animate(view : UIView, options : UIView.AnimationOptions = [], springSettings : KOAnimationSpringSettings? = nil, completionHandler : ((Bool)->Void)? = nil){
+    public func animate(view: UIView, options: UIView.AnimationOptions = [], springSettings: KOAnimationSpringSettings? = nil, completionHandler: ((Bool) -> Void)? = nil) {
         prepareViewForAnimation(view)
-        guard let springSettings = springSettings else{
+        guard let springSettings = springSettings else {
             UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
                 [weak self] in
                 self?.animation(view: view)
@@ -168,8 +167,7 @@ open class KOAnimation{
             return
         }
         
-        UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: springSettings.damping, initialSpringVelocity: springSettings.velocity, options: options, animations: {
-            [weak self] in
+        UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: springSettings.damping, initialSpringVelocity: springSettings.velocity, options: options, animations: { [weak self] in
             self?.animation(view: view)
         }, completion: completionHandler)
     }
@@ -182,38 +180,37 @@ open class KOAnimation{
     ///   - completionHandler: animation completion handler
     public func animateAlongsideTransition(view: UIView, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)? = nil) {
         prepareViewForAnimation(view)
-        guard let coordinator = coordinator else{
+        guard let coordinator = coordinator else {
             animation(view: view)
             completionHandler?(nil)
             return
         }
         
-        coordinator.animate(alongsideTransition: { [weak self](coordinatorContext) in
+        coordinator.animate(alongsideTransition: { [weak self](_) in
             self?.animation(view: view)
         }, completion: completionHandler)
     }
     
-    //MARK: Functions to override
-    
-    
+    // MARK: Functions to override
+
     /// Used before start of view animation. Developer can override this function to set the initial parameters of the view.
     ///
     /// - Parameter view: view associated with the animation
-    open func prepareViewForAnimation(_ view: UIView){
+    open func prepareViewForAnimation(_ view: UIView) {
         //to override
     }
     
     /// Animation block. This function should be overridden to set the view property in animation.
     ///
     /// - Parameter view: view associated with the animation
-    open func animation(view : UIView){
+    open func animation(view: UIView) {
         //to override
     }
 }
 
 ///  Group of animations, it will be treated like a one animation. Specific parameters for each animation will be avoided, only parameters setted for whole group will be used.
-open class KOAnimationGroup : KOAnimation{
-    private let animations : [KOAnimation]
+open class KOAnimationGroup: KOAnimation {
+    private let animations: [KOAnimation]
     
     /// Init
     ///
@@ -222,44 +219,44 @@ open class KOAnimationGroup : KOAnimation{
     ///   - duration: total duration of animation
     ///   - delay: animation delay
     ///   - timingParameters: animation parameters
-    public init(animations : [KOAnimation], duration: TimeInterval = 0.5, delay : TimeInterval = 0, timingParameters : UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)){
+    public init(animations: [KOAnimation], duration: TimeInterval = 0.5, delay: TimeInterval = 0, timingParameters: UITimingCurveProvider = UICubicTimingParameters(animationCurve: .easeInOut)) {
         self.animations = animations
         super.init(duration: duration, delay: delay, timingParameters: timingParameters)
     }
     
-    public convenience init(animations : [KOAnimation], duration: TimeInterval = 0.5, delay : TimeInterval = 0, animationCurve : UIView.AnimationCurve){
+    public convenience init(animations: [KOAnimation], duration: TimeInterval = 0.5, delay: TimeInterval = 0, animationCurve: UIView.AnimationCurve) {
         self.init(animations: animations, duration: duration, delay: delay, timingParameters: UICubicTimingParameters(animationCurve: .easeInOut))
     }
     
-    public convenience init(animations : [KOAnimation],duration: TimeInterval = 0.5, delay : TimeInterval = 0, dampingRatio : CGFloat){
+    public convenience init(animations: [KOAnimation], duration: TimeInterval = 0.5, delay: TimeInterval = 0, dampingRatio: CGFloat) {
         self.init(animations: animations, duration: duration, delay: delay, timingParameters: UISpringTimingParameters(dampingRatio: dampingRatio))
     }
     
-    //MARK: Functions to override
-    override open func prepareViewForAnimation(_ view: UIView){
-        for animation in animations{
+    // MARK: Functions to override
+    override open func prepareViewForAnimation(_ view: UIView) {
+        for animation in animations {
             animation.prepareViewForAnimation(view)
         }
     }
     
-    override open func animation(view : UIView){
-        for animation in animations{
+    override open func animation(view: UIView) {
+        for animation in animations {
             animation.animation(view: view)
         }
     }
 }
 
 /// Custom animation class. Can be used to create keyframes animations etc.
-open class KOCustomAnimation : KOAnimation{
-    private var animationEvent : (UIView)->Void
-    private var prepareViewForAnimationEvent : ((UIView)->Void)?
+open class KOCustomAnimation: KOAnimation {
+    private var animationEvent: (UIView) -> Void
+    private var prepareViewForAnimationEvent: ((UIView) -> Void)?
     
     /// Init
     ///
     /// - Parameters:
     ///   - animation: animation block, it has to set the final parameters of animation at the view. In example: view.alpha = 1.0.
     ///   - prepareViewForAnimation: it should be used to set the initial parameters of the view before animation
-    public init(animation : @escaping (UIView)->Void, prepareViewForAnimation : ((UIView)->Void)?) {
+    public init(animation: @escaping (UIView) -> Void, prepareViewForAnimation: ((UIView) -> Void)?) {
         self.animationEvent = animation
         self.prepareViewForAnimationEvent = prepareViewForAnimation
         
@@ -276,11 +273,11 @@ open class KOCustomAnimation : KOAnimation{
 }
 
 /// Base class for animation that will set initial view parameters
-open class KOFromToAnimation<ValueType> : KOAnimation{
-    public var toValue : ValueType
-    public var fromValue : ValueType?
+open class KOFromToAnimation<ValueType>: KOAnimation {
+    public var toValue: ValueType
+    public var fromValue: ValueType?
     
-    public init(toValue : ValueType, fromValue : ValueType? = nil){
+    public init(toValue: ValueType, fromValue: ValueType? = nil) {
         self.toValue = toValue
         self.fromValue = fromValue
         
@@ -288,33 +285,33 @@ open class KOFromToAnimation<ValueType> : KOAnimation{
     }
 }
 
-open class KOFadeAnimation : KOFromToAnimation<CGFloat>{
+open class KOFadeAnimation: KOFromToAnimation<CGFloat> {
     override open func animation(view: UIView) {
         view.alpha = toValue
     }
     
     override open func prepareViewForAnimation(_ view: UIView) {
-        if let fromValue = fromValue{
+        if let fromValue = fromValue {
             view.alpha = fromValue
         }
     }
 }
 
-public class KOFadeInAnimation : KOFadeAnimation{
-    public init(fromValue : CGFloat? = nil) {
+public class KOFadeInAnimation: KOFadeAnimation {
+    public init(fromValue: CGFloat? = nil) {
         super.init(toValue: 1.0, fromValue: fromValue)
     }
 }
 
-public class KOFadeOutAnimation : KOFadeAnimation{
-    public init(fromValue : CGFloat? = nil) {
+public class KOFadeOutAnimation: KOFadeAnimation {
+    public init(fromValue: CGFloat? = nil) {
         super.init(toValue: 0, fromValue: fromValue)
     }
 }
 
-public class KOTransformAnimation: KOFromToAnimation<CGAffineTransform>{
+public class KOTransformAnimation: KOFromToAnimation<CGAffineTransform> {
     override public func prepareViewForAnimation(_ view: UIView) {
-        if let fromValue = fromValue{
+        if let fromValue = fromValue {
             view.transform = fromValue
         }
     }
@@ -324,63 +321,63 @@ public class KOTransformAnimation: KOFromToAnimation<CGAffineTransform>{
     }
 }
 
-public class KOScaleAnimation : KOTransformAnimation{
+public class KOScaleAnimation: KOTransformAnimation {
     public init(toValue: CGPoint, fromValue: CGPoint?  = nil) {
-        var fromValueTransform : CGAffineTransform? = nil
-        if let fromValuePoint = fromValue{
+        var fromValueTransform: CGAffineTransform?
+        if let fromValuePoint = fromValue {
             fromValueTransform = CGAffineTransform(scaleX: fromValuePoint.x, y: fromValuePoint.y)
         }
         super.init(toValue: CGAffineTransform(scaleX: toValue.x, y: toValue.y), fromValue: fromValueTransform)
     }
 }
 
-public class KOTranslationAnimation : KOTransformAnimation{
+public class KOTranslationAnimation: KOTransformAnimation {
     public init(toValue: CGPoint, fromValue: CGPoint? = nil) {
-        var fromValueTransform : CGAffineTransform? = nil
-        if let fromValuePoint = fromValue{
+        var fromValueTransform: CGAffineTransform?
+        if let fromValuePoint = fromValue {
             fromValueTransform = CGAffineTransform(translationX: fromValuePoint.x, y: fromValuePoint.y)
         }
         super.init(toValue: CGAffineTransform(translationX: toValue.x, y: toValue.y), fromValue: fromValueTransform)
     }
 }
 
-public class KORotationAnimation : KOTransformAnimation{
+public class KORotationAnimation: KOTransformAnimation {
     public init(toValue: CGFloat, fromValue: CGFloat? = nil) {
-        var fromValueTransform : CGAffineTransform? = nil
-        if let fromValueFloat = fromValue{
+        var fromValueTransform: CGAffineTransform?
+        if let fromValueFloat = fromValue {
             fromValueTransform = CGAffineTransform(rotationAngle: fromValueFloat)
         }
         super.init(toValue: CGAffineTransform(rotationAngle: toValue), fromValue: fromValueTransform)
     }
 }
 
-open class KOBackgroundColorAnimation : KOFromToAnimation<UIColor>{
+open class KOBackgroundColorAnimation: KOFromToAnimation<UIColor> {
     override open func animation(view: UIView) {
         view.backgroundColor = toValue
     }
     
     override open func prepareViewForAnimation(_ view: UIView) {
-        if let fromValue = fromValue{
+        if let fromValue = fromValue {
             view.backgroundColor = fromValue
         }
     }
 }
 
-open class KOFrameAnimation : KOFromToAnimation<CGRect>{
+open class KOFrameAnimation: KOFromToAnimation<CGRect> {
     override open func animation(view: UIView) {
         view.frame = toValue
     }
     
     override open func prepareViewForAnimation(_ view: UIView) {
-        if let fromValue = fromValue{
+        if let fromValue = fromValue {
             view.frame = fromValue
         }
     }
 }
 
-open class KOFrameFromToCurrentAnimation : KOAnimation{
-    private var fromValue : CGRect
-    private var toValue : CGRect?
+open class KOFrameFromToCurrentAnimation: KOAnimation {
+    private var fromValue: CGRect
+    private var toValue: CGRect?
     
     public init(fromValue: CGRect) {
         self.fromValue = fromValue
@@ -388,7 +385,7 @@ open class KOFrameFromToCurrentAnimation : KOAnimation{
     }
     
     override open func animation(view: UIView) {
-        if let toValue = toValue{
+        if let toValue = toValue {
             view.frame = toValue
         }
     }
@@ -399,16 +396,16 @@ open class KOFrameFromToCurrentAnimation : KOAnimation{
     }
 }
 
-open class KOVisualEffectAnimation : KOFromToAnimation<UIVisualEffect?>{
+open class KOVisualEffectAnimation: KOFromToAnimation<UIVisualEffect?> {
     override open func animation(view: UIView) {
-        guard let visualEffectView = view as? UIVisualEffectView else{
+        guard let visualEffectView = view as? UIVisualEffectView else {
             return
         }
         visualEffectView.effect = toValue
     }
     
     override open func prepareViewForAnimation(_ view: UIView) {
-        if let visualEffectView = view as? UIVisualEffectView, let fromValue = fromValue{
+        if let visualEffectView = view as? UIVisualEffectView, let fromValue = fromValue {
             visualEffectView.effect = fromValue
         }
     }

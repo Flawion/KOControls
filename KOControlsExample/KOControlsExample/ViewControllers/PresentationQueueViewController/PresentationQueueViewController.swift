@@ -26,7 +26,7 @@
 import UIKit
 import KOControls
 
-class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
+final class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var presentingView: UIView!
     @IBOutlet weak var bottomView: UIView!
     
@@ -34,7 +34,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var presentViewsCountField: UITextField!
     @IBOutlet weak var removeIndexField: UITextField!
     
-    private weak var presentingContainerViewController : UIViewController!
+    private weak var presentingContainerViewController: UIViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,23 +42,22 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         initialize()
     }
     
-    private func initialize(){
+    private func initialize() {
         navigationItem.title = "KOPresentationQueueService"
         initializePresentingContainerViewController()
         initializeViewsCountInQueueLabel()
     }
     
-    private func initializeViewsCountInQueueLabel(){
-        KOPresentationQueuesService.shared.queueChangedEvent = {
-            [weak self] queueIndex in
-            guard let sSelf = self else{
+    private func initializeViewsCountInQueueLabel() {
+        KOPresentationQueuesService.shared.queueChangedEvent = { [weak self] queueIndex in
+            guard let sSelf = self else {
                 return
             }
             sSelf.viewsCountInQueueLabel.text = "Views count in queue: \(KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: queueIndex) ?? 0)"
         }
     }
-    
-    private func initializePresentingContainerViewController(){
+
+    private func initializePresentingContainerViewController() {
         let presentingContainerViewController = UIViewController()
         presentingContainerViewController.definesPresentationContext = true
         presentingContainerViewController.view.backgroundColor = UIColor.clear
@@ -79,7 +78,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         return handleShouldBeginEditing(textField: textField)
     }
     
-    private func handleShouldBeginEditing(textField: UITextField)->Bool{
+    private func handleShouldBeginEditing(textField: UITextField) -> Bool {
         switch textField.tag {
         case 1:
             showPresentViewsCountPicker()
@@ -94,18 +93,16 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func showPresentViewsCountPicker(){
-        _ = presentOptionsPicker(withOptions: [["1","2","3","4","5"]], viewLoadedAction: KODialogActionModel(title: "Select present views count", action: {
-            [weak self](dialogViewController) in
-            guard let sSelf = self else{
+    private func showPresentViewsCountPicker() {
+        _ = presentOptionsPicker(withOptions: [["1", "2", "3", "4", "5"]], viewLoadedAction: KODialogActionModel(title: "Select present views count", action: { [weak self](dialogViewController) in
+            guard let sSelf = self else {
                 return
             }
             
             let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
-            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.presentViewsCountField.text) ?? 0) - 1) , inComponent: 0, animated: false)
-            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: {
-                [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
-                guard let sSelf = self else{
+            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.presentViewsCountField.text) ?? 0) - 1), inComponent: 0, animated: false)
+            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
+                guard let sSelf = self else {
                     return
                 }
                 sSelf.presentViewsCountField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0) + 1)"
@@ -114,18 +111,16 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         }))
     }
     
-    private func showRemoveIndexPicker(){
-        _ = presentOptionsPicker(withOptions: [["0","1","2","3","4"]], viewLoadedAction: KODialogActionModel(title: "Select index of view to remove", action: {
-            [weak self](dialogViewController) in
-            guard let sSelf = self else{
+    private func showRemoveIndexPicker() {
+        _ = presentOptionsPicker(withOptions: [["0", "1", "2", "3", "4"]], viewLoadedAction: KODialogActionModel(title: "Select index of view to remove", action: { [weak self](dialogViewController) in
+            guard let sSelf = self else {
                 return
             }
             
             let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
-            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.removeIndexField.text) ?? 0)) , inComponent: 0, animated: false)
-            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: {
-                [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
-                guard let sSelf = self else{
+            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.removeIndexField.text) ?? 0)), inComponent: 0, animated: false)
+            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
+                guard let sSelf = self else {
                     return
                 }
                 sSelf.removeIndexField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0))"
@@ -134,7 +129,7 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
         }))
     }
     
-    private func convertTextToInt(_ text : String?)->Int?{
+    private func convertTextToInt(_ text: String?) -> Int? {
         let numberFormatter = NumberFormatter()
         numberFormatter.locale = Locale(identifier: "en_US")
         return numberFormatter.number(from: text ?? "")?.intValue
@@ -142,25 +137,25 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func presentViewsBttClick(_ sender: Any) {
         view.endEditing(true)
-        guard let count = convertTextToInt(presentViewsCountField.text) else{
+        guard let count = convertTextToInt(presentViewsCountField.text) else {
             return
         }
         var itemsCount = 0
-        if let queueCount = KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: 0),  let customDialogViewController = KOPresentationQueuesService.shared.itemFromQueue(withIndex: 0, itemIndex: queueCount - 1)?.viewControllerToPresent as? CustomDialogViewController{
+        if let queueCount = KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: 0), let customDialogViewController = KOPresentationQueuesService.shared.itemFromQueue(withIndex: 0, itemIndex: queueCount - 1)?.viewControllerToPresent as? CustomDialogViewController {
            itemsCount = customDialogViewController.index + 1
-        }else if KOPresentationQueuesService.shared.itemPresentedForQueue(withIndex: 0) != nil{
+        } else if KOPresentationQueuesService.shared.itemPresentedForQueue(withIndex: 0) != nil {
             itemsCount += 1
         }
 
-        for i in 0..<count{
-            let customDialog = CustomDialogViewController(index: i + itemsCount)
+        for index in 0..<count {
+            let customDialog = CustomDialogViewController(index: index + itemsCount)
             _ = KOPresentationQueuesService.shared.presentInQueue(customDialog, onViewController: presentingContainerViewController, queueIndex: 0, animated: true, animationCompletion: nil)
         }
     }
     
     @IBAction func removeViewBttClick(_ sender: Any) {
         view.endEditing(true)
-        guard let index = convertTextToInt(removeIndexField.text) else{
+        guard let index = convertTextToInt(removeIndexField.text) else {
             return
         }
         KOPresentationQueuesService.shared.removeFromQueue(withIndex: 0, itemWithIndex: index)
@@ -171,10 +166,10 @@ class PresentationQueueViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-class CustomDialogViewController : KODialogViewController{
-    let index : Int
+final class CustomDialogViewController: KODialogViewController {
+    let index: Int
     
-    init(index : Int) {
+    init(index: Int) {
         self.index = index
         super.init(nibName: nil, bundle: nil)
         initializeTransition()
@@ -186,7 +181,7 @@ class CustomDialogViewController : KODialogViewController{
         initializeTransition()
     }
     
-    private func initializeTransition(){
+    private func initializeTransition() {
         modalPresentationStyle = .overCurrentContext
         modalTransitionStyle = .crossDissolve
     }

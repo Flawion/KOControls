@@ -25,12 +25,12 @@
 
 import UIKit
 
-class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var menuTableView: UITableView!
     
-    private let menuItemReuseIdentifier : String = "menuItemReuseIdentifier"
-    private let menuItemTypes : [MenuItemTypes] = [
+    private let menuItemReuseIdentifier: String = "menuItemReuseIdentifier"
+    private let menuItemTypes: [MenuItemTypes] = [
         .presentationQueueService,
         .textFields,
         .scrollOffsetProgressController,
@@ -45,11 +45,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         menuTableView.tableFooterView = UIView()
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItemTypes.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = menuTableView.dequeueReusableCell(withIdentifier: menuItemReuseIdentifier, for: indexPath)
         cell.textLabel?.text = menuItemTypes[indexPath.row].rawValue
         return cell

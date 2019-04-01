@@ -26,12 +26,12 @@
 import UIKit
 
 /// View that forwards touches to the 'passthroughViews'
-public class KOTouchForwardingView : UIView{
+public class KOTouchForwardingView: UIView {
     
     /// Views that will get touches from this class
-    public var passthroughViews : [UIView] = []
+    public var passthroughViews: [UIView] = []
     
-    public init(passthroughViews : [UIView] = []) {
+    public init(passthroughViews: [UIView] = []) {
         self.passthroughViews = passthroughViews
         super.init(frame: CGRect.zero)
     }
@@ -41,8 +41,8 @@ public class KOTouchForwardingView : UIView{
     }
     
     override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        for passthroughView in passthroughViews{
-            if let viewTouched = passthroughView.hitTest(convert(point, to: passthroughView), with: event){
+        for passthroughView in passthroughViews {
+            if let viewTouched = passthroughView.hitTest(convert(point, to: passthroughView), with: event) {
                 return viewTouched
             }
         }

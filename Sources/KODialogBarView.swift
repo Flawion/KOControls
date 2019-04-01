@@ -26,92 +26,90 @@
 import UIKit
 
 /// Dialog bar
-open class KODialogBarView : UIView{
-    //MARK: - Variables
-    private weak var containerView : UIView!
-    private weak var containerForCustomView : UIView!
+open class KODialogBarView: UIView {
+    // MARK: - Variables
+    private weak var containerView: UIView!
+    private weak var containerForCustomView: UIView!
     
     //public
     
     /// View that can replaces standard bar view
-    public var customView : UIView?{
-        didSet{
+    public var customView: UIView? {
+        didSet {
             refreshCustomView()
         }
     }
     
-    
-    //MARK: Title views
-    private weak var titleContainerView : UIView!
-    private var titleLabelInTitleContainerViewConsts : [NSLayoutConstraint] = []
-    private var titleLabelInContainerViewConsts : [NSLayoutConstraint] = []
+    // MARK: Title views
+    private weak var titleContainerView: UIView!
+    private var titleLabelInTitleContainerViewConsts: [NSLayoutConstraint] = []
+    private var titleLabelInContainerViewConsts: [NSLayoutConstraint] = []
     
     //public
     
     /// 'Text' parameter should be changed to match the dialog
-    public private(set) weak var titleLabel : UILabel!
-    public private(set) var titleContainerEdgesConstraintsInset : KOEdgesConstraintsInsets!
+    public private(set) weak var titleLabel: UILabel!
+    public private(set) var titleContainerEdgesConstraintsInset: KOEdgesConstraintsInsets!
     
     /// Is title view will be always centered between the left and right views
-    public var isTitleLabelCentered : Bool = true{
-        didSet{
+    public var isTitleLabelCentered: Bool = true {
+        didSet {
             refreshTitleLabelConstraints()
         }
     }
     
-    open var defaultTitleInsets : UIEdgeInsets{
+    open var defaultTitleInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
     }
     
-    //MARK: Left view
-    private weak var leftContainerForView : UIView!
-    private weak var leftContainerForViewWidthConst : NSLayoutConstraint!
+    // MARK: Left view
+    private weak var leftContainerForView: UIView!
+    private weak var leftContainerForViewWidthConst: NSLayoutConstraint!
     
     //public
     
     /// View positioned at left of titleLabel
-    public var leftView : UIView?{
-        didSet{
+    public var leftView: UIView? {
+        didSet {
             refreshLeftView()
         }
     }
     
-    public var leftViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
+    public var leftViewEdgesConstraintsInset: KOEdgesConstraintsInsets!
     
     /// Width will be considered, if size of the left view can't be calculated
-    open var defaultLeftViewContainerWidth : CGFloat = 0{
-        didSet{
+    open var defaultLeftViewContainerWidth: CGFloat = 0 {
+        didSet {
             leftContainerForViewWidthConst.constant = defaultLeftViewContainerWidth
             layoutIfNeeded()
         }
     }
     
-    //MARK: Right view
-    private weak var rightContainerForView : UIView!
-    private weak var rightContainerForViewWidthConst : NSLayoutConstraint!
+    // MARK: Right view
+    private weak var rightContainerForView: UIView!
+    private weak var rightContainerForViewWidthConst: NSLayoutConstraint!
     
     //public
     
     /// View positioned at right of titleLabel
-    public var rightView : UIView?{
-        didSet{
+    public var rightView: UIView? {
+        didSet {
             refreshRightView()
         }
     }
     
-    public var rightViewEdgesConstraintsInset : KOEdgesConstraintsInsets!
+    public var rightViewEdgesConstraintsInset: KOEdgesConstraintsInsets!
     
     /// Width will be considered, if size of the right view can't be calculated
-    open var defaultRightViewContainerWidth : CGFloat = 0{
-        didSet{
+    open var defaultRightViewContainerWidth: CGFloat = 0 {
+        didSet {
             rightContainerForViewWidthConst.constant = defaultRightViewContainerWidth
             layoutIfNeeded()
         }
     }
     
-    
-    //MARK: - Functions
-    //MARK: Initialization
+    // MARK: - Functions
+    // MARK: Initialization
     public convenience init() {
         self.init(frame: CGRect.zero)
     }
@@ -126,13 +124,22 @@ open class KODialogBarView : UIView{
         initialize()
     }
     
-    private func initialize(){
+    private func initialize() {
+        // initialize views
         initializeView()
-        initializeContent()
+        let titleVerticalConstraintsInsets = initializeTitleContainerView()
+        initializeTitleLabel()
+        let leftContainerForViewRightConst = initializeLeftContainerForView()
+        let rightContainerForViewLeftConst = initializeRightContainerForView()
+
+        //create titleContainerEdgesConstraintsInset
+        titleContainerEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewRightConst, rightConst: rightContainerForViewLeftConst, rightMultipler: 1.0), vertical: titleVerticalConstraintsInsets)
+        titleContainerEdgesConstraintsInset.insets = defaultTitleInsets
+
         refreshTitleLabelConstraints()
     }
     
-    private func initializeView(){
+    private func initializeView() {
         //create views
         //create container view
         let containerView = UIView()
@@ -166,15 +173,25 @@ open class KODialogBarView : UIView{
             containerForCustomView.bottomAnchor.constraint(equalTo: bottomAnchor)
             ])
     }
-    
-    private func initializeContent(){
-        //create views
-        //create title
+
+    private func initializeTitleContainerView() -> KOVerticalConstraintsInsets {
         let titleContainerView = UIView()
         titleContainerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(titleContainerView)
         self.titleContainerView = titleContainerView
-        
+
+        //create constraints
+        let titleContainerTopConst = titleContainerView.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let titleContainerBottomConst = titleContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        addConstraints([
+            titleContainerTopConst,
+            titleContainerBottomConst
+            ])
+
+        return KOVerticalConstraintsInsets(topConst: titleContainerTopConst, bottomConst: titleContainerBottomConst)
+    }
+
+    private func initializeTitleLabel() {
         let titleLabel = UILabel()
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
@@ -183,83 +200,81 @@ open class KODialogBarView : UIView{
         titleLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 200), for: .horizontal)
         titleContainerView.addSubview(titleLabel)
         self.titleLabel = titleLabel
-        
-        //create left container for view
+    }
+
+    private func initializeLeftContainerForView() -> NSLayoutConstraint {
         let leftContainerForView = UIView()
         leftContainerForView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(leftContainerForView)
         self.leftContainerForView = leftContainerForView
-        
-        //create right container for view
-        let rightContainerForView = UIView()
-        rightContainerForView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(rightContainerForView)
-        self.rightContainerForView = rightContainerForView
-        
+
         //create constraints
-        //for left view
         let leftContainerForViewLeftConst = leftContainerForView.leftAnchor.constraint(equalTo: containerView.leftAnchor)
         let leftContainerForViewTopConst = leftContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor)
         let leftContainerForViewRightConst = leftContainerForView.rightAnchor.constraint(equalTo: titleContainerView.leftAnchor)
         let leftContainerForViewBottomtConst = leftContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        leftViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewLeftConst, rightConst: leftContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: leftContainerForViewTopConst, bottomConst: leftContainerForViewBottomtConst))
-        
-        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: defaultLeftViewContainerWidth)
-        leftContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
-        leftContainerForView.addConstraint(leftContainerForViewWidthConst)
-        self.leftContainerForViewWidthConst = leftContainerForViewWidthConst
-        
-        //for right view
-        let rightContainerForViewLeftConst = rightContainerForView.leftAnchor.constraint(equalTo: titleContainerView.rightAnchor)
-        let rightContainerForViewTopConst = rightContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor)
-        let rightContainerForViewRightConst = rightContainerForView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-        let rightContainerForViewBottomConst = rightContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        rightViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: rightContainerForViewLeftConst, rightConst: rightContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: rightContainerForViewTopConst, bottomConst: rightContainerForViewBottomConst))
-        
-        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: defaultRightViewContainerWidth)
-        rightContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
-        rightContainerForView.addConstraint(rightContainerForViewWidthConst)
-        self.rightContainerForViewWidthConst = rightContainerForViewWidthConst
-        
-        //for title container
-        let titleContainerTopConst = titleContainerView.topAnchor.constraint(equalTo: containerView.topAnchor)
-        let titleContainerBottomConst = titleContainerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        titleContainerEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewRightConst, rightConst: rightContainerForViewLeftConst, rightMultipler: 1.0), vertical: KOVerticalConstraintsInsets(topConst: titleContainerTopConst, bottomConst: titleContainerBottomConst))
-        titleContainerEdgesConstraintsInset.insets = defaultTitleInsets
-        
         addConstraints([
             leftContainerForViewLeftConst,
             leftContainerForViewTopConst,
             leftContainerForViewRightConst,
-            leftContainerForViewBottomtConst,
-            titleContainerTopConst,
-            titleContainerBottomConst,
+            leftContainerForViewBottomtConst
+            ])
+        leftViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewLeftConst, rightConst: leftContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: leftContainerForViewTopConst, bottomConst: leftContainerForViewBottomtConst))
+
+        let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: defaultLeftViewContainerWidth)
+        leftContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
+        leftContainerForView.addConstraint(leftContainerForViewWidthConst)
+        self.leftContainerForViewWidthConst = leftContainerForViewWidthConst
+
+        return leftContainerForViewRightConst
+    }
+
+    private func initializeRightContainerForView() -> NSLayoutConstraint {
+        let rightContainerForView = UIView()
+        rightContainerForView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(rightContainerForView)
+        self.rightContainerForView = rightContainerForView
+
+        //create constraints
+        let rightContainerForViewLeftConst = rightContainerForView.leftAnchor.constraint(equalTo: titleContainerView.rightAnchor)
+        let rightContainerForViewTopConst = rightContainerForView.topAnchor.constraint(equalTo: containerView.topAnchor)
+        let rightContainerForViewRightConst = rightContainerForView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
+        let rightContainerForViewBottomConst = rightContainerForView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        addConstraints([
             rightContainerForViewLeftConst,
             rightContainerForViewTopConst,
             rightContainerForViewRightConst,
             rightContainerForViewBottomConst
             ])
+        rightViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: rightContainerForViewLeftConst, rightConst: rightContainerForViewRightConst), vertical: KOVerticalConstraintsInsets(topConst: rightContainerForViewTopConst, bottomConst: rightContainerForViewBottomConst))
+
+        let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: defaultRightViewContainerWidth)
+        rightContainerForViewWidthConst.priority = UILayoutPriority(rawValue: 900)
+        rightContainerForView.addConstraint(rightContainerForViewWidthConst)
+        self.rightContainerForViewWidthConst = rightContainerForViewWidthConst
+
+        return rightContainerForViewLeftConst
     }
     
-    private func refreshCustomView(){
+    private func refreshCustomView() {
         containerForCustomView.isHidden = customView == nil
         containerForCustomView.fill(withView: customView)
         layoutIfNeeded()
     }
     
-    private func refreshTitleLabelConstraints(){
+    private func refreshTitleLabelConstraints() {
         titleContainerView.removeConstraints(self.titleLabelInTitleContainerViewConsts)
         containerView.removeConstraints(self.titleLabelInContainerViewConsts)
         
-        var titleLabelInTitleContainerViewConsts : [NSLayoutConstraint] = []
-        var titleLabelInContainerViewConsts : [NSLayoutConstraint] = []
+        var titleLabelInTitleContainerViewConsts: [NSLayoutConstraint] = []
+        var titleLabelInContainerViewConsts: [NSLayoutConstraint] = []
         
         titleLabelInTitleContainerViewConsts.append(contentsOf: [
             titleLabel.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor)
             ])
         
-        if isTitleLabelCentered{
+        if isTitleLabelCentered {
             titleLabelInTitleContainerViewConsts.append(contentsOf: [
                 titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: titleContainerView.leftAnchor),
                 titleLabel.rightAnchor.constraint(lessThanOrEqualTo: titleContainerView.rightAnchor)
@@ -268,7 +283,7 @@ open class KODialogBarView : UIView{
             let titleLabelCenterConst = titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
             titleLabelCenterConst.priority = UILayoutPriority(rawValue: 180)
             titleLabelInContainerViewConsts.append(titleLabelCenterConst)
-        }else{
+        } else {
             titleLabelInTitleContainerViewConsts.append(contentsOf: [
                 titleLabel.leftAnchor.constraint(equalTo: titleContainerView.leftAnchor),
                 titleLabel.rightAnchor.constraint(equalTo: titleContainerView.rightAnchor)
@@ -281,13 +296,13 @@ open class KODialogBarView : UIView{
         self.titleLabelInContainerViewConsts = titleLabelInContainerViewConsts
     }
     
-    //MARK: Left/Right views
-    private func refreshLeftView(){
+    // MARK: Left/Right views
+    private func refreshLeftView() {
         leftContainerForView.fill(withView: leftView)
         layoutIfNeeded()
     }
     
-    private func refreshRightView(){
+    private func refreshRightView() {
         rightContainerForView.fill(withView: rightView)
         layoutIfNeeded()
     }

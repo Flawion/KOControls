@@ -25,7 +25,7 @@
 
 import UIKit
 
-extension UIViewController{
+extension UIViewController {
     
     /// Presents viewController with the additional parameters
     ///
@@ -36,12 +36,12 @@ extension UIViewController{
     ///   - animated: if presenting should be animated
     ///   - completion: animation completion handler
     /// - Returns: id of view in the queue
-    public func present(_ viewControllerToPresent : UIViewController, inQueueWithIndex queueIndex: Int?, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil)->String?{
-        if let popoverSettings = popoverSettings{
+    public func present(_ viewControllerToPresent: UIViewController, inQueueWithIndex queueIndex: Int?, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
+        if let popoverSettings = popoverSettings {
             popoverSettings.prepareViewController(viewControllerToPresent, presentOnViewController: self)
         }
         
-        guard let queueIndex = queueIndex else{
+        guard let queueIndex = queueIndex else {
             present(viewControllerToPresent, animated: animated, completion: completion)
             return nil
         }
@@ -58,18 +58,18 @@ extension UIViewController{
     ///   - animated: if presenting should be animated
     ///   - completion: animation completion handler
     /// - Returns: id of view in the queue
-    public func presentDialog(_ dialogViewControllerToPresent : KODialogViewController, viewLoadedAction : KODialogActionModel, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil)->String?{
+    public func presentDialog(_ dialogViewControllerToPresent: KODialogViewController, viewLoadedAction: KODialogActionModel, inQueueWithIndex: Int? = nil, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
         dialogViewControllerToPresent.viewLoadedEvent = {
             dialogViewController in
             dialogViewController.barView.titleLabel.text = viewLoadedAction.title
             viewLoadedAction.action(dialogViewController)
         }
-        if popoverSettings != nil{
+        if popoverSettings != nil {
             //main view must fill all size
             dialogViewControllerToPresent.mainViewVerticalAlignment = .fill
             dialogViewControllerToPresent.mainViewHorizontalAlignment = .fill
         }
-        return present(dialogViewControllerToPresent, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        return present(dialogViewControllerToPresent, inQueueWithIndex: inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
     /// Presents datePickerViewController with the additional parameters
@@ -82,10 +82,10 @@ extension UIViewController{
     ///   - animated: if presenting should be animated
     ///   - completion: animation completion handler
     /// - Returns: id of view in the queue
-    public func presentDatePicker(viewLoadedAction : KODialogActionModel, postInit : ((KODatePickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil)->String?{
+    public func presentDatePicker(viewLoadedAction: KODialogActionModel, postInit: ((KODatePickerViewController) -> Void)? = nil, inQueueWithIndex: Int? = nil, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
         let datePickerViewController = KODatePickerViewController()
         postInit?(datePickerViewController)
-        return presentDialog(datePickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        return presentDialog(datePickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex: inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
     /// Presents optionsPickerViewController with the additional parameters
@@ -99,10 +99,10 @@ extension UIViewController{
     ///   - animated: if presenting should be animated
     ///   - completion: animation completion handler
     /// - Returns: id of view in the queue
-    public func presentOptionsPicker(withOptions options: [[String]], viewLoadedAction : KODialogActionModel, postInit : ((KOOptionsPickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil)->String?{
+    public func presentOptionsPicker(withOptions options: [[String]], viewLoadedAction: KODialogActionModel, postInit: ((KOOptionsPickerViewController) -> Void)? = nil, inQueueWithIndex: Int? = nil, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
         let optionsPickerViewController = KOOptionsPickerViewController(options: options)
         postInit?(optionsPickerViewController)
-        return presentDialog(optionsPickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        return presentDialog(optionsPickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex: inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
     // Presents itemsTablePickerViewController with the additional parameters. Developer have to handle UITableViewDataSource. 'contentHeight' or 'contentWidth' parameters have to be setted depending on alignments of the main view. With default settings 'contentHeight' is needed to properly show the dialog.
@@ -115,10 +115,10 @@ extension UIViewController{
     ///   - animated: if presenting should be animated
     ///   - completion: animation completion handler
     /// - Returns: id of view in the queue
-    public func presentItemsTablePicker(viewLoadedAction : KODialogActionModel, postInit : ((KOItemsTablePickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil)->String?{
+    public func presentItemsTablePicker(viewLoadedAction: KODialogActionModel, postInit: ((KOItemsTablePickerViewController) -> Void)? = nil, inQueueWithIndex: Int? = nil, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
         let itemsTablePickerViewController = KOItemsTablePickerViewController()
         postInit?(itemsTablePickerViewController)
-        return presentDialog(itemsTablePickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        return presentDialog(itemsTablePickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex: inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
     
     // Presents itemsCollectionPickerViewController with the additional parameters. Developer have to handle UICollectionViewDataSource. 'contentHeight' or 'contentWidth' parameters have to be setted depending on alignments of the main view. With default settings 'contentHeight' is needed to properly show the dialog.
@@ -132,9 +132,9 @@ extension UIViewController{
     ///   - animated: if presenting should be animated
     ///   - completion: animation completion handler
     /// - Returns: id of view in the queue
-    public func presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewLayout, viewLoadedAction : KODialogActionModel, postInit : ((KOItemsCollectionPickerViewController)->Void)? = nil, inQueueWithIndex : Int? = nil, popoverSettings : KOPopoverSettings? = nil, animated : Bool = true, completion : (()->Void)? = nil)->String?{
+    public func presentItemsCollectionPicker(itemsCollectionLayout: UICollectionViewLayout, viewLoadedAction: KODialogActionModel, postInit: ((KOItemsCollectionPickerViewController) -> Void)? = nil, inQueueWithIndex: Int? = nil, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
         let itemsCollectionPickerViewController = KOItemsCollectionPickerViewController(itemsCollectionLayout: itemsCollectionLayout)
         postInit?(itemsCollectionPickerViewController)
-        return presentDialog(itemsCollectionPickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex : inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
+        return presentDialog(itemsCollectionPickerViewController, viewLoadedAction: viewLoadedAction, inQueueWithIndex: inQueueWithIndex, popoverSettings: popoverSettings, animated: animated, completion: completion)
     }
 }

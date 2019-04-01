@@ -26,13 +26,13 @@
 import UIKit
 import KOControls
 
-class UserNameErrorInfoView : UIView, KOTextFieldErrorInfoInterface{
+final class UserNameErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
     func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         return nil
     }
 }
 
-class TextFieldsViewController: UIViewController {
+final class TextFieldsViewController: UIViewController {
     @IBOutlet weak var emailField: KOTextField!
     @IBOutlet weak var passwordField: KOTextField!
     @IBOutlet weak var userNameField: KOTextField!
@@ -43,29 +43,28 @@ class TextFieldsViewController: UIViewController {
         initialize()
     }
     
-    private func initialize(){
+    private func initialize() {
         navigationItem.title = "KOTextField"
         initializeEmailField()
         initializePasswordField()
         initializeUserNameField()
     }
 
-    private func initializeEmailField(){
+    private func initializeEmailField() {
         //- email field
         emailField.borderSettings = AppSettings.fieldBorder
         emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
         emailField.add(validator: KORegexTextValidator.mailValidator)
     }
     
-    private func initializePasswordField(){
+    private func initializePasswordField() {
         //- password field
         passwordField.borderSettings = AppSettings.fieldBorder
         passwordField.errorInfoView.descriptionLabel.text = "Password should contains 8 to 20 chars"
         passwordField.validateMode = .validateOnTextChanged
         
         //simple function validation
-        passwordField.add(validator: KOFunctionTextValidator(function: {
-            (password) -> Bool in
+        passwordField.add(validator: KOFunctionTextValidator(function: { password -> Bool in
             return password.count >= 8 && password.count <= 20
         }))
         
@@ -73,7 +72,7 @@ class TextFieldsViewController: UIViewController {
         //passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
         
         //changes animations
-        passwordField.errorInfoHideAnimation = KOAnimationGroup(animations:[
+        passwordField.errorInfoHideAnimation = KOAnimationGroup(animations: [
             KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
             KOFadeOutAnimation()
             ])
@@ -84,7 +83,7 @@ class TextFieldsViewController: UIViewController {
         
         //adds additional icon
         passwordField.errorInfoView.imageWidthConst.constant = 25
-        passwordField.errorInfoView.imageView.image = UIImage(named:"ico_account")
+        passwordField.errorInfoView.imageView.image = UIImage(named: "ico_account")
         passwordField.errorInfoView.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         passwordField.errorInfoView.imageView.contentMode = .scaleAspectFit
         
@@ -108,7 +107,7 @@ class TextFieldsViewController: UIViewController {
         passwordField.errorWidth = 100
     }
     
-    private func initializeUserNameField(){
+    private func initializeUserNameField() {
         //- user name field
         userNameField.borderSettings = AppSettings.fieldBorder
         userNameField.validateMode = .manual

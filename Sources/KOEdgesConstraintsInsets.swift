@@ -26,33 +26,33 @@
 import UIKit
 
 /// Helps to manage horizonstal constraints
-public class KOHorizontalConstraintsInsets{
-    private weak var leftConst : NSLayoutConstraint!
-    private weak var rightConst : NSLayoutConstraint!
-    private let leftMultipler : CGFloat
-    private let rightMultipler : CGFloat
+public class KOHorizontalConstraintsInsets {
+    private weak var leftConst: NSLayoutConstraint!
+    private weak var rightConst: NSLayoutConstraint!
+    private let leftMultipler: CGFloat
+    private let rightMultipler: CGFloat
     
     /// Left constraint's constant
-    public var left : CGFloat{
-        get{
+    public var left: CGFloat {
+        get {
             return leftMultipler * leftConst.constant
         }
-        set{
+        set {
             leftConst.constant = newValue * leftMultipler
         }
     }
     
     /// Right constraint's constant
-    public var right : CGFloat{
-        get{
+    public var right: CGFloat {
+        get {
             return rightConst.constant * rightMultipler
         }
-        set{
+        set {
             rightConst.constant = newValue * rightMultipler
         }
     }
     
-    init(leftConst : NSLayoutConstraint, rightConst : NSLayoutConstraint, leftMultipler : CGFloat = 1.0, rightMultipler : CGFloat = -1.0){
+    init(leftConst: NSLayoutConstraint, rightConst: NSLayoutConstraint, leftMultipler: CGFloat = 1.0, rightMultipler: CGFloat = -1.0) {
         self.leftConst = leftConst
         self.rightConst = rightConst
         
@@ -62,33 +62,33 @@ public class KOHorizontalConstraintsInsets{
 }
 
 /// Helps to manage vertical constraints
-public class KOVerticalConstraintsInsets{
-    private weak var topConst : NSLayoutConstraint!
-    private weak var bottomConst : NSLayoutConstraint!
-    private let topMultipler : CGFloat
-    private let bottomMultipler : CGFloat
+public class KOVerticalConstraintsInsets {
+    private weak var topConst: NSLayoutConstraint!
+    private weak var bottomConst: NSLayoutConstraint!
+    private let topMultipler: CGFloat
+    private let bottomMultipler: CGFloat
     
     /// Top constraint's constant
-    public var top : CGFloat{
-        get{
+    public var top: CGFloat {
+        get {
             return topConst.constant * topMultipler
         }
-        set{
+        set {
             topConst.constant = newValue * topMultipler
         }
     }
     
     /// Bottom constraint's constant
-    public var bottom : CGFloat{
-        get{
+    public var bottom: CGFloat {
+        get {
             return bottomConst.constant * bottomMultipler
         }
-        set{
+        set {
             bottomConst.constant = newValue * bottomMultipler
         }
     }
     
-    init(topConst : NSLayoutConstraint, bottomConst : NSLayoutConstraint, topMultipler : CGFloat = 1.0, bottomMultipler : CGFloat = -1.0){
+    init(topConst: NSLayoutConstraint, bottomConst: NSLayoutConstraint, topMultipler: CGFloat = 1.0, bottomMultipler: CGFloat = -1.0) {
         self.topConst = topConst
         self.bottomConst = bottomConst
         
@@ -97,56 +97,56 @@ public class KOVerticalConstraintsInsets{
     }
 }
 
-public class KOEdgesConstraintsInsets{
-    private var horizontal : KOHorizontalConstraintsInsets!
-    private var vertical : KOVerticalConstraintsInsets!
+public class KOEdgesConstraintsInsets {
+    private var horizontal: KOHorizontalConstraintsInsets!
+    private var vertical: KOVerticalConstraintsInsets!
     
     /// Left constraint's constant
-    public var left : CGFloat{
-        get{
+    public var left: CGFloat {
+        get {
             return horizontal.left
         }
-        set{
+        set {
             horizontal.left = newValue
         }
     }
     
     /// Top constraint's constant
-    public var top : CGFloat{
-        get{
+    public var top: CGFloat {
+        get {
             return vertical.top
         }
-        set{
+        set {
             vertical.top = newValue
         }
     }
     
     /// Right constraint's constant
-    public var right : CGFloat{
-        get{
+    public var right: CGFloat {
+        get {
             return horizontal.right
         }
-        set{
+        set {
             horizontal.right = newValue
         }
     }
     
     /// Bottom constraint's constant
-    public var bottom : CGFloat{
-        get{
+    public var bottom: CGFloat {
+        get {
             return vertical.bottom
         }
-        set{
+        set {
             vertical.bottom = newValue
         }
     }
     
     /// Changes all constants of the constraints to match the insets
-    public var insets : UIEdgeInsets {
-        get{
+    public var insets: UIEdgeInsets {
+        get {
             return UIEdgeInsets(top: vertical.top, left: horizontal.left, bottom: vertical.bottom, right: horizontal.right)
         }
-        set{
+        set {
             horizontal.left = newValue.left
             horizontal.right = newValue.right
             vertical.top = newValue.top
@@ -154,7 +154,7 @@ public class KOEdgesConstraintsInsets{
         }
     }
     
-    public init(horizontal : KOHorizontalConstraintsInsets, vertical : KOVerticalConstraintsInsets){
+    public init(horizontal: KOHorizontalConstraintsInsets, vertical: KOVerticalConstraintsInsets) {
         self.horizontal = horizontal
         self.vertical = vertical
     }

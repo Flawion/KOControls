@@ -25,22 +25,22 @@
 
 import UIKit
 
-//MARK: Internal extensions
-extension UIView{
-    internal func fill(withView filingView: UIView?){
-        guard subviews.first != filingView else{
+// MARK: Internal extensions
+extension UIView {
+    internal func fill(withView filingView: UIView?) {
+        guard subviews.first != filingView else {
             //nothing changed
             return
         }
         
         //delete old ones
         removeConstraints(constraints)
-        for subview in subviews{
+        for subview in subviews {
             subview.removeFromSuperview()
         }
         
         //add new one if need
-        if let filingView = filingView{
+        if let filingView = filingView {
             filingView.translatesAutoresizingMaskIntoConstraints = false
             addSubview(filingView)
             addConstraints([

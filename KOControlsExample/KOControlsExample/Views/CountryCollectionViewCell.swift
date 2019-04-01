@@ -26,23 +26,23 @@
 import UIKit
 import KOControls
 
-class CountryCollectionViewCell: UICollectionViewCell {
+final class CountryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    override var isSelected: Bool{
-        get{
+    override var isSelected: Bool {
+        get {
             return super.isSelected
         }
-        set{
+        set {
             super.isSelected = newValue
             layer.borderWidth = newValue ? 4 : 0
         }
     }
     
-    weak var countryModel : CountryModel?{
-        didSet{
-            guard let countryModel = self.countryModel else{
+    weak var countryModel: CountryModel? {
+        didSet {
+            guard let countryModel = self.countryModel else {
                 return
             }
             titleLabel.text = countryModel.name
