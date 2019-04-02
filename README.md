@@ -207,10 +207,10 @@ passwordField.errorInfoView.markerColor = UIColor.white
   <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/passwordfield3.png" width="500">
 </p>
 
-You can replace ```errorInfoView``` completely by ```customErrorInfoView```, but new view need to implement  ```KOTextFieldErrorInfoInterface```.
+You can replace ```errorInfoView``` completely by ```customErrorInfoView```, but new view need to implement  ```KOTextFieldErrorInfoProtocol```.
 
 ```swift
-class UserNameErrorInfoView : UIView, KOTextFieldErrorInfoInterface{
+class UserNameErrorInfoView : UIView, KOTextFieldErrorInfoProtocol{
     func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         return nil
     }
