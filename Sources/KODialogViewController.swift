@@ -534,21 +534,16 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         deleteBarConstraints()
         
         //get main view anchors
-        var mLeftAnchor: NSLayoutXAxisAnchor!
-        var mRightAnchor: NSLayoutXAxisAnchor!
-        var mTopAnchor: NSLayoutYAxisAnchor!
-        var mBottomAnchor: NSLayoutYAxisAnchor!
+        var mLeftAnchor: NSLayoutXAxisAnchor = pMainView.leftAnchor
+        var mRightAnchor: NSLayoutXAxisAnchor = pMainView.rightAnchor
+        var mTopAnchor: NSLayoutYAxisAnchor = pMainView.topAnchor
+        var mBottomAnchor: NSLayoutYAxisAnchor = pMainView.bottomAnchor
 
         if #available(iOS 11.0, *) {
             mLeftAnchor = pMainView.safeAreaLayoutGuide.leftAnchor
             mRightAnchor = pMainView.safeAreaLayoutGuide.rightAnchor
             mTopAnchor = pMainView.safeAreaLayoutGuide.topAnchor
             mBottomAnchor = pMainView.safeAreaLayoutGuide.bottomAnchor
-        } else {
-            mLeftAnchor = pMainView.leftAnchor
-            mRightAnchor = pMainView.rightAnchor
-            mTopAnchor = pMainView.topAnchor
-            mBottomAnchor = pMainView.bottomAnchor
         }
         
         //create new one

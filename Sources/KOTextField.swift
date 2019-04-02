@@ -78,12 +78,12 @@ public struct KOTextFieldBorderSettings {
 // MARK: - Validators
 
 /// Developer can implement its own validator by implementing this protocol to the class
-public protocol KOTextValidatorInterface: AnyObject {
+public protocol KOTextValidatorProtocol: AnyObject {
     func validate(text: String) -> Bool
 }
 
 /// Regexp validator
-public class KORegexTextValidator: KOTextValidatorInterface {
+public class KORegexTextValidator: KOTextValidatorProtocol {
     private let regex: NSPredicate
     
     /// Simple, easy to use mailValidator: field.add(validator: KORegexTextValidator.mailValidator)
@@ -101,7 +101,7 @@ public class KORegexTextValidator: KOTextValidatorInterface {
 }
 
 /// Simple way to create your own validator by passing a function
-public class KOFunctionTextValidator: KOTextValidatorInterface {
+public class KOFunctionTextValidator: KOTextValidatorProtocol {
     private let function: (String) -> Bool
     
     public init(function: @escaping (String) -> Bool) {
@@ -140,7 +140,7 @@ open class KOTextField: UITextField {
         }
     }
     
-    public private(set) var validators: [KOTextValidatorInterface] = []
+    public private(set) var validators: [KOTextValidatorProtocol] = []
     public var validateMode: KOTextFieldValidateModes = .validateOnLostFocus
     
     /// Flag that indicates whether is error or isn't
@@ -220,7 +220,7 @@ open class KOTextField: UITextField {
     }
 
     /// View that can replaces default 'errorInfoView'
-    public var customErrorInfoView: (UIView & KOTextFieldErrorInfoInterface)? {
+    public var customErrorInfoView: (UIView & KOTextFieldErrorInfoProtocol)? {
         didSet {
             refreshCustomErrorInfoView()
         }
@@ -600,7 +600,7 @@ open class KOTextField: UITextField {
         }
     }
     
-    private func index(validator: KOTextValidatorInterface) -> Int? {
+    private func index(validator: KOTextValidatorProtocol) -> Int? {
         return validators.index(where: {$0 === validator})
     }
     
@@ -609,7 +609,7 @@ open class KOTextField: UITextField {
     /// Adds the new validator
     ///
     /// - Parameter validator: validator to add
-    open func add(validator: KOTextValidatorInterface) {
+    open func add(validator: KOTextValidatorProtocol) {
         guard index(validator: validator) == nil else {
             return
         }
@@ -619,7 +619,7 @@ open class KOTextField: UITextField {
     /// Removes the validator
     ///
     /// - Parameter validator: validator to remove
-    open func remove(validator: KOTextValidatorInterface) {
+    open func remove(validator: KOTextValidatorProtocol) {
         guard let index = index(validator: validator) else {
             return
         }

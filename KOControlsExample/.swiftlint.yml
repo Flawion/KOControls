@@ -10,6 +10,10 @@ included:
 excluded:
  - Pods
 
+type_name:
+ excluded:
+  - KOVisualEffectDimmingPresentationController
+
 identifier_name: 
  excluded:
   - id

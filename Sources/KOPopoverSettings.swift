@@ -38,7 +38,7 @@ open class KOPopoverSettings: NSObject, UIPopoverPresentationControllerDelegate 
     //others
     
     /// Preferred content size can be calculated automatically if this variable isn't nil. But view size must be calculable.
-    public var calculatePreferredContentSizeByLayoutSizeFitting: CGSize? = UIView.layoutFittingCompressedSize
+    public var preferredContentSizeByLayoutSizeFitting: CGSize? = UIView.layoutFittingCompressedSize
     
     /// Preferred content size of view
     public var preferredContentSize: CGSize?
@@ -69,9 +69,9 @@ open class KOPopoverSettings: NSObject, UIPopoverPresentationControllerDelegate 
         //calculate preferred content size
         if let overridePreferredContentSize = preferredContentSize {
             viewController.preferredContentSize = overridePreferredContentSize
-        } else if let calculatePreferredContentSizeByLayoutSizeFitting = calculatePreferredContentSizeByLayoutSizeFitting {
+        } else if let preferredContentSizeByLayoutSizeFitting = preferredContentSizeByLayoutSizeFitting {
             viewController.loadViewIfNeeded()
-            let size = viewController.view.systemLayoutSizeFitting(calculatePreferredContentSizeByLayoutSizeFitting)
+            let size = viewController.view.systemLayoutSizeFitting(preferredContentSizeByLayoutSizeFitting)
             viewController.preferredContentSize = size
         }
         

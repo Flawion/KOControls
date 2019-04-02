@@ -26,7 +26,7 @@
 import UIKit
 import KOControls
 
-final class UserNameErrorInfoView: UIView, KOTextFieldErrorInfoInterface {
+final class UserNameErrorInfoView: UIView, KOTextFieldErrorInfoProtocol {
     func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         return nil
     }
