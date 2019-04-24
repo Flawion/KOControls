@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'KOControls'
-  s.version = '1.0.3'
+  s.version = '1.1'
 
   s.summary = 'Package of useful controls: pickers, presenting queue, textfield thats supports showing the errors etc.'
   s.homepage = 'https://github.com/Flawion/KOControls'
@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
   s.resources = 'Sources/*.{png,jpeg,jpg,storyboard,xib,xcassets}'
 
   s.requires_arc = true
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 end
