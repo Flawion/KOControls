@@ -291,51 +291,25 @@ open class KOTextField: UITextField {
         let errorView = UIView()
         errorView.isHidden = true
         errorView.backgroundColor = UIColor.clear
-        errorView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(errorView)
+        _ = addAutoLayoutSubview(errorView, toAddConstraints: [.top, .right, .bottom])
         self.errorView = errorView
+
+        let errorWidthConst = errorView.widthAnchor.constraint(equalToConstant: 0)
+        addConstraint(errorWidthConst)
+        self.errorWidthConst = errorWidthConst
         
         //container for custom error view
         let containerForCustomErrorView = UIView()
         containerForCustomErrorView.isHidden = true
         containerForCustomErrorView.backgroundColor = UIColor.clear
-        containerForCustomErrorView.translatesAutoresizingMaskIntoConstraints = false
-        errorView.addSubview(containerForCustomErrorView)
+        _ = errorView.addAutoLayoutSubview(containerForCustomErrorView)
         self.containerForCustomErrorView = containerForCustomErrorView
         
         //error icon view
         let errorIconView = UIImageView(image: UIImage(named: "field_error", in: Bundle(for: type(of: self)), compatibleWith: nil))
         errorIconView.contentMode = .center
-        errorIconView.translatesAutoresizingMaskIntoConstraints = false
-        errorView.addSubview(errorIconView)
+        _ = errorView.addAutoLayoutSubview(errorIconView)
         self.errorIconView = errorIconView
-        
-        //create constraints
-        //for error view
-        let errorWidthConst = errorView.widthAnchor.constraint(equalToConstant: 0)
-        addConstraints([
-            errorView.topAnchor.constraint(equalTo: topAnchor),
-            errorView.rightAnchor.constraint(equalTo: rightAnchor),
-            errorView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            errorWidthConst
-            ])
-        self.errorWidthConst = errorWidthConst
-        
-        //for container
-        errorView.addConstraints([
-            containerForCustomErrorView.leftAnchor.constraint(equalTo: errorView.leftAnchor),
-            containerForCustomErrorView.topAnchor.constraint(equalTo: errorView.topAnchor),
-            containerForCustomErrorView.rightAnchor.constraint(equalTo: errorView.rightAnchor),
-            containerForCustomErrorView.bottomAnchor.constraint(equalTo: errorView.bottomAnchor)
-            ])
-        
-        //for error icon view
-        errorView.addConstraints([
-            errorIconView.leftAnchor.constraint(equalTo: errorView.leftAnchor),
-            errorIconView.topAnchor.constraint(equalTo: errorView.topAnchor),
-            errorIconView.rightAnchor.constraint(equalTo: errorView.rightAnchor),
-            errorIconView.bottomAnchor.constraint(equalTo: errorView.bottomAnchor)
-            ])
     }
     
     private func initializeErrorInfoView() {
@@ -344,37 +318,18 @@ open class KOTextField: UITextField {
         containerForErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
         
         let containerForCustomErrorInfoView = UIView()
-        containerForCustomErrorInfoView.translatesAutoresizingMaskIntoConstraints = false
         containerForCustomErrorInfoView.isHidden = true
+        _ = containerForErrorInfoView.addAutoLayoutSubview(containerForCustomErrorInfoView)
         self.containerForCustomErrorInfoView = containerForCustomErrorInfoView
         
         let errorInfoView = KOTextFieldErrorInfoView()
-        errorInfoView.translatesAutoresizingMaskIntoConstraints = false
+        _ = containerForErrorInfoView.addAutoLayoutSubview(errorInfoView)
         self.errorInfoView = errorInfoView
         
         //animations
         errorInfoAnimator = KOAnimator(view: containerForErrorInfoView)
         errorInfoShowAnimation = KOFadeInAnimation(fromValue: 0)
         errorInfoHideAnimation = KOFadeOutAnimation()
-        
-        //create constraints
-        //for containerForCustomErrorInfoView
-        containerForErrorInfoView.addSubview(containerForCustomErrorInfoView)
-        containerForErrorInfoView.addConstraints([
-            containerForCustomErrorInfoView.leftAnchor.constraint(equalTo: containerForErrorInfoView.leftAnchor),
-            containerForCustomErrorInfoView.rightAnchor.constraint(equalTo: containerForErrorInfoView.rightAnchor),
-            containerForCustomErrorInfoView.topAnchor.constraint(equalTo: containerForErrorInfoView.topAnchor),
-            containerForCustomErrorInfoView.bottomAnchor.constraint(equalTo: containerForErrorInfoView.bottomAnchor)
-            ])
-        
-        //for errorInfoView
-        containerForErrorInfoView.addSubview(errorInfoView)
-        containerForErrorInfoView.addConstraints([
-            errorInfoView.leftAnchor.constraint(equalTo: containerForErrorInfoView.leftAnchor),
-            errorInfoView.rightAnchor.constraint(equalTo: containerForErrorInfoView.rightAnchor),
-            errorInfoView.topAnchor.constraint(equalTo: containerForErrorInfoView.topAnchor),
-            errorInfoView.bottomAnchor.constraint(equalTo: containerForErrorInfoView.bottomAnchor)
-            ])
     }
     
     override open func didMoveToSuperview() {
@@ -470,14 +425,13 @@ open class KOTextField: UITextField {
         if manageErrorInfoMarkerVisibility {
             errorInfoView.isMarkerViewHidden = false
         }
-        showInView.addSubview(containerForErrorInfoView)
-        containerForErrorInfoConsts = [
-            containerForErrorInfoView.rightAnchor.constraint(equalTo: rightAnchor, constant: -errorInfoInsets.right),
-            containerForErrorInfoView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: errorInfoInsets.left),
-            containerForErrorInfoView.topAnchor.constraint(equalTo: bottomAnchor, constant: (errorInfoInsets.top - errorInfoInsets.bottom)),
-            errorInfoView.markerCenterXEqualTo(errorView.centerXAnchor)!
-        ]
-        showInView.addConstraints(containerForErrorInfoConsts)
+
+        var containerForErrorInfoConsts = showInView.addAutoLayoutSubview(containerForErrorInfoView, overrideAnchors: KOOverrideAnchors(left: leftAnchor, top: bottomAnchor, right: rightAnchor), toAddConstraints: [.left, .top, .right], insets: UIEdgeInsets(top: errorInfoInsets.top - errorInfoInsets.bottom, left: errorInfoInsets.left, bottom: 0, right: errorInfoInsets.right), operations: [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater]).list
+        let markerCenterXEqualTo = errorInfoView.markerCenterXEqualTo(errorView.centerXAnchor)!
+        showInView.addConstraint(markerCenterXEqualTo)
+        containerForErrorInfoConsts.append(markerCenterXEqualTo)
+        self.containerForErrorInfoConsts = containerForErrorInfoConsts
+
         errorInfoShowedInView = showInView
         addCustomErrorInfoMarkerCenterXConst()
         isShowedErrorInfo = true
@@ -601,7 +555,7 @@ open class KOTextField: UITextField {
     }
     
     private func index(validator: KOTextValidatorProtocol) -> Int? {
-        return validators.index(where: {$0 === validator})
+        return validators.firstIndex(where: {$0 === validator})
     }
     
     // MARK: Open functions

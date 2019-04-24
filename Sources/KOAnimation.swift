@@ -36,98 +36,6 @@ public struct KOAnimationSpringSettings {
     }
 }
 
-/// Manages animation
-open class KOAnimator {
-    private weak var view: UIView?
-    
-    /// Current setted animation
-    public private(set) var currentViewAnimation: KOAnimation?
-    
-    /// Property animator for current setted animation
-    public private(set) var currentPropertyAnimator: UIViewPropertyAnimator?
-    
-    /// Runs before animation.prepareViewForAnimation and playViewAnimation
-    public var prepareViewForAnimationEvent: ((_ : UIView) -> Void)?
-    
-    public var isRunning: Bool {
-        return currentPropertyAnimator?.isRunning ?? false
-    }
-    
-    public init(view: UIView) {
-        self.view = view
-    }
-
-    /// Stops current animation and recreates 'UIViewPropertyAnimator' for the new animation
-    ///
-    /// - Parameters:
-    ///   - animation: animation to set
-    ///   - completionHandler: animation completion handler
-    open func setViewAnimation(_ animation: KOAnimation, completionHandler: ((UIViewAnimatingPosition) -> Void)?) {
-        stopViewAnimation()
-        
-        if let view = view {
-            prepareViewForAnimationEvent?(view)
-            animation.prepareViewForAnimation(view)
-        }
-        currentViewAnimation = animation
-        currentPropertyAnimator = UIViewPropertyAnimator(duration: animation.duration, timingParameters: animation.timingParameters)
-        currentPropertyAnimator?.addAnimations { [weak self] in
-            guard let view = self?.view else {
-                return
-            }
-            animation.animation(view: view)
-        }
-        if let completionHandler = completionHandler {
-            currentPropertyAnimator?.addCompletion(completionHandler)
-        }
-    }
-    
-    /// Sets the new animation and play it
-    ///
-    /// - Parameters:
-    ///   - animation: animation to set
-    ///   - completionHandler: animation completion handler
-    open func runViewAnimation(_ animation: KOAnimation, completionHandler: ((UIViewAnimatingPosition) -> Void)?) {
-        setViewAnimation(animation, completionHandler: completionHandler)
-        playViewAnimation()
-    }
-    
-    /// Runs animation at 'UIViewControllerTransitionCoordinator', this function dosen't create 'UIViewPropertyAnimator' for animation. So you can't control animation by this property.
-    ///
-    /// - Parameters:
-    ///   - animation: animation to run at coordinator
-    ///   - coordinator: coordinator of presented view
-    ///   - completionHandler: animation completion handler
-    open func runAnimationAlongsideTransition(_ animation: KOAnimation, coordinator: UIViewControllerTransitionCoordinator?, completionHandler: ((UIViewControllerTransitionCoordinatorContext?) -> Void)?) {
-        guard let view = view else {
-            return
-        }
-        animation.prepareViewForAnimation(view)
-        animation.animateAlongsideTransition(view: view, coordinator: coordinator, completionHandler: completionHandler)
-    }
-    
-    public func pauseViewAnimation() {
-        guard let currentPropertyAnimator = currentPropertyAnimator else {
-            return
-        }
-        currentPropertyAnimator.pauseAnimation()
-    }
-    
-    public func stopViewAnimation() {
-        guard let currentPropertyAnimator = currentPropertyAnimator, currentPropertyAnimator.state != .stopped else {
-            return
-        }
-        currentPropertyAnimator.stopAnimation(false)
-    }
-    
-    public func playViewAnimation() {
-        guard let currentViewAnimation = currentViewAnimation, let currentPropertyAnimator = currentPropertyAnimator else {
-            return
-        }
-        currentPropertyAnimator.startAnimation(afterDelay: currentViewAnimation.delay)
-    }
-}
-
 /// Base class for animation, it should be used only for inheritance
 open class KOAnimation {
     // MARK: Variables
@@ -163,13 +71,13 @@ open class KOAnimation {
             UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
                 [weak self] in
                 self?.animation(view: view)
-            }, completion: completionHandler)
+                }, completion: completionHandler)
             return
         }
         
         UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: springSettings.damping, initialSpringVelocity: springSettings.velocity, options: options, animations: { [weak self] in
             self?.animation(view: view)
-        }, completion: completionHandler)
+            }, completion: completionHandler)
     }
     
     /// Runs animation at 'UIViewControllerTransitionCoordinator'
@@ -188,7 +96,7 @@ open class KOAnimation {
         
         coordinator.animate(alongsideTransition: { [weak self](_) in
             self?.animation(view: view)
-        }, completion: completionHandler)
+            }, completion: completionHandler)
     }
     
     // MARK: Functions to override

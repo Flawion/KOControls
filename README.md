@@ -23,6 +23,11 @@ Right now it contains only the few features but it will be getting the new stuff
 * Xcode 10.0+
 * Swift 4.2+
 
+## Versions
+
+* Swift 4.2  ~> 1.0
+* Swift 5.0  ~> 1.1
+
 ## Installation
 
 KOControls doesn't contains any external dependencies. If you want to stay updated install KOControls by Cocoapods.
@@ -31,8 +36,9 @@ KOControls doesn't contains any external dependencies. If you want to stay updat
 
 Add below entry to the target in Podfile
 ```
-pod 'KOControls', '~> 1.0'
+pod 'KOControls', '~> 1.1'
 ```
+
 For example
 
 ```
@@ -41,7 +47,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'Target Name' do
-pod 'KOControls', '~> 1.0'
+pod 'KOControls', '~> 1.1'
 end
 ```
 Install the pods by running

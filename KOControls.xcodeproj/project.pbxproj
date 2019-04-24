@@ -12,7 +12,8 @@
 		053ED24A21162C2E0016ABC4 /* KOControls.h in Headers */ = {isa = PBXBuildFile; fileRef = 053ED24821162C2E0016ABC4 /* KOControls.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		053ED27B211630EE0016ABC4 /* KOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED27A211630EE0016ABC4 /* KOTextField.swift */; };
 		053ED28C211638950016ABC4 /* KOTextFieldErrorInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOTextFieldErrorInfoView.swift */; };
-		0566A6AA213E75D900E87518 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566A6A9213E75D900E87518 /* UIView+Extensions.swift */; };
+		0546FCA622704A5000EE7236 /* KOAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0546FCA522704A5000EE7236 /* KOAnimator.swift */; };
+		0566A6AA213E75D900E87518 /* KOConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566A6A9213E75D900E87518 /* KOConstraints.swift */; };
 		058529592151161100FA36DE /* KOPopoverSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058529582151161100FA36DE /* KOPopoverSettings.swift */; };
 		0585295B2151164000FA36DE /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585295A2151164000FA36DE /* UIViewController+Extensions.swift */; };
 		05B4DF8A21674E05002556B9 /* KOAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B4DF8921674E05002556B9 /* KOAnimation.swift */; };
@@ -34,7 +35,8 @@
 		053ED24921162C2E0016ABC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		053ED27A211630EE0016ABC4 /* KOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextField.swift; sourceTree = "<group>"; };
 		053ED28B211638950016ABC4 /* KOTextFieldErrorInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextFieldErrorInfoView.swift; sourceTree = "<group>"; };
-		0566A6A9213E75D900E87518 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		0546FCA522704A5000EE7236 /* KOAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimator.swift; sourceTree = "<group>"; };
+		0566A6A9213E75D900E87518 /* KOConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOConstraints.swift; sourceTree = "<group>"; };
 		058529582151161100FA36DE /* KOPopoverSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPopoverSettings.swift; sourceTree = "<group>"; };
 		0585295A2151164000FA36DE /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		05B4DF8921674E05002556B9 /* KOAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimation.swift; sourceTree = "<group>"; };
@@ -79,6 +81,8 @@
 			isa = PBXGroup;
 			children = (
 				052099E3214FEC8600603A5D /* Assets.xcassets */,
+				0546FCA522704A5000EE7236 /* KOAnimator.swift */,
+				05B4DF8921674E05002556B9 /* KOAnimation.swift */,
 				05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */,
 				053ED27A211630EE0016ABC4 /* KOTextField.swift */,
 				053ED28B211638950016ABC4 /* KOTextFieldErrorInfoView.swift */,
@@ -88,13 +92,12 @@
 				058529582151161100FA36DE /* KOPopoverSettings.swift */,
 				05E464CA216E28A900AE504D /* KOTouchForwardingView.swift */,
 				05E40301214A8E58004AB4A4 /* KOTransition.swift */,
-				05B4DF8921674E05002556B9 /* KOAnimation.swift */,
 				05E40303214A9156004AB4A4 /* KODialogBarView.swift */,
 				05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */,
 				05FD48E2214122390092A3A3 /* KOPickerViewController.swift */,
 				053ED24821162C2E0016ABC4 /* KOControls.h */,
 				053ED24921162C2E0016ABC4 /* Info.plist */,
-				0566A6A9213E75D900E87518 /* UIView+Extensions.swift */,
+				0566A6A9213E75D900E87518 /* KOConstraints.swift */,
 				0585295A2151164000FA36DE /* UIViewController+Extensions.swift */,
 			);
 			path = Sources;
@@ -143,7 +146,7 @@
 				TargetAttributes = {
 					053ED24421162C2E0016ABC4 = {
 						CreatedOnToolsVersion = 9.4.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -153,6 +156,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 053ED23B21162C2E0016ABC4;
 			productRefGroup = 053ED24621162C2E0016ABC4 /* Products */;
@@ -180,7 +184,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0566A6AA213E75D900E87518 /* UIView+Extensions.swift in Sources */,
+				0546FCA622704A5000EE7236 /* KOAnimator.swift in Sources */,
+				0566A6AA213E75D900E87518 /* KOConstraints.swift in Sources */,
 				05E464CB216E28A900AE504D /* KOTouchForwardingView.swift in Sources */,
 				0585295B2151164000FA36DE /* UIViewController+Extensions.swift in Sources */,
 				05251CBD213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift in Sources */,
@@ -345,7 +350,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -373,7 +378,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

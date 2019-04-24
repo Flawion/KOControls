@@ -131,7 +131,6 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoProtocol {
     // MARK: Initialization
     private func initialize() {
         initializeViews()
-        createConstraints()
         initializeAppearance()
     }
 
@@ -146,67 +145,25 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoProtocol {
 
     private func initializeViews() {
         initializeContent()
-        initializeImageView()
-        initializeDescriptionLabel()
-        initializeMarkerLineView()
         initializeMarkerView()
+        initializeMarkerLineView()
+        let descriptionConstraints = initializeDescriptionLabel()
+        let imageConstraints = initializeImageView()
+
+        descriptionLabelEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageConstraints.right!, rightConst: descriptionConstraints.right!, leftMultipler: -1.0), vertical: KOVerticalConstraintsInsets(topConst: descriptionConstraints.top!, bottomConst: descriptionConstraints.bottom!))
     }
 
     private func initializeContent() {
         let contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(contentView)
+        _ = addAutoLayoutSubview(contentView, toAddConstraints: [.left, .right, .bottom])
         self.contentView = contentView
-    }
-
-    private func initializeImageView() {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(imageView)
-        self.imageView = imageView
-    }
-
-    private func initializeDescriptionLabel() {
-        let descriptionLabel = UILabel()
-        descriptionLabel.numberOfLines = 0
-        descriptionLabel.lineBreakMode = .byWordWrapping
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(descriptionLabel)
-        self.descriptionLabel = descriptionLabel
-    }
-
-    private func initializeMarkerLineView() {
-        let markerLineView = UIView()
-        markerLineView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(markerLineView)
-        self.markerLineView = markerLineView
     }
 
     private func initializeMarkerView() {
         let markerView = UIView()
-        markerView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(markerView)
+        let markerConstraints = addAutoLayoutSubview(markerView, overrideAnchors: KOOverrideAnchors(left: contentView.leftAnchor, right: contentView.rightAnchor, bottom: contentView.topAnchor), insets: UIEdgeInsets(top: 0, left: defaultMarkerMinHorizontalInsets, bottom: 0, right: defaultMarkerMinHorizontalInsets), operations: [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater, KOConstraintsDirections.right: KOConstraintsOperations.equalOrLess])
         self.markerView = markerView
-    }
 
-    // MARK: Create constraints
-    private func createConstraints() {
-        createContentConstraints()
-        createMarkerLineConstraints()
-        createMarkerViewConstraints()
-        let imageRightToDescriptionLeftConst = createImageViewConstraints()
-        createDescriptionConstraints(imageRightToDescriptionLeftConst: imageRightToDescriptionLeftConst)
-    }
-
-    private func createContentConstraints() {
-        addConstraints([
-            contentView.leftAnchor.constraint(equalTo: leftAnchor),
-            contentView.rightAnchor.constraint(equalTo: rightAnchor),
-            contentView.bottomAnchor.constraint(equalTo: bottomAnchor)
-            ])
-    }
-
-    private func createMarkerViewConstraints() {
         let markerWidthConst = markerView.widthAnchor.constraint(equalToConstant: markerWidth)
         let markerHeightConst = markerView.heightAnchor.constraint(equalToConstant: markerHeight)
         markerView.addConstraints([
@@ -217,58 +174,40 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoProtocol {
         self.markerHeightConst = markerHeightConst
         recreateMarkerShape()
 
-        let markerLeftConst = markerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: defaultMarkerMinHorizontalInsets)
-        let markerRightConst = markerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -defaultMarkerMinHorizontalInsets)
-        addConstraints([
-            markerRightConst,
-            markerLeftConst,
-            markerView.bottomAnchor.constraint(equalTo: contentView.topAnchor),
-            markerView.topAnchor.constraint(equalTo: topAnchor)
-            ])
-        markerMinHorizontalConstraintsInsets = KOHorizontalConstraintsInsets(leftConst: markerLeftConst, rightConst: markerRightConst)
+        markerMinHorizontalConstraintsInsets = KOHorizontalConstraintsInsets(leftConst: markerConstraints.left!, rightConst: markerConstraints.right!)
     }
 
-    private func createMarkerLineConstraints() {
+    private func initializeMarkerLineView() {
+        let markerLineView = UIView()
+        _ = contentView.addAutoLayoutSubview(markerLineView, toAddConstraints: [.left, .top, .right])
+        self.markerLineView = markerLineView
+
         let markerLineHeightConst = markerLineView.heightAnchor.constraint(equalToConstant: defaultMarkerLineHeight)
-        contentView.addConstraints([
-            markerLineView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            markerLineView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            markerLineView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            markerLineHeightConst
-            ])
         self.markerLineHeightConst = markerLineHeightConst
     }
 
-    private func createImageViewConstraints() -> NSLayoutConstraint {
-        let imageLeftConst = imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: defaultImageInsets.left)
-        let imageRightToDescriptionLeftConst = imageView.rightAnchor.constraint(equalTo: descriptionLabel.leftAnchor, constant: (-defaultImageInsets.right) + (-defaultDescriptionInsets.left))
-        let imageTopConst = imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: defaultImageInsets.top)
-        let imageBottomConst = imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -defaultImageInsets.bottom)
-        let imageWidthConst = imageView.widthAnchor.constraint(equalToConstant: 0)
-        contentView.addConstraints([
-            imageLeftConst,
-            imageRightToDescriptionLeftConst,
-            imageTopConst,
-            imageBottomConst,
-            imageWidthConst
-            ])
-        imageViewEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageLeftConst, rightConst: imageRightToDescriptionLeftConst), vertical: KOVerticalConstraintsInsets(topConst: imageTopConst, bottomConst: imageBottomConst))
-        self.imageWidthConst = imageWidthConst
-        return imageRightToDescriptionLeftConst
+    private func initializeDescriptionLabel() -> KOConstraintsContainer {
+        let descriptionLabel = UILabel()
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.lineBreakMode = .byWordWrapping
+        let descriptionConstraints = contentView.addAutoLayoutSubview(descriptionLabel, overrideAnchors: KOOverrideAnchors(top: markerLineView.bottomAnchor), toAddConstraints: [.right, .top, .bottom], insets: UIEdgeInsets(top: defaultDescriptionInsets.top, left: 0, bottom: defaultDescriptionInsets.bottom, right: defaultDescriptionInsets.right))
+        self.descriptionLabel = descriptionLabel
+        return descriptionConstraints
     }
 
-    private func createDescriptionConstraints(imageRightToDescriptionLeftConst: NSLayoutConstraint) {
-        let descriptionRightConst = descriptionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -defaultDescriptionInsets.right)
-        let descriptionTopConst = descriptionLabel.topAnchor.constraint(equalTo: markerLineView.bottomAnchor, constant: defaultDescriptionInsets.top)
-        let descriptionBottomConst = descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -defaultDescriptionInsets.bottom)
-        contentView.addConstraints([
-            descriptionRightConst,
-            descriptionTopConst,
-            descriptionBottomConst
-            ])
-        descriptionLabelEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageRightToDescriptionLeftConst, rightConst: descriptionRightConst, leftMultipler: -1.0), vertical: KOVerticalConstraintsInsets(topConst: descriptionTopConst, bottomConst: descriptionBottomConst))
+    private func initializeImageView() -> KOConstraintsContainer {
+        let imageView = UIImageView()
+        let imageConstraints = contentView.addAutoLayoutSubview(imageView, overrideAnchors: KOOverrideAnchors(right: descriptionLabel.leftAnchor), insets: UIEdgeInsets(top: defaultImageInsets.top, left: defaultImageInsets.left, bottom: defaultImageInsets.bottom, right: defaultImageInsets.right + defaultDescriptionInsets.left))
+        self.imageView = imageView
+
+        let imageWidthConst = imageView.widthAnchor.constraint(equalToConstant: 0)
+        contentView.addConstraint(imageWidthConst)
+        self.imageWidthConst = imageWidthConst
+        imageViewEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageConstraints.left!, rightConst: imageConstraints.right!), vertical: KOVerticalConstraintsInsets(topConst: imageConstraints.top!, bottomConst: imageConstraints.bottom!))
+
+        return imageConstraints
     }
-    
+
     private func recreateMarkerShape() {
         let bezierPath = UIBezierPath()
         bezierPath.move(to: CGPoint(x: 0, y: markerHeight))
@@ -290,8 +229,7 @@ open class KOTextFieldErrorInfoView: UIView, KOTextFieldErrorInfoProtocol {
     }
     
     open func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
-        let const = markerView.centerXAnchor.constraint(equalTo: constraint)
-        const.priority = UILayoutPriority(rawValue: 900)
+        let const = markerView.centerXAnchor.constraint(equalTo: constraint).withPriority(900)
         return const
     }
 }

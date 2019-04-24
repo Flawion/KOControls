@@ -174,7 +174,7 @@ public class KOPresentationQueuesService {
         guard let queue = queues[index] else {
             return nil
         }
-        guard let itemIndex = queue.items.index(where: {$0.id == itemId}) else {
+        guard let itemIndex = queue.items.firstIndex(where: {$0.id == itemId}) else {
             return nil
         }
         return queue.items[itemIndex]
@@ -264,7 +264,7 @@ public class KOPresentationQueuesService {
         guard let queue = queues[index] else {
             return
         }
-        guard let itemIndex = queue.items.index(where: {$0.id == itemId}) else {
+        guard let itemIndex = queue.items.firstIndex(where: {$0.id == itemId}) else {
             return
         }
         queue.items.remove(at: itemIndex)
