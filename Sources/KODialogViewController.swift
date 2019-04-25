@@ -25,6 +25,8 @@
 
 import UIKit
 
+// MARK: - Settings
+
 /// Dialog action
 public class KODialogActionModel: NSObject {
     
@@ -88,6 +90,10 @@ public enum KODialogBarModes {
     /// This function will be invoked at the of viewDidDisappear, you can use 'viewDidDisappearEvent' instead
     @objc optional func dialogViewControllerViewDidDisappear(_ dialogViewController: KODialogViewController)
 }
+
+// MARK: - KODialogViewController
+
+// swiftlint:disable type_body_length file_length
 
 /// Dialog view with the bar and content view. Content can be changed by override function 'createContentView'. BarView title should be changed by assign text to the 'barView.titleLabel.text'. 'Left/Right BarButtonAction' should be used to get the result or dismiss.
 open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate {

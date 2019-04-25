@@ -126,6 +126,8 @@ public class KOFunctionTextValidator: KOTextValidatorProtocol {
 
 // MARK: - KOTextField
 
+// swiftlint:disable type_body_length file_length
+
 /// Field that supports showing an error to the user and managing field border based on state
 open class KOTextField: UITextField {
     // MARK: - Variables

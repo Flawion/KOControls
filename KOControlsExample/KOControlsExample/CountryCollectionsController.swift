@@ -64,13 +64,15 @@ final class CountryCollectionsController: NSObject {
     
     func searchForCountries(byName name: String) {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        defer {
+            tableView?.reloadData()
+            collectionView?.reloadData()
+        }
         guard !trimmedName.isEmpty else {
             currentVisibleCountries = countries
             return
         }
         currentVisibleCountries = countries.filter({$0.name.lowercased().contains(trimmedName)})
-        tableView?.reloadData()
-        collectionView?.reloadData()
     }
     
     func calculateCollectionSize(_ collectionView: UICollectionView, availableWidth: CGFloat, itemMaxWidth: Double) {
