@@ -50,10 +50,10 @@ final class PresentationQueueViewController: UIViewController, UITextFieldDelega
     
     private func initializeViewsCountInQueueLabel() {
         KOPresentationQueuesService.shared.queueChangedEvent = { [weak self] queueIndex in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
-            sSelf.viewsCountInQueueLabel.text = "Views count in queue: \(KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: queueIndex) ?? 0)"
+            self.viewsCountInQueueLabel.text = "Views count in queue: \(KOPresentationQueuesService.shared.itemsCountForQueue(withIndex: queueIndex) ?? 0)"
         }
     }
 
@@ -95,17 +95,17 @@ final class PresentationQueueViewController: UIViewController, UITextFieldDelega
     
     private func showPresentViewsCountPicker() {
         _ = presentOptionsPicker(withOptions: [["1", "2", "3", "4", "5"]], viewLoadedAction: KODialogActionModel(title: "Select present views count", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             
             let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
-            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.presentViewsCountField.text) ?? 0) - 1), inComponent: 0, animated: false)
+            optionsPickerViewController.optionsPicker.selectRow(((self.convertTextToInt(self.presentViewsCountField.text) ?? 0) - 1), inComponent: 0, animated: false)
             optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
-                guard let sSelf = self else {
+                guard let self = self else {
                     return
                 }
-                sSelf.presentViewsCountField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0) + 1)"
+                self.presentViewsCountField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0) + 1)"
             })
             optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
         }))
@@ -113,17 +113,17 @@ final class PresentationQueueViewController: UIViewController, UITextFieldDelega
     
     private func showRemoveIndexPicker() {
         _ = presentOptionsPicker(withOptions: [["0", "1", "2", "3", "4"]], viewLoadedAction: KODialogActionModel(title: "Select index of view to remove", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             
             let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
-            optionsPickerViewController.optionsPicker.selectRow(((sSelf.convertTextToInt(sSelf.removeIndexField.text) ?? 0)), inComponent: 0, animated: false)
+            optionsPickerViewController.optionsPicker.selectRow(((self.convertTextToInt(self.removeIndexField.text) ?? 0)), inComponent: 0, animated: false)
             optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
-                guard let sSelf = self else {
+                guard let self = self else {
                     return
                 }
-                sSelf.removeIndexField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0))"
+                self.removeIndexField.text = "\(optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0))"
             })
             optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
         }))

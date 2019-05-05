@@ -135,7 +135,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     //public
     
     /// Main view of dialog, the view of viewController is the container for that view that fills the background
-    public weak var mainView: UIView! {
+    public var mainView: UIView! {
         loadViewIfNeeded()
         return pMainView
     }
@@ -180,7 +180,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     // MARK: Content view
-    private var pContentView: UIView!
+    private weak var pContentView: UIView!
     
     private weak var contentWidthConst: NSLayoutConstraint!
     private weak var contentHeightConst: NSLayoutConstraint!
@@ -188,7 +188,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     //public
     
     /// The main content of the view, developer should override 'createContentView' to change it
-    public weak var contentView: UIView! {
+    public var contentView: UIView! {
         loadViewIfNeeded()
         return pContentView
     }

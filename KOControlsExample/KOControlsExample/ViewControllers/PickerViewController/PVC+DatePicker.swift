@@ -38,13 +38,13 @@ extension PickerViewController {
         customizeIfNeed(popoverSettings: popoverSettings!)
 
         _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your birthday", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
 
             let datePickerViewController = dialogViewController as! KODatePickerViewController
             datePickerViewController.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeDatePicker(datePickerViewController)
+            self.initializeDatePicker(datePickerViewController)
         }), popoverSettings: popoverSettings!)
     }
 

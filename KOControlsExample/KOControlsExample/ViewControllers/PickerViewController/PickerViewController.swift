@@ -52,7 +52,7 @@ final class PickerViewController: UIViewController {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd-MM-YYYY"
             birthdayField.text = dateFormatter.string(from: birthdayDate)
-            birthdayField.isShowingError = (Calendar.current.dateComponents([.year], from: birthdayDate, to: Date()).year ?? 0) < 18
+            birthdayField.error.isShowing = (Calendar.current.dateComponents([.year], from: birthdayDate, to: Date()).year ?? 0) < 18
         }
     }
     
@@ -77,7 +77,7 @@ final class PickerViewController: UIViewController {
     var favoriteFilmTypeIndex: Int = 0 {
         didSet {
             filmTypeField.text = filmTypes[favoriteFilmTypeIndex]
-            filmTypeField.isShowingError = favoriteFilmTypeIndex == (filmTypes.count - 1)
+            filmTypeField.error.isShowing = favoriteFilmTypeIndex == (filmTypes.count - 1)
         }
     }
     
@@ -118,18 +118,18 @@ final class PickerViewController: UIViewController {
     }
     
     private func initializeFields() {
-        birthdayField.borderSettings = AppSettings.fieldBorder
-        birthdayField.showErrorInfoMode = .always
-        birthdayField.errorInfoView.descriptionLabel.text = "You are under 18"
-        birthdayField.showErrorInfoInView = scrollViewContainer
+        birthdayField.border.settings = AppSettings.fieldBorder
+        birthdayField.errorInfo.showMode = .always
+        birthdayField.errorInfo.view.descriptionLabel.text = "You are under 18"
+        birthdayField.errorInfo.showInView = scrollViewContainer
         
-        filmTypeField.borderSettings = AppSettings.fieldBorder
-        filmTypeField.showErrorInfoMode = .always
-        filmTypeField.errorInfoView.descriptionLabel.text = "You have selected wrong option"
-        filmTypeField.showErrorInfoInView = scrollViewContainer
+        filmTypeField.border.settings = AppSettings.fieldBorder
+        filmTypeField.errorInfo.showMode = .always
+        filmTypeField.errorInfo.view.descriptionLabel.text = "You have selected wrong option"
+        filmTypeField.errorInfo.showInView = scrollViewContainer
         
-        countryField.borderSettings = AppSettings.fieldBorder
-        customCountryField.borderSettings = AppSettings.fieldBorder
+        countryField.border.settings = AppSettings.fieldBorder
+        customCountryField.border.settings = AppSettings.fieldBorder
     }
     
     private func initializeCountryCollectionControllers() {

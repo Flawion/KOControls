@@ -35,13 +35,13 @@ extension PickerViewController {
 
     private func showItemsCollectionPickerNormal() {
         _ = presentItemsCollectionPicker(itemsCollectionLayout: UICollectionViewFlowLayout(), viewLoadedAction: KODialogActionModel(title: "Select your country", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
 
             let itemsCollectionPickerViewController = dialogViewController as! KOItemsCollectionPickerViewController
             itemsCollectionPickerViewController.contentHeight = 300
-            sSelf.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: sSelf.view.bounds.width, itemMaxWidth: 120)
+            self.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: self.view.bounds.width, itemMaxWidth: 120)
         }), postInit: { [weak self] itemsCollectionPickerViewController in
             self?.customizeTransitionIfNeed(dialogViewController: itemsCollectionPickerViewController)
         })
@@ -54,23 +54,23 @@ extension PickerViewController {
         customizeIfNeed(popoverSettings: popoverSettings!)
 
         _ = presentItemsCollectionPicker(itemsCollectionLayout: UICollectionViewFlowLayout(), viewLoadedAction: KODialogActionModel(title: "Select your country", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             let itemsCollectionPickerViewController =  dialogViewController as! KOItemsCollectionPickerViewController
             itemsCollectionPickerViewController.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: 320, itemMaxWidth: 80)
+            self.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: 320, itemMaxWidth: 80)
         }), popoverSettings: popoverSettings!)
     }
 
     private func initializeItemsCollectionPicker(_ itemsCollectionPicker: KOItemsCollectionPickerViewController, availableWidth: CGFloat, itemMaxWidth: Double) {
         itemsCollectionPicker.leftBarButtonAction = KODialogActionModel.cancelAction()
         itemsCollectionPicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](itemsCollectionPicker: KOItemsCollectionPickerViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             if let countryIndex = itemsCollectionPicker.itemsCollection.indexPathsForSelectedItems?.first?.row {
-                sSelf.countryIndex = countryIndex
+                self.countryIndex = countryIndex
             }
         })
 

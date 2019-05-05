@@ -43,7 +43,7 @@ public class KOPropertyObserver<Subject: NSObject, Value> {
     public init(subject: Subject, propertyPath: KeyPath<Subject, Value>, propertyChangedEvent: @escaping (Subject, NSKeyValueObservedChange<Value>) -> Void, options: NSKeyValueObservingOptions = [.new]) {
         self.options = options
         self.subject = subject
-        
+       
         token = subject.observe(propertyPath, options: options, changeHandler: propertyChangedEvent)
     }
 }

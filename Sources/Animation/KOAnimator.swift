@@ -106,7 +106,7 @@ open class KOAnimator {
         guard let currentPropertyAnimator = currentPropertyAnimator, currentPropertyAnimator.state != .stopped else {
             return
         }
-        currentPropertyAnimator.stopAnimation(false)
+        currentPropertyAnimator.stopAnimation(true)
     }
 
     public func playViewAnimation() {

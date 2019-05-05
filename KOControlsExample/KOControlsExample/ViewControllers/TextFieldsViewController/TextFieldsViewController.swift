@@ -26,7 +26,7 @@
 import UIKit
 import KOControls
 
-final class UserNameErrorInfoView: UIView, KOTextFieldErrorInfoProtocol {
+final class UserNameErrorInfoView: UIView, KOErrorInfoProtocol {
     func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         return nil
     }
@@ -52,19 +52,19 @@ final class TextFieldsViewController: UIViewController {
 
     private func initializeEmailField() {
         //- email field
-        emailField.borderSettings = AppSettings.fieldBorder
-        emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
-        emailField.add(validator: KORegexTextValidator.mailValidator)
+        emailField.border.settings = AppSettings.fieldBorder
+        emailField.errorInfo.view.descriptionLabel.text = "Email is incorrect"
+        emailField.validation.add(validator: KORegexTextValidator.mailValidator)
     }
     
     private func initializePasswordField() {
         //- password field
-        passwordField.borderSettings = AppSettings.fieldBorder
-        passwordField.errorInfoView.descriptionLabel.text = "Password should contains 8 to 20 chars"
-        passwordField.validateMode = .validateOnTextChanged
+        passwordField.border.settings = AppSettings.fieldBorder
+        passwordField.errorInfo.view.descriptionLabel.text = "Password should contains 8 to 20 chars"
+        passwordField.validation.mode = .validateOnTextChanged
         
         //simple function validation
-        passwordField.add(validator: KOFunctionTextValidator(function: { password -> Bool in
+        passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
             return password.count >= 8 && password.count <= 20
         }))
         
@@ -72,29 +72,29 @@ final class TextFieldsViewController: UIViewController {
         //passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
         
         //changes animations
-        passwordField.errorInfoHideAnimation = KOAnimationGroup(animations: [
+        passwordField.errorInfo.hideAnimation = KOAnimationGroup(animations: [
             KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
             KOFadeOutAnimation()
             ])
-        passwordField.errorInfoShowAnimation = KOAnimationGroup(animations: [
+        passwordField.errorInfo.showAnimation = KOAnimationGroup(animations: [
             KOTranslationAnimation(toValue: CGPoint.zero, fromValue: CGPoint(x: -200, y: 20)),
             KOFadeInAnimation(fromValue: 0)
             ], dampingRatio: 0.6)
         
         //adds additional icon
-        passwordField.errorInfoView.imageWidthConst.constant = 25
-        passwordField.errorInfoView.imageView.image = UIImage(named: "ico_account")
-        passwordField.errorInfoView.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        passwordField.errorInfoView.imageView.contentMode = .scaleAspectFit
+        passwordField.errorInfo.view.imageWidthConst.constant = 25
+        passwordField.errorInfo.view.imageView.image = UIImage(named: "ico_account")
+        passwordField.errorInfo.view.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        passwordField.errorInfo.view.imageView.contentMode = .scaleAspectFit
         
         //other adjustments
-        passwordField.errorInfoView.descriptionLabel.textColor = UIColor.black
-        passwordField.errorInfoView.contentView.backgroundColor = UIColor.white
-        passwordField.errorInfoView.layer.shadowColor = UIColor.black.cgColor
-        passwordField.errorInfoView.layer.shadowOffset = CGSize(width: 0, height: -2)
-        passwordField.errorInfoView.layer.shadowRadius = 5
-        passwordField.errorInfoView.layer.shadowOpacity = 0.7
-        passwordField.errorInfoView.markerColor = UIColor.white
+        passwordField.errorInfo.view.descriptionLabel.textColor = UIColor.black
+        passwordField.errorInfo.view.contentView.backgroundColor = UIColor.white
+        passwordField.errorInfo.view.layer.shadowColor = UIColor.black.cgColor
+        passwordField.errorInfo.view.layer.shadowOffset = CGSize(width: 0, height: -2)
+        passwordField.errorInfo.view.layer.shadowRadius = 5
+        passwordField.errorInfo.view.layer.shadowOpacity = 0.7
+        passwordField.errorInfo.view.markerColor = UIColor.white
 
          //sets custom error view
         let passwordErrorLabel = UILabel()
@@ -103,15 +103,15 @@ final class TextFieldsViewController: UIViewController {
         passwordErrorLabel.textAlignment = .center
         passwordErrorLabel.text = "Incorrect"
         
-        passwordField.customErrorView = passwordErrorLabel
-        passwordField.errorWidth = 100
+        passwordField.error.customView = passwordErrorLabel
+        passwordField.error.viewWidth = 100
     }
     
     private func initializeUserNameField() {
         //- user name field
-        userNameField.borderSettings = AppSettings.fieldBorder
-        userNameField.validateMode = .manual
-        userNameField.errorInfoInsets.top = 2
+        userNameField.border.settings = AppSettings.fieldBorder
+        userNameField.validation.mode = .manual
+        userNameField.errorInfo.insets.top = 2
         
         //sets custom error info view
         let userNameErrorInfoView = UserNameErrorInfoView()
@@ -129,10 +129,10 @@ final class TextFieldsViewController: UIViewController {
             userNameErrorInfoLabel.topAnchor.constraint(equalTo: userNameErrorInfoView.topAnchor, constant: 8)
             ])
         
-        userNameField.customErrorInfoView = userNameErrorInfoView
+        userNameField.errorInfo.customView = userNameErrorInfoView
     }
     
     @IBAction func showHideUserNameBttClick(_ sender: Any) {
-        userNameField.isShowingError = !userNameField.isShowingError
+        userNameField.error.isShowing = !userNameField.error.isShowing
     }
 }

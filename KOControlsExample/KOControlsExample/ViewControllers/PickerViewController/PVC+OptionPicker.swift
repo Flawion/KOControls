@@ -38,12 +38,12 @@ extension PickerViewController {
         customizeIfNeed(popoverSettings: popoverSettings!)
 
         _ = presentOptionsPicker(withOptions: [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
             optionsPickerViewController.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeOptionsPicker(optionsPickerViewController)
+            self.initializeOptionsPicker(optionsPickerViewController)
         }), popoverSettings: popoverSettings!)
     }
 
@@ -59,10 +59,10 @@ extension PickerViewController {
         optionsPicker.optionsPicker.selectRow(favoriteFilmTypeIndex, inComponent: 0, animated: false)
         optionsPicker.leftBarButtonAction = KODialogActionModel.cancelAction()
         optionsPicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
-            sSelf.favoriteFilmTypeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
+            self.favoriteFilmTypeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
         })
         customizeIfNeed(optionsPicker: optionsPicker)
     }

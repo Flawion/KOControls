@@ -49,23 +49,23 @@ extension PickerViewController {
         customizeIfNeed(popoverSettings: popoverSettings!)
 
         _ = presentItemsTablePicker( viewLoadedAction: KODialogActionModel(title: "Select your country", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             let itemsTablePickerViewController = dialogViewController as! KOItemsTablePickerViewController
             itemsTablePickerViewController.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeItemsTablePicker(itemsTablePickerViewController)
+            self.initializeItemsTablePicker(itemsTablePickerViewController)
         }), popoverSettings: popoverSettings!)
     }
 
     private func initializeItemsTablePicker(_ itemsTablePicker: KOItemsTablePickerViewController) {
         itemsTablePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
         itemsTablePicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](itemsTablePickerViewController: KOItemsTablePickerViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             if let countryIndex = itemsTablePickerViewController.itemsTable.indexPathForSelectedRow?.row {
-                sSelf.countryIndex = countryIndex
+                self.countryIndex = countryIndex
             }
         })
         itemsTablePicker.itemsTable.allowsSelection = true
@@ -112,12 +112,12 @@ extension PickerViewController {
         let searchItemsTablePicker = SearchItemsTablePickerViewController()
         customizeTransitionIfNeed(dialogViewController: searchItemsTablePicker)
         _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KODialogActionModel(title: "Select your country", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             let searchItemsTablePickerViewController = dialogViewController as! SearchItemsTablePickerViewController
             searchItemsTablePickerViewController.contentHeight = 300
-            sSelf.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
+            self.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
         }))
     }
 
@@ -129,25 +129,25 @@ extension PickerViewController {
         customizeIfNeed(popoverSettings: popoverSettings!)
 
         _ = presentDialog(searchItemsTablePicker, viewLoadedAction: KODialogActionModel(title: "Select your country", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
 
             let searchItemsTablePickerViewController = dialogViewController as! SearchItemsTablePickerViewController
             searchItemsTablePickerViewController.mainView.backgroundColor = UIColor.clear
-            sSelf.initializeItemsTablePicker(searchItemsTablePickerViewController)
-            sSelf.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
+            self.initializeItemsTablePicker(searchItemsTablePickerViewController)
+            self.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
         }), popoverSettings: popoverSettings)
     }
 
     private func initializeCustomItemsTablePicker(_ itemsTablePicker: SearchItemsTablePickerViewController) {
         itemsTablePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
         itemsTablePicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](itemsTablePickerViewController: KOItemsTablePickerViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             if let countryIndex = itemsTablePickerViewController.itemsTable.indexPathForSelectedRow?.row {
-                sSelf.customCountryIndex = countryIndex
+                self.customCountryIndex = countryIndex
             }
         })
         itemsTablePicker.itemsTable.allowsSelection = true
@@ -175,7 +175,7 @@ final class SearchItemsTablePickerViewController: KOItemsTablePickerViewControll
 
         let searchField = KOTextField()
         searchField.borderStyle = .roundedRect
-        searchField.borderSettings = AppSettings.fieldBorder
+        searchField.border.settings = AppSettings.fieldBorder
         searchField.placeholder = "Search country"
         contentView.addSubview(searchField)
         searchField.translatesAutoresizingMaskIntoConstraints = false

@@ -35,16 +35,9 @@ internal class KOPresentationQueue {
 public class KOPresentationQueueItem: Equatable {
     internal let animationCompletion: (() -> Void)?
     
-    /// Unique item's id
     public let id: String
-
-    /// If presenting should be animated
     public let animated: Bool
-    
-    /// Presenting viewController
     public weak var viewControllerPresenting: UIViewController?
-    
-    /// Presented viewController
     public var viewControllerToPresent: UIViewController
     
     /// Returns whether the 'viewControllerToPresent' is currently presented on the screen
@@ -71,7 +64,6 @@ public class KOPresentationQueuesService {
     private var queues: [Int: KOPresentationQueue] = [:]
     private var processQueuesTimer: Timer?
     
-    /// Shared instance
     public static let shared: KOPresentationQueuesService = {
         return KOPresentationQueuesService()
     }()
@@ -306,12 +298,6 @@ public class KOPresentationQueuesService {
         queueChangedEvent?(index)
     }
     
-    /// Removes current presented view controller for the queue
-    ///
-    /// - Parameters:
-    ///   - index: queue's index
-    ///   - animated: if dismiss should be animated
-    ///   - animationCompletion: animation completion handler
     public func removeCurrentVisibleItemForQueue(withIndex index: Int, animated: Bool, animationCompletion: (() -> Void)?) {
         guard let queue = queues[index], let currentItem = queue.currentPresentedItem else {
             return
@@ -329,9 +315,6 @@ public class KOPresentationQueuesService {
         })
     }
 
-    /// Delete queue
-    ///
-    /// - Parameter index: queue's index
     public func deleteQueue(withIndex index: Int) {
         queues.removeValue(forKey: index)
         queueChangedEvent?(index)

@@ -184,21 +184,21 @@ final class ScrollOffsetProgressViewController: UIViewController {
         popoverSettings = KOPopoverSettings(sourceView: sender, sourceRect: sender.bounds)
         
         _ = presentOptionsPicker(withOptions: [progressModes, progressMaxOffsets], viewLoadedAction: KODialogActionModel(title: "Choose mode and max offset of calculating scroll offset progress", action: { [weak self](dialogViewController) in
-            guard let sSelf = self else {
+            guard let self = self else {
                 return
             }
             
             let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
-            optionsPickerViewController.optionsPicker.selectRow(sSelf.selectedProgressModeIndex, inComponent: 0, animated: false)
-            optionsPickerViewController.optionsPicker.selectRow(sSelf.selectedProgressMaxOffsetIndex, inComponent: 1, animated: false)
+            optionsPickerViewController.optionsPicker.selectRow(self.selectedProgressModeIndex, inComponent: 0, animated: false)
+            optionsPickerViewController.optionsPicker.selectRow(self.selectedProgressMaxOffsetIndex, inComponent: 1, animated: false)
             optionsPickerViewController.mainView.backgroundColor = UIColor.clear
             optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction(withTitle: "Cancel")
             optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(withTitle: "Done", action: { [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
-                guard let sSelf = self else {
+                guard let self = self else {
                     return
                 }
-                sSelf.selectedProgressModeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
-                sSelf.selectedProgressMaxOffsetIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 1)
+                self.selectedProgressModeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
+                self.selectedProgressMaxOffsetIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 1)
             })
             
         }), postInit: { (optionsPickerViewController) in
