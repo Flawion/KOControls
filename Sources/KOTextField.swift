@@ -133,7 +133,7 @@ open class KOTextField: UITextField {
     // MARK: - Variables
     
     //public
-    @IBOutlet public weak var koDelegate: KOTextFieldDelegate? {
+    @IBOutlet public var koDelegate: KOTextFieldDelegate? {
         get {
             return delegate as? KOTextFieldDelegate
         }

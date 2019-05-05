@@ -70,7 +70,7 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     }
     
     /// Scroll view based on which the progress will be calculated
-    public weak var scrollView: UIScrollView? {
+    public var scrollView: UIScrollView? {
         set {
             bindScrollView(newValue)
         }
