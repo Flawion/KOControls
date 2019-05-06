@@ -1,5 +1,5 @@
 //
-//  KOValidationFeature.swift
+//  KOViewValidationFeature.swift
 //  KOControls
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -74,23 +74,23 @@ public class KOFunctionTextValidator: KOTextValidatorProtocol {
     }
 }
 
-public protocol KOValidationFeatureDelegate: NSObjectProtocol {
+public protocol KOViewValidationFeatureDelegate: NSObjectProtocol {
     var isFirstResponder: Bool { get }
     var textToValidate: String? { get }
     func validationSuccess()
     func validationFailure()
 }
 
-// MARK: - KOValidationFeature
-public class KOValidationFeature {
+// MARK: - KOViewValidationFeature
+public class KOViewValidationFeature {
     // MARK: - Variables
-    private weak var delegate: KOValidationFeatureDelegate?
+    private weak var delegate: KOViewValidationFeatureDelegate?
     
     public private(set) var validators: [KOTextValidatorProtocol] = []
     public var mode: KOTextValidateModes = .validateOnLostFocus
     
     // MARK: - Functions
-    public init(delegate: KOValidationFeatureDelegate) {
+    public init(delegate: KOViewValidationFeatureDelegate) {
         self.delegate = delegate
     }
     

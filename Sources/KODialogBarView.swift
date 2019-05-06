@@ -44,12 +44,13 @@ open class KODialogBarView: UIView {
     private weak var titleContainerView: UIView!
     private var titleLabelInTitleContainerViewConsts: [NSLayoutConstraint] = []
     private var titleLabelInContainerViewConsts: [NSLayoutConstraint] = []
-    
+    private var titleContainerVerticalConstraintsInsets: KOVerticalConstraintsInsets!
+
     //public
     
     /// 'Text' parameter should be changed to match the dialog
     public private(set) weak var titleLabel: UILabel!
-    public private(set) var titleContainerEdgesConstraintsInset: KOEdgesConstraintsInsets!
+    public private(set) var titleContainerEdgesConstraintsInsets: KOEdgesConstraintsInsets!
     
     /// Is title view will be always centered between the left and right views
     public var isTitleLabelCentered: Bool = true {
@@ -65,7 +66,8 @@ open class KODialogBarView: UIView {
     // MARK: Left view
     private weak var leftContainerForView: UIView!
     private weak var leftContainerForViewWidthConst: NSLayoutConstraint!
-    
+    private weak var leftContainerForViewRightConst: NSLayoutConstraint!
+
     //public
     
     /// View positioned at left of titleLabel
@@ -88,7 +90,8 @@ open class KODialogBarView: UIView {
     // MARK: Right view
     private weak var rightContainerForView: UIView!
     private weak var rightContainerForViewWidthConst: NSLayoutConstraint!
-    
+    private weak var rightContainerForViewLeftConst: NSLayoutConstraint!
+
     //public
     
     /// View positioned at right of titleLabel
@@ -126,28 +129,24 @@ open class KODialogBarView: UIView {
     
     private func initialize() {
         // initialize views
-        initializeView()
-        let titleVerticalConstraintsInsets = initializeTitleContainerView()
+        initializeContainerView()
+        initializeContainerForCustomView()
+        initializeTitleContainerView()
         initializeTitleLabel()
-        let leftContainerForViewRightConst = initializeLeftContainerForView()
-        let rightContainerForViewLeftConst = initializeRightContainerForView()
-
-        //create titleContainerEdgesConstraintsInset
-        titleContainerEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewRightConst, rightConst: rightContainerForViewLeftConst, rightMultipler: 1.0), vertical: titleVerticalConstraintsInsets)
-        titleContainerEdgesConstraintsInset.insets = defaultTitleInsets
-
+        initializeLeftContainerForView()
+        initializeRightContainerForView()
+        createTitleContainerEdgesConstraintsInsets()
         refreshTitleLabelConstraints()
     }
-    
-    private func initializeView() {
-        //create views
-        //create container view
+
+    private func initializeContainerView() {
         let containerView = UIView()
         containerView.backgroundColor = UIColor.clear
         _ = addAutoLayoutSubview(containerView)
         self.containerView = containerView
-        
-        //create container for custom View
+    }
+
+    private func initializeContainerForCustomView() {
         let containerForCustomView = UIView()
         containerForCustomView.isHidden = true
         containerForCustomView.backgroundColor = UIColor.clear
@@ -155,11 +154,11 @@ open class KODialogBarView: UIView {
         self.containerForCustomView = containerForCustomView
     }
 
-    private func initializeTitleContainerView() -> KOVerticalConstraintsInsets {
+    private func initializeTitleContainerView() {
         let titleContainerView = UIView()
         let titleContainerConstraints = containerView.addAutoLayoutSubview(titleContainerView, toAddConstraints: [.top, .bottom])
         self.titleContainerView = titleContainerView
-        return KOVerticalConstraintsInsets(topConst: titleContainerConstraints.top!, bottomConst: titleContainerConstraints.bottom!)
+        self.titleContainerVerticalConstraintsInsets = KOVerticalConstraintsInsets(topConst: titleContainerConstraints.top!, bottomConst: titleContainerConstraints.bottom!)
     }
 
     private func initializeTitleLabel() {
@@ -173,40 +172,48 @@ open class KODialogBarView: UIView {
         self.titleLabel = titleLabel
     }
 
-    private func initializeLeftContainerForView() -> NSLayoutConstraint {
+    private func initializeLeftContainerForView() {
         let leftContainerForView = UIView()
         let leftContainerConstraints = containerView.addAutoLayoutSubview(leftContainerForView, overrideAnchors: KOOverrideAnchors(right: titleContainerView.leftAnchor))
+        leftContainerForViewRightConst = leftContainerConstraints.right!
         self.leftContainerForView = leftContainerForView
 
-        //create constraints
         leftViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerConstraints.left!, rightConst: leftContainerConstraints.right!), vertical: KOVerticalConstraintsInsets(topConst: leftContainerConstraints.top!, bottomConst: leftContainerConstraints.bottom!))
 
         let leftContainerForViewWidthConst = leftContainerForView.widthAnchor.constraint(equalToConstant: defaultLeftViewContainerWidth).withPriority(900)
         leftContainerForView.addConstraint(leftContainerForViewWidthConst)
         self.leftContainerForViewWidthConst = leftContainerForViewWidthConst
-
-        return leftContainerConstraints.right!
     }
 
-    private func initializeRightContainerForView() -> NSLayoutConstraint {
+    private func initializeRightContainerForView() {
         let rightContainerForView = UIView()
         let rightContainerConstraints = containerView.addAutoLayoutSubview(rightContainerForView, overrideAnchors: KOOverrideAnchors(left: titleContainerView.rightAnchor))
+        rightContainerForViewLeftConst = rightContainerConstraints.left!
         self.rightContainerForView = rightContainerForView
 
-        //create constraints
         rightViewEdgesConstraintsInset = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: rightContainerConstraints.left!, rightConst: rightContainerConstraints.right!), vertical: KOVerticalConstraintsInsets(topConst: rightContainerConstraints.top!, bottomConst: rightContainerConstraints.bottom!))
 
         let rightContainerForViewWidthConst = rightContainerForView.widthAnchor.constraint(equalToConstant: defaultRightViewContainerWidth).withPriority(900)
         rightContainerForView.addConstraint(rightContainerForViewWidthConst)
         self.rightContainerForViewWidthConst = rightContainerForViewWidthConst
-
-        return rightContainerConstraints.left!
     }
-    
+
+    private func createTitleContainerEdgesConstraintsInsets() {
+        titleContainerEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewRightConst, rightConst: rightContainerForViewLeftConst, rightMultipler: 1.0), vertical: titleContainerVerticalConstraintsInsets)
+        titleContainerEdgesConstraintsInsets.insets = defaultTitleInsets
+    }
+
+    // MARK: View and custom view
     private func refreshCustomView() {
-        containerForCustomView.isHidden = customView == nil
         containerForCustomView.fill(withView: customView)
+        refreshCustomViewVisbility()
         layoutIfNeeded()
+    }
+
+    private func refreshCustomViewVisbility() {
+        let isCustomViewHidden = customView == nil
+        containerForCustomView.isHidden = isCustomViewHidden
+        containerView.isHidden = !isCustomViewHidden
     }
     
     private func refreshTitleLabelConstraints() {

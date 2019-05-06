@@ -27,7 +27,7 @@ import UIKit
 import KOControls
 
 final class AppSettings {
-    static let fieldBorder = KOBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor: UIColor.red.cgColor, width: 1, focusedWidth: 2)
+    static let fieldBorder = KOViewBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor: UIColor.red.cgColor, width: 1, focusedWidth: 2)
     
     static var countries: [CountryModel] {
         var countries: [CountryModel] = []

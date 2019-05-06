@@ -1,5 +1,5 @@
 //
-//  KOErrorInfoFeature.swift
+//  KOViewErrorInfoFeature.swift
 //  KOControls
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -36,10 +36,10 @@ public enum KOShowErrorInfoModes {
     case always
 }
 
-@objc public protocol KOErrorInfoFeatureDelegate: NSObjectProtocol {
+@objc public protocol KOViewErrorInfoFeatureDelegate: NSObjectProtocol {
     var featureContainer: UIView { get }
     var errorIsShowing: Bool { get }
-    var errorViewCenterXAnchor: NSLayoutXAxisAnchor { get }
+    var markerCenterXEualTo: NSLayoutXAxisAnchor { get }
     
     @objc optional func errorInfoStartingHideAnimation()
     @objc optional func errorInfoDidHide()
@@ -47,10 +47,10 @@ public enum KOShowErrorInfoModes {
     @objc optional func errorInfoDidShow()
 }
 
-// MARK: - KOErrorInfoFeature
-public class KOErrorInfoFeature {
+// MARK: - KOViewErrorInfoFeature
+public class KOViewErrorInfoFeature {
     // MARK: - Variables
-    private weak var delegate: KOErrorInfoFeatureDelegate?
+    private weak var delegate: KOViewErrorInfoFeatureDelegate?
     
     private var containerForView: UIView!
     private var containerForViewConsts: [NSLayoutConstraint] = []
@@ -106,7 +106,7 @@ public class KOErrorInfoFeature {
     
     // MARK: - Functions
     // MARK: Initializations
-    public init(delegate: KOErrorInfoFeatureDelegate) {
+    public init(delegate: KOViewErrorInfoFeatureDelegate) {
         self.delegate = delegate
 
         initialize()
@@ -197,26 +197,26 @@ public class KOErrorInfoFeature {
         }
         
         setViewMarkerHiddenIfCan(false)
-        addView(toView: showInView)
+        addContainerForView(toView: showInView)
         addCustomViewMarkerCenterXConst()
         delegate.errorInfoDidShow?()
     }
     
-    private func addView(toView showInView: UIView) {
+    private func addContainerForView(toView showInView: UIView) {
         guard let delegate = delegate else {
             return
         }
         
         let constraintsToView = delegate.featureContainer
-        var containerForErrorInfoConsts = showInView.addAutoLayoutSubview(containerForView,
+        var containerForViewConsts = showInView.addAutoLayoutSubview(containerForView,
                                                                           overrideAnchors: KOOverrideAnchors(left: constraintsToView.leftAnchor, top: constraintsToView.bottomAnchor, right: constraintsToView.rightAnchor), toAddConstraints: [.left, .top, .right],
                                                                           insets: UIEdgeInsets(top: insets.top - insets.bottom, left: insets.left, bottom: 0, right: insets.right),
                                                                           operations: [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater]).list
-        let markerCenterXEqualTo = view.markerCenterXEqualTo(delegate.errorViewCenterXAnchor)!
+        let markerCenterXEqualTo = view.markerCenterXEqualTo(delegate.markerCenterXEualTo)!
         showInView.addConstraint(markerCenterXEqualTo)
-        containerForErrorInfoConsts.append(markerCenterXEqualTo)
+        containerForViewConsts.append(markerCenterXEqualTo)
         
-        self.containerForViewConsts = containerForErrorInfoConsts
+        self.containerForViewConsts = containerForViewConsts
         showedInView = showInView
     }
     
@@ -273,9 +273,9 @@ public class KOErrorInfoFeature {
     }
     
     private func refreshCustomViewVisibility() {
-        let result = customView != nil
-        containerForCustomView.isHidden = !result
-        view.isHidden = result
+        let isCustomViewHidden = customView == nil
+        containerForCustomView.isHidden = isCustomViewHidden
+        view.isHidden = !isCustomViewHidden
     }
     
     private func refreshCustomViewMarkerCenterXConst() {
@@ -288,7 +288,7 @@ public class KOErrorInfoFeature {
         }
         
         removeCustomViewMarkerCenterXConst()
-        if let errorViewCenterXAnchor = delegate?.errorViewCenterXAnchor, let customViewMarkerCenterXConst = customView.markerCenterXEqualTo(errorViewCenterXAnchor) {
+        if let errorViewCenterXAnchor = delegate?.markerCenterXEualTo, let customViewMarkerCenterXConst = customView.markerCenterXEqualTo(errorViewCenterXAnchor) {
             showedInView.addConstraint(customViewMarkerCenterXConst)
         }
     }

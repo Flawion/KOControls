@@ -25,10 +25,6 @@
 
 import UIKit
 
-/// Indicates on which axis it will be doing a calculation
-///
-/// - vertical: vertical
-/// - horizontal: horizontal
 public enum KOScrollOffsetAxis {
     case vertical
     case horizontal
@@ -72,7 +68,7 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     /// Scroll view based on which the progress will be calculated
     public var scrollView: UIScrollView? {
         set {
-            bindScrollView(newValue)
+            attachToScrollView(newValue)
         }
         get {
             return scrollOffsetObserver?.subject
@@ -136,32 +132,39 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
 
         self.minOffset = minOffset
         self.maxOffset = maxOffset
-        bindScrollView(scrollView)
+        attachToScrollView(scrollView)
     }
     
     private func refreshMode() {
         scrollView?.setContentOffset(CGPoint.zero, animated: false)
         calculateOffsetGesture?.isEnabled = mode == .scrollingBlockedUntilProgressMax
-        contentOffset = 0
-        lastContentOffset = 0
+        resetOffsetParameters()
         calculateContentOffsetAndProgress()
     }
-    
+
+    private func resetOffsetParameters() {
+        contentOffset = 0
+        lastContentOffset = 0
+    }
+
     // MARK: Scroll view
-    private func bindScrollView(_ scrollView: UIScrollView?) {
+    private func attachToScrollView(_ scrollView: UIScrollView?) {
         guard let scrollView = scrollView else {
             return
         }
-        
+        bindScrollView(scrollView)
+        createCalculateOffsetGesture(forScrollView: scrollView)
+        resetOffsetParameters()
+        calculateContentOffsetAndProgress()
+    }
+
+    private func bindScrollView(_ scrollView: UIScrollView) {
         scrollOffsetObserver = KOPropertyObserver<UIScrollView, CGPoint>(subject: scrollView, propertyPath: \UIScrollView.contentOffset, propertyChangedEvent: { [weak self](subject, property) in
             self?.scrollView(subject, newContentOffset: property.newValue ?? subject.contentOffset)
         })
-        
-        contentOffset = 0
-        lastContentOffset = 0
-        calculateContentOffsetAndProgress()
-        
-        //add gesture
+    }
+
+    private func createCalculateOffsetGesture(forScrollView scrollView: UIScrollView) {
         let calculateOffsetGesture = UIPanGestureRecognizer(target: self, action: #selector(calculateOffsetGestureAction(_:)))
         calculateOffsetGesture.delegate = self
         calculateOffsetGesture.isEnabled = isScrollBlockedUntilProgressMax
@@ -183,51 +186,72 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
         if isScrollBlockedUntilProgressMax {
             calculateContentOffsetFromGesture()
         } else {
-            calculateContentOffsetFromScroll()
+            calculateContentOffsetFromScrollView()
         }
         calculateOffsetProgress()
     }
-    
-    private func calculateContentOffsetFromScroll() {
+
+    private func calculateContentOffsetFromScrollView() {
         guard let scrollView = scrollView else {
             contentOffset = 0
             return
         }
-        
-        var offset: CGFloat = 0
-        
-        //calculate offset
+
         switch mode {
         case .contentOffsetBased:
-            offset = scrollView.contentOffset.y
-            if scrollOffsetAxis == .horizontal {
-                offset = scrollView.contentOffset.x
-            }
-            contentOffset = offset
+            calculateContentOffsetFromScrollViewContentOffset(scrollView)
             
         case .translationOffsetBased:
-            if scrollOffsetAxis == .horizontal {
-                //prevents from bouncing
-                guard scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x <= (scrollView.contentSize.width - scrollView.bounds.width) else {
-                    return
-                }
-                offset = scrollView.contentOffset.x
-            } else {
-                //prevents from bouncing
-                guard scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y <= (scrollView.contentSize.height - scrollView.bounds.height) else {
-                    return
-                }
-                offset = scrollView.contentOffset.y
-            }
-        
-            offset -= lastContentOffset
-            contentOffset += offset
-            contentOffset = min(offsetRange, max(0, contentOffset))
-            lastContentOffset = scrollView.contentOffset.y
+            calculateContentOffsetFromScrollViewTranslationOffset(scrollView)
             
         default:
             break
         }
+    }
+
+    private func calculateContentOffsetFromScrollViewContentOffset(_ scrollView: UIScrollView) {
+        var offset: CGFloat = scrollView.contentOffset.y
+        if scrollOffsetAxis == .horizontal {
+            offset = scrollView.contentOffset.x
+        }
+        contentOffset = offset
+    }
+
+    private func calculateContentOffsetFromScrollViewTranslationOffset(_ scrollView: UIScrollView) {
+        guard var offset: CGFloat = getContentOffsetIfNotBouncing(fromScrollView: scrollView) else {
+            // prevents from jumping
+            return
+        }
+        offset -= lastContentOffset
+        contentOffset += offset
+        contentOffset = min(offsetRange, max(0, contentOffset))
+        lastContentOffset = scrollView.contentOffset.y
+    }
+
+    private func getContentOffsetIfNotBouncing(fromScrollView scrollView: UIScrollView) -> CGFloat? {
+        return scrollOffsetAxis == .horizontal ? getContentOffsetHorizontalIfNotBouncing(fromScrollView: scrollView) : getContentOffsetVerticalIfNotBouncing(fromScrollView: scrollView)
+    }
+
+    private func getContentOffsetHorizontalIfNotBouncing(fromScrollView scrollView: UIScrollView) -> CGFloat? {
+        guard isScrollViewNotBouncingHorizontal(scrollView) else {
+            return nil
+        }
+        return scrollView.contentOffset.x
+    }
+
+    private func isScrollViewNotBouncingHorizontal(_ scrollView: UIScrollView) -> Bool {
+        return scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x <= (scrollView.contentSize.width - scrollView.bounds.width)
+    }
+
+    private func getContentOffsetVerticalIfNotBouncing(fromScrollView scrollView: UIScrollView) -> CGFloat? {
+        guard isScrollViewNotBouncingVertical(scrollView) else {
+            return nil
+        }
+        return scrollView.contentOffset.y
+    }
+
+    private func isScrollViewNotBouncingVertical(_ scrollView: UIScrollView) -> Bool {
+        return scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y <= (scrollView.contentSize.height - scrollView.bounds.height)
     }
 
     private func calculateContentOffsetFromGesture() {
@@ -239,33 +263,43 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
         defer {
             calculateOffsetGesture.setTranslation(CGPoint.zero, in: scrollView)
         }
-        
-        var offset: CGFloat = contentOffset
-        let translation = calculateOffsetGesture.translation(in: scrollView)
-        if scrollOffsetAxis == .horizontal {
-            //dosen't adds new values until scroll contentOffset is attaching to the view
-            guard scrollView.contentOffset.y <= 0 else {
-                return
-            }
-            offset -= translation.x
-        } else {
-            //dosen't adds new values until scroll contentOffset is attaching to the view
-            guard scrollView.contentOffset.y <= 0 else {
-                return
-            }
-            offset -= translation.y
+
+        guard let translation = getTranslationOnAxisIfContentOffsetGreaterThanZero(fromGesture: calculateOffsetGesture, scrollView: scrollView) else {
+            return
         }
+
+        var offset: CGFloat = contentOffset
+        offset -= translation
         offset = max(0, offset)
         contentOffset = offset
     }
-    
+
+    private func  getTranslationOnAxisIfContentOffsetGreaterThanZero(fromGesture gesture: UIPanGestureRecognizer, scrollView: UIScrollView) -> CGFloat? {
+        let translation = gesture.translation(in: scrollView)
+        return scrollOffsetAxis == .horizontal ? getTranslationVerticalIfContentOffsetGreaterThanZero(fromTranslation: translation, scrollView: scrollView) :
+        getTranslationVerticalIfContentOffsetGreaterThanZero(fromTranslation: translation, scrollView: scrollView)
+    }
+
+    private func  getTranslationHorizontalIfContentOffsetGreaterThanZero(fromTranslation translation: CGPoint, scrollView: UIScrollView) -> CGFloat? {
+        guard scrollView.contentOffset.x <= 0 else {
+            return nil
+        }
+        return translation.x
+    }
+
+    private func  getTranslationVerticalIfContentOffsetGreaterThanZero(fromTranslation translation: CGPoint, scrollView: UIScrollView) -> CGFloat? {
+        guard scrollView.contentOffset.y <= 0 else {
+            return nil
+        }
+        return translation.y
+    }
+
     private func calculateOffsetProgress() {
         guard maxOffset > minOffset, maxOffset > 0 else {
             progress = 0
             return
         }
-        
-        //calculate progress
+
         var offset: CGFloat = contentOffset
         offset -= minOffset
         guard offset > 0 else {
@@ -278,21 +312,41 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     
     private func scrollView(_ scrollView: UIScrollView, newContentOffset contentOffset: CGPoint) {
         guard !isScrollBlockedUntilProgressMax else {
-            //prevent from scroll until progress is max
-            if progress < 1 {
-                switch scrollOffsetAxis {
-                case .horizontal:
-                    if contentOffset.x > 0 {
-                        scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset.y), animated: false)
-                    }
-                case .vertical:
-                    if contentOffset.y > 0 {
-                        scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
-                    }
-                }
-            }
+            preventFromScrollUntilProgressIsMax(scrollView, contentOffset: contentOffset)
+
             return
         }
         calculateContentOffsetAndProgress()
+    }
+
+    private func preventFromScrollUntilProgressIsMax(_ scrollView: UIScrollView, contentOffset: CGPoint) {
+        guard progress < 1 else {
+            return
+        }
+        preventFromScroll(scrollView, contentOffset: contentOffset)
+    }
+
+    private func preventFromScroll(_ scrollView: UIScrollView, contentOffset: CGPoint) {
+        switch scrollOffsetAxis {
+        case .horizontal:
+            preventFromScrollHorizontal(scrollView, contentOffset: contentOffset)
+
+        case .vertical:
+            preventFromScrollVertical(scrollView, contentOffset: contentOffset)
+        }
+    }
+
+    private func preventFromScrollHorizontal(_ scrollView: UIScrollView, contentOffset: CGPoint) {
+        guard contentOffset.x > 0 else {
+            return
+        }
+        scrollView.setContentOffset(CGPoint(x: 0, y: contentOffset.y), animated: false)
+    }
+
+    private func preventFromScrollVertical(_ scrollView: UIScrollView, contentOffset: CGPoint) {
+        guard contentOffset.y > 0 else {
+            return
+        }
+        scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
     }
 }

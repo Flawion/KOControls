@@ -1,5 +1,5 @@
 //
-//  KOErrorFeature.swift
+//  KOViewErrorFeature.swift
 //  KOControls
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -25,16 +25,16 @@
 
 import UIKit
 
-@objc public protocol KOErrorFeatureDelegate: NSObjectProtocol {
+@objc public protocol KOViewErrorFeatureDelegate: NSObjectProtocol {
     var featureContainer: UIView { get }
     
     @objc optional func errorDidShow()
     @objc optional func errorDidHide()
 }
 
-public class KOErrorFeature {
+public class KOViewErrorFeature {
     // MARK: - Variables
-    private weak var delegate: KOErrorFeatureDelegate?
+    private weak var delegate: KOViewErrorFeatureDelegate?
     private weak var containerForCustomView: UIView!
     
     private weak var view: UIView!
@@ -75,7 +75,7 @@ public class KOErrorFeature {
     
     // MARK: - Functions
     // MARK: Initializations
-    public init(delegate: KOErrorFeatureDelegate) {
+    public init(delegate: KOViewErrorFeatureDelegate) {
         self.delegate = delegate
         initialize()
     }
@@ -142,8 +142,8 @@ public class KOErrorFeature {
     }
     
     private func refreshCustomViewVisibility() {
-        let isCustomErrorViewHidden = customView == nil
-        containerForCustomView.isHidden = isCustomErrorViewHidden
-        iconView.isHidden = !isCustomErrorViewHidden
+        let isCustomViewHidden = customView == nil
+        containerForCustomView.isHidden = isCustomViewHidden
+        iconView.isHidden = !isCustomViewHidden
     }
 }
