@@ -43,7 +43,7 @@ open class KODialogBarView: UIView {
     // MARK: Title views
     private weak var titleContainerView: UIView!
     private var titleLabelInTitleContainerViewConsts: [NSLayoutConstraint] = []
-    private var titleLabelInContainerViewConsts: [NSLayoutConstraint] = []
+    private var titleLabelInContainerViewConst: NSLayoutConstraint?
     private var titleContainerVerticalConstraintsInsets: KOVerticalConstraintsInsets!
 
     //public
@@ -217,37 +217,57 @@ open class KODialogBarView: UIView {
     }
     
     private func refreshTitleLabelConstraints() {
+        removeTitleLabelConstraints()
+        createTitleLabelConstraints()
+    }
+
+    private func removeTitleLabelConstraints() {
         titleContainerView.removeConstraints(self.titleLabelInTitleContainerViewConsts)
-        containerView.removeConstraints(self.titleLabelInContainerViewConsts)
-        
-        var titleLabelInTitleContainerViewConsts: [NSLayoutConstraint] = []
-        var titleLabelInContainerViewConsts: [NSLayoutConstraint] = []
-        
-        titleLabelInTitleContainerViewConsts.append(contentsOf: [
+        guard let titleLabelInContainerViewConst = titleLabelInContainerViewConst else {
+            return
+        }
+        containerView.removeConstraint(titleLabelInContainerViewConst)
+    }
+
+    private func createTitleLabelConstraints() {
+        let titleLabelInTitleContainerViewConsts: [NSLayoutConstraint] = createTitleLabelInTitleContainerViewConstraints()
+        let titleLabelInContainerViewConst: NSLayoutConstraint? = createTitleLabelInContainerViewConstraint()
+        titleContainerView.addConstraints(titleLabelInTitleContainerViewConsts)
+        if let titleLabelInContainerViewConst = titleLabelInContainerViewConst {
+            containerView.addConstraint(titleLabelInContainerViewConst)
+        }
+        self.titleLabelInTitleContainerViewConsts = titleLabelInTitleContainerViewConsts
+        self.titleLabelInContainerViewConst = titleLabelInContainerViewConst
+    }
+
+    private func createTitleLabelInTitleContainerViewConstraints() -> [NSLayoutConstraint] {
+        var consts: [NSLayoutConstraint] = [
             titleLabel.topAnchor.constraint(equalTo: titleContainerView.topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: titleContainerView.bottomAnchor)
-            ])
-        
+            ]
+
         if isTitleLabelCentered {
-            titleLabelInTitleContainerViewConsts.append(contentsOf: [
+            consts.append(contentsOf: [
                 titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: titleContainerView.leftAnchor),
                 titleLabel.rightAnchor.constraint(lessThanOrEqualTo: titleContainerView.rightAnchor)
                 ])
-            
-            let titleLabelCenterConst = titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
-            titleLabelCenterConst.priority = UILayoutPriority(rawValue: 180)
-            titleLabelInContainerViewConsts.append(titleLabelCenterConst)
+
         } else {
-            titleLabelInTitleContainerViewConsts.append(contentsOf: [
+            consts.append(contentsOf: [
                 titleLabel.leftAnchor.constraint(equalTo: titleContainerView.leftAnchor),
                 titleLabel.rightAnchor.constraint(equalTo: titleContainerView.rightAnchor)
                 ])
         }
-        
-        titleContainerView.addConstraints(titleLabelInTitleContainerViewConsts)
-        containerView.addConstraints(titleLabelInContainerViewConsts)
-        self.titleLabelInTitleContainerViewConsts = titleLabelInTitleContainerViewConsts
-        self.titleLabelInContainerViewConsts = titleLabelInContainerViewConsts
+        return consts
+    }
+
+    private func createTitleLabelInContainerViewConstraint() -> NSLayoutConstraint? {
+        guard isTitleLabelCentered else {
+            return nil
+        }
+        let titleLabelCenterConst = titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
+        titleLabelCenterConst.priority = UILayoutPriority(rawValue: 180)
+        return titleLabelCenterConst
     }
     
     // MARK: Left/Right views

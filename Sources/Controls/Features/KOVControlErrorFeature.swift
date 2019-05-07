@@ -1,5 +1,5 @@
 //
-//  KOViewErrorFeature.swift
+//  KOControlErrorFeature.swift
 //  KOControls
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -25,16 +25,16 @@
 
 import UIKit
 
-@objc public protocol KOViewErrorFeatureDelegate: NSObjectProtocol {
+@objc public protocol KOControlErrorFeatureDelegate: NSObjectProtocol {
     var featureContainer: UIView { get }
     
     @objc optional func errorDidShow()
     @objc optional func errorDidHide()
 }
 
-public class KOViewErrorFeature {
+public class KOVControlErrorFeature {
     // MARK: - Variables
-    private weak var delegate: KOViewErrorFeatureDelegate?
+    private weak var delegate: KOControlErrorFeatureDelegate?
     private weak var containerForCustomView: UIView!
     
     private weak var view: UIView!
@@ -75,7 +75,7 @@ public class KOViewErrorFeature {
     
     // MARK: - Functions
     // MARK: Initializations
-    public init(delegate: KOViewErrorFeatureDelegate) {
+    public init(delegate: KOControlErrorFeatureDelegate) {
         self.delegate = delegate
         initialize()
     }

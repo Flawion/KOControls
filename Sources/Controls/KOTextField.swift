@@ -49,10 +49,10 @@ open class KOTextField: UITextField {
         }
     }
     
-    public private(set) var error: KOViewErrorFeature!
-    public private(set) var errorInfo: KOViewErrorInfoFeature!
-    public private(set) var validation: KOViewValidationFeature!
-    public private(set) var border: KOViewBorderFeature!
+    public private(set) var error: KOVControlErrorFeature!
+    public private(set) var errorInfo: KOControlErrorInfoFeature!
+    public private(set) var validation: KOControlValidationFeature!
+    public private(set) var border: KOControlBorderFeature!
     
     // MARK: - Functions
     // MARK: Overridden rects to avoid intersection with the error icon view
@@ -111,10 +111,10 @@ open class KOTextField: UITextField {
     }
     
     private func initializeFeatures() {
-        error = KOViewErrorFeature(delegate: self)
-        errorInfo = KOViewErrorInfoFeature(delegate: self)
-        validation = KOViewValidationFeature(delegate: self)
-        border = KOViewBorderFeature(delegate: self)
+        error = KOVControlErrorFeature(delegate: self)
+        errorInfo = KOControlErrorInfoFeature(delegate: self)
+        validation = KOControlValidationFeature(delegate: self)
+        border = KOControlBorderFeature(delegate: self)
     }
     
     private func initializeView() {
@@ -146,8 +146,8 @@ open class KOTextField: UITextField {
     }
 }
 
-// MARK: - KOViewBorderFeatureDelegate
-extension KOTextField: KOViewBorderFeatureDelegate {
+// MARK: - KOControlBorderFeatureDelegate
+extension KOTextField: KOControlBorderFeatureDelegate {
     public var featureContainer: UIView {
         return self
     }
@@ -157,8 +157,8 @@ extension KOTextField: KOViewBorderFeatureDelegate {
     }
 }
 
-// MARK: - KOViewValidationFeatureDelegate
-extension KOTextField: KOViewValidationFeatureDelegate {
+// MARK: - KOControlValidationFeatureDelegate
+extension KOTextField: KOControlValidationFeatureDelegate {
     public var textToValidate: String? {
         return text
     }
@@ -172,8 +172,8 @@ extension KOTextField: KOViewValidationFeatureDelegate {
     }
 }
 
-// MARK: - KOViewErrorFeatureDelegate
-extension KOTextField: KOViewErrorFeatureDelegate {
+// MARK: - KOControlErrorFeatureDelegate
+extension KOTextField: KOControlErrorFeatureDelegate {
     public func errorDidShow() {
         border.refresh()
         errorInfo.refresh()
@@ -188,7 +188,7 @@ extension KOTextField: KOViewErrorFeatureDelegate {
 }
 
 // MARK: - KOViewErrorInfoFeatureDelegate
-extension KOTextField: KOViewErrorInfoFeatureDelegate {
+extension KOTextField: KOControlErrorInfoFeatureDelegate {
     public var markerCenterXEualTo: NSLayoutXAxisAnchor {
         return error.viewCenterXAnchor
     }

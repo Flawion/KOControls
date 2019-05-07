@@ -366,43 +366,70 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         
         view.removeConstraints(mainViewAllHorizontalConsts)
         
-        var leftConst: NSLayoutConstraint!
-        var rightConst: NSLayoutConstraint!
-        var allConsts: [NSLayoutConstraint] = []
-        
         switch mainViewHorizontalAlignment {
         case .left:
-            leftConst = pMainView.leftAnchor.constraint(equalTo: view.leftAnchor)
-            rightConst = pMainView.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor)
-            allConsts = [leftConst, rightConst]
+           createMainViewConstraintsForLeftHorizontalAllignment()
             
         case .leading:
-            leftConst = pMainView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-            rightConst = pMainView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor)
-            allConsts = [leftConst, rightConst]
+            createMainViewConstraintsForLeadingHorizontalAllignment()
             
         case .center:
-            leftConst = pMainView.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor)
-            rightConst = pMainView.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor)
-            allConsts = [leftConst, rightConst, pMainView.centerXAnchor.constraint(equalTo: view.centerXAnchor)]
+            createMainViewConstraintsForCenterHorizontalAllignment()
             
         case .right:
-            leftConst = pMainView.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor)
-            rightConst = pMainView.rightAnchor.constraint(equalTo: view.rightAnchor)
-            allConsts = [leftConst, rightConst]
+            createMainViewConstraintsForRightHorizontalAllignment()
             
         case .trailing:
-            leftConst = pMainView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor)
-            rightConst = pMainView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            allConsts = [leftConst, rightConst]
-            
-        //fill space
+            createMainViewConstraintsForTrailingHorizontalAllignment()
+
         default:
-            leftConst = pMainView.leftAnchor.constraint(equalTo: view.leftAnchor)
-            rightConst = pMainView.rightAnchor.constraint(equalTo: view.rightAnchor)
-            allConsts = [leftConst, rightConst]
+            createMainViewConstraintsForFillHorizontalAllignment()
         }
-        
+    }
+
+    private func createMainViewConstraintsForLeftHorizontalAllignment() {
+        let leftConst = pMainView.leftAnchor.constraint(equalTo: view.leftAnchor)
+        let rightConst = pMainView.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor)
+        let allConsts = [leftConst, rightConst]
+        setMainViewConstraintsForHorizontalAllignment(leftConst: leftConst, rightConst: rightConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForLeadingHorizontalAllignment() {
+        let leftConst = pMainView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let rightConst = pMainView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor)
+        let allConsts = [leftConst, rightConst]
+        setMainViewConstraintsForHorizontalAllignment(leftConst: leftConst, rightConst: rightConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForCenterHorizontalAllignment() {
+        let leftConst = pMainView.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor)
+        let rightConst = pMainView.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor)
+        let allConsts = [leftConst, rightConst, pMainView.centerXAnchor.constraint(equalTo: view.centerXAnchor)]
+        setMainViewConstraintsForHorizontalAllignment(leftConst: leftConst, rightConst: rightConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForRightHorizontalAllignment() {
+        let leftConst = pMainView.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor)
+        let rightConst = pMainView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        let allConsts = [leftConst, rightConst]
+        setMainViewConstraintsForHorizontalAllignment(leftConst: leftConst, rightConst: rightConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForTrailingHorizontalAllignment() {
+        let leftConst = pMainView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor)
+        let rightConst = pMainView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let allConsts = [leftConst, rightConst]
+        setMainViewConstraintsForHorizontalAllignment(leftConst: leftConst, rightConst: rightConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForFillHorizontalAllignment() {
+        let leftConst = pMainView.leftAnchor.constraint(equalTo: view.leftAnchor)
+        let rightConst = pMainView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        let allConsts = [leftConst, rightConst]
+        setMainViewConstraintsForHorizontalAllignment(leftConst: leftConst, rightConst: rightConst, allConsts: allConsts)
+    }
+
+    private func setMainViewConstraintsForHorizontalAllignment(leftConst: NSLayoutConstraint, rightConst: NSLayoutConstraint, allConsts: [NSLayoutConstraint]) {
         view.addConstraints(allConsts)
         mainViewAllHorizontalConsts = allConsts
         mainViewHorizontalConstraintsInsets = KOHorizontalConstraintsInsets(leftConst: leftConst, rightConst: rightConst)
@@ -416,40 +443,56 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         
         view.removeConstraints(mainViewAllVerticalConsts)
         
-        var topConst: NSLayoutConstraint!
-        var bottomConst: NSLayoutConstraint!
-        var allConsts: [NSLayoutConstraint] = []
-        
         switch mainViewVerticalAlignment {
-            
         case .top:
-            topConst = pMainView.topAnchor.constraint(equalTo: view.topAnchor)
-            bottomConst = pMainView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor)
-            allConsts = [topConst, bottomConst]
+            createMainViewConstraintsForTopVerticalAllignment()
             
         case .center:
-            topConst = pMainView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor)
-            bottomConst = pMainView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor)
-            allConsts = [topConst, bottomConst, pMainView.centerYAnchor.constraint(equalTo: view.centerYAnchor)]
+            createMainViewConstraintsForCenterVerticalAllignment()
             
         case .bottom:
-            topConst = pMainView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor)
-            bottomConst = pMainView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            allConsts = [topConst, bottomConst]
-            
-        //fill space
+            createMainViewConstraintsForBottomVerticalAllignment()
+
         default:
-            topConst = pMainView.topAnchor.constraint(equalTo: view.topAnchor)
-            bottomConst = pMainView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            allConsts = [topConst, bottomConst]
+            createMainViewConstraintsForDefaultVerticalAllignment()
         }
-        
+    }
+
+    private func createMainViewConstraintsForTopVerticalAllignment() {
+        let topConst = pMainView.topAnchor.constraint(equalTo: view.topAnchor)
+        let bottomConst = pMainView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor)
+        let allConsts = [topConst, bottomConst]
+        setMainViewConstraintsForVerticalAllignment(topConst: topConst, bottomConst: bottomConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForCenterVerticalAllignment() {
+        let topConst = pMainView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor)
+        let bottomConst = pMainView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor)
+        let allConsts = [topConst, bottomConst, pMainView.centerYAnchor.constraint(equalTo: view.centerYAnchor)]
+        setMainViewConstraintsForVerticalAllignment(topConst: topConst, bottomConst: bottomConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForBottomVerticalAllignment() {
+        let topConst = pMainView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor)
+        let bottomConst = pMainView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let allConsts = [topConst, bottomConst]
+        setMainViewConstraintsForVerticalAllignment(topConst: topConst, bottomConst: bottomConst, allConsts: allConsts)
+    }
+
+    private func createMainViewConstraintsForDefaultVerticalAllignment() {
+        let topConst = pMainView.topAnchor.constraint(equalTo: view.topAnchor)
+        let bottomConst = pMainView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        let allConsts = [topConst, bottomConst]
+        setMainViewConstraintsForVerticalAllignment(topConst: topConst, bottomConst: bottomConst, allConsts: allConsts)
+    }
+
+    private func setMainViewConstraintsForVerticalAllignment(topConst: NSLayoutConstraint, bottomConst: NSLayoutConstraint, allConsts: [NSLayoutConstraint]) {
         view.addConstraints(allConsts)
         mainViewAllVerticalConsts = allConsts
         mainViewVerticalConstraintsInsets = KOVerticalConstraintsInsets(topConst: topConst, bottomConst: bottomConst)
         refreshMainViewEdgesConstraintsInsets()
     }
-    
+
     private func refreshMainViewEdgesConstraintsInsets() {
         guard mainViewHorizontalConstraintsInsets != nil && mainViewVerticalConstraintsInsets != nil else {
             return
@@ -463,23 +506,28 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         }
         
         guard let backgroundVisualEffect = backgroundVisualEffect else {
-            //remove visual effect view if need
-            if let backgroundVisualEffectView = self.backgroundVisualEffectView {
-                backgroundVisualEffectView.removeFromSuperview()
-                pMainView.removeConstraints(backgroundVisualEffectConsts)
-                backgroundVisualEffectConsts = []
-                pMainView.backgroundColor = UIColor.white
-            }
+            removeBackgroundVisualEffectView()
             return
         }
-        
-        //create visual effect
+        addBackgroundVisualEffectView(forEffect: backgroundVisualEffect)
+    }
+
+    private func removeBackgroundVisualEffectView() {
+        guard let backgroundVisualEffectView = self.backgroundVisualEffectView else {
+            return
+        }
+        backgroundVisualEffectView.removeFromSuperview()
+        pMainView.removeConstraints(backgroundVisualEffectConsts)
+        backgroundVisualEffectConsts = []
+        pMainView.backgroundColor = UIColor.white
+    }
+
+    private func addBackgroundVisualEffectView(forEffect backgroundVisualEffect: UIVisualEffect) {
         let backgroundVisualEffectView = UIVisualEffectView(effect: backgroundVisualEffect)
         backgroundVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
         pMainView.insertSubview(backgroundVisualEffectView, belowSubview: pContentView)
         self.backgroundVisualEffectView = backgroundVisualEffectView
-        
-        //create constraints
+
         backgroundVisualEffectConsts = [
             backgroundVisualEffectView.leftAnchor.constraint(equalTo: pMainView.leftAnchor),
             backgroundVisualEffectView.topAnchor.constraint(equalTo: pMainView.topAnchor),
@@ -497,18 +545,31 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         }
         
         guard let contentWidth = contentWidth else {
-            if let contentWidthConst = self.contentWidthConst {
-                contentView.removeConstraint(contentWidthConst)
-            }
+            removeContentWidthConstraint()
             return
         }
+        refreshContentWidthConstraint(constant: contentWidth)
+    }
+
+    private func removeContentWidthConstraint() {
+        guard let contentWidthConst = self.contentWidthConst else {
+            return
+        }
+        contentView.removeConstraint(contentWidthConst)
+    }
+
+    private func refreshContentWidthConstraint(constant: CGFloat) {
         guard let contentWidthConst =  self.contentWidthConst else {
-            let contentWidthConst = contentView.widthAnchor.constraint(equalToConstant: contentWidth)
-            contentView.addConstraint(contentWidthConst)
-            self.contentWidthConst = contentWidthConst
+            createContentWidthConstraint(constant: constant)
             return
         }
-        contentWidthConst.constant = contentWidth
+        contentWidthConst.constant = constant
+    }
+
+    private func createContentWidthConstraint(constant: CGFloat) {
+        let contentWidthConst = contentView.widthAnchor.constraint(equalToConstant: constant)
+        contentView.addConstraint(contentWidthConst)
+        self.contentWidthConst = contentWidthConst
     }
     
     private func refreshContentHeight() {
@@ -517,18 +578,31 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         }
         
         guard let contentHeight = self.contentHeight else {
-            if let contentHeightConst = self.contentHeightConst {
-                contentView.removeConstraint(contentHeightConst)
-            }
+            removeContentHeightConstraint()
             return
         }
+        refreshContentHeightConstraint(constant: contentHeight)
+    }
+
+    private func removeContentHeightConstraint() {
         guard let contentHeightConst = self.contentHeightConst else {
-            let contentHeightConst = contentView.heightAnchor.constraint(equalToConstant: contentHeight)
-            contentView.addConstraint(contentHeightConst)
-            self.contentHeightConst = contentHeightConst
             return
         }
-        contentHeightConst.constant = contentHeight
+        contentView.removeConstraint(contentHeightConst)
+    }
+
+    private func refreshContentHeightConstraint(constant: CGFloat) {
+        guard let contentHeightConst = self.contentHeightConst else {
+            createContentHeightConstraint(constant: constant)
+            return
+        }
+        contentHeightConst.constant = constant
+    }
+
+    private func createContentHeightConstraint(constant: CGFloat) {
+        let contentHeightConst = contentView.heightAnchor.constraint(equalToConstant: constant)
+        contentView.addConstraint(contentHeightConst)
+        self.contentHeightConst = contentHeightConst
     }
 
     // MARK: Bar view and buttons
@@ -541,14 +615,14 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         
         //get main view anchors
         var mLeftAnchor: NSLayoutXAxisAnchor = pMainView.leftAnchor
-        var mRightAnchor: NSLayoutXAxisAnchor = pMainView.rightAnchor
         var mTopAnchor: NSLayoutYAxisAnchor = pMainView.topAnchor
+        var mRightAnchor: NSLayoutXAxisAnchor = pMainView.rightAnchor
         var mBottomAnchor: NSLayoutYAxisAnchor = pMainView.bottomAnchor
 
         if #available(iOS 11.0, *) {
             mLeftAnchor = pMainView.safeAreaLayoutGuide.leftAnchor
-            mRightAnchor = pMainView.safeAreaLayoutGuide.rightAnchor
             mTopAnchor = pMainView.safeAreaLayoutGuide.topAnchor
+            mRightAnchor = pMainView.safeAreaLayoutGuide.rightAnchor
             mBottomAnchor = pMainView.safeAreaLayoutGuide.bottomAnchor
         }
         
@@ -559,15 +633,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         var contentTopConst: NSLayoutConstraint!
         var contentBottomConst: NSLayoutConstraint!
         
-        //add or remove bar view
-        if barMode != .hidden {
-            if pBarView.superview != pMainView {
-                pBarView.removeFromSuperview()
-                pMainView.addSubview(barView)
-            }
-        } else {
-            pBarView.removeFromSuperview()
-        }
+        addOrRemoveBarView()
         
         //create bar constraints
         switch barMode {
@@ -598,6 +664,22 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
             allConstraints = []
         }
     }
+
+    private func addOrRemoveBarView() {
+        if barMode != .hidden {
+            addBarView()
+        } else {
+            pBarView.removeFromSuperview()
+        }
+    }
+
+    private func addBarView() {
+        guard pBarView.superview != pMainView else {
+            return
+        }
+        pBarView.removeFromSuperview()
+        pMainView.addSubview(barView)
+    }
     
     private func refreshLeftBarButtonAction() {
         guard isViewLoaded else {
@@ -609,17 +691,22 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
             return
         }
         
-        var leftBarButton: UIButton! = delegate?.dialogViewControllerCreateLeftButton?(self)
-        if leftBarButton == nil {
-            leftBarButton = UIButton(type: .system)
-            leftBarButton.setTitle(leftBarButtonAction.title, for: .normal)
-        }
-        
+        createLeftBarButton(fromAction: leftBarButtonAction)
+    }
+
+    private func createLeftBarButton(fromAction action: KODialogActionModel) {
+        let leftBarButton: UIButton = (delegate?.dialogViewControllerCreateLeftButton?(self)) ?? createDefaultBarButton(withTitle: action.title)
         leftBarButton.addTarget(self, action: #selector(leftBarButtonClick), for: .touchUpInside)
         barView.leftView = leftBarButton
         barView.leftViewEdgesConstraintsInset.insets = defaultBarButtonInsets
     }
-    
+
+    private func createDefaultBarButton(withTitle title: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        return button
+    }
+
     private func refreshRightBarButtonAction() {
         guard isViewLoaded else {
             return
@@ -630,12 +717,11 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
             return
         }
         
-        var rightBarButton: UIButton! = delegate?.dialogViewControllerCreateRightButton?(self)
-        if rightBarButton == nil {
-            rightBarButton = UIButton(type: .system)
-            rightBarButton.setTitle(rightBarButtonAction.title, for: .normal)
-        }
-        
+        createRightBarButton(fromAction: rightBarButtonAction)
+    }
+
+    private func createRightBarButton(fromAction action: KODialogActionModel) {
+        let rightBarButton: UIButton = (delegate?.dialogViewControllerCreateRightButton?(self)) ?? createDefaultBarButton(withTitle: action.title)
         rightBarButton.addTarget(self, action: #selector(rightBarButtonClick), for: .touchUpInside)
         barView.rightView = rightBarButton
         barView.rightViewEdgesConstraintsInset.insets = defaultBarButtonInsets

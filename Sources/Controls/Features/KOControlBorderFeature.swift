@@ -1,5 +1,5 @@
 //
-//  KOViewBorderFeature.swift
+//  KOControlBorderFeature.swift
 //  KOControls
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -25,7 +25,7 @@
 
 import UIKit
 
-public struct KOViewBorderSettings {
+public struct KOControlBorderSettings {
     public var color: CGColor?
     public var errorColor: CGColor?
     public var focusedColor: CGColor?
@@ -48,24 +48,24 @@ public struct KOViewBorderSettings {
     }
 }
 
-public protocol KOViewBorderFeatureDelegate: NSObjectProtocol {
+public protocol KOControlBorderFeatureDelegate: NSObjectProtocol {
     var featureContainer: UIView { get }
     var errorIsShowing: Bool { get }
 }
 
-// MARK: - KOViewBorderFeature
-public class KOViewBorderFeature {
+// MARK: - KOControlBorderFeature
+public class KOControlBorderFeature {
     // MARK: - Variables
-    private weak var delegate: KOViewBorderFeatureDelegate?
+    private weak var delegate: KOControlBorderFeatureDelegate?
     
-    public var settings: KOViewBorderSettings? {
+    public var settings: KOControlBorderSettings? {
         didSet {
             refresh()
         }
     }
     
     // MARK: - Functions
-    public init(delegate: KOViewBorderFeatureDelegate) {
+    public init(delegate: KOControlBorderFeatureDelegate) {
         self.delegate = delegate
     }
 

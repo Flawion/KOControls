@@ -40,7 +40,6 @@ open class KOPopoverSettings: NSObject, UIPopoverPresentationControllerDelegate 
     /// Preferred content size can be calculated automatically if this variable isn't nil. But view size must be calculable.
     public var preferredContentSizeByLayoutSizeFitting: CGSize? = UIView.layoutFittingCompressedSize
     
-    /// Preferred content size of view
     public var preferredContentSize: CGSize?
     
     /// This event will be invoked before view presented
@@ -59,14 +58,12 @@ open class KOPopoverSettings: NSObject, UIPopoverPresentationControllerDelegate 
     }
     
     /// If you use overriden 'present' function with parameter 'popoverSettings' this function will be invoked before view presented
-    ///
-    /// - Parameters:
-    ///   - viewController: presented view controller
-    ///   - presentOnViewController: presenting view controller
     public func prepareViewController(_ viewController: UIViewController, presentOnViewController: UIViewController ) {
-        viewController.modalPresentationStyle = .popover
-        
-        //calculate preferred content size
+        calculatePreferedContentSize(forViewController: viewController)
+        setPopoverSettings(forViewController: viewController)
+    }
+
+    private func calculatePreferedContentSize(forViewController viewController: UIViewController) {
         if let overridePreferredContentSize = preferredContentSize {
             viewController.preferredContentSize = overridePreferredContentSize
         } else if let preferredContentSizeByLayoutSizeFitting = preferredContentSizeByLayoutSizeFitting {
@@ -74,18 +71,25 @@ open class KOPopoverSettings: NSObject, UIPopoverPresentationControllerDelegate 
             let size = viewController.view.systemLayoutSizeFitting(preferredContentSizeByLayoutSizeFitting)
             viewController.preferredContentSize = size
         }
-        
-        //set popover settings
-        if let popoverPresentationController = viewController.popoverPresentationController {
-            if let barButtonItem = barButtonItem {
-                popoverPresentationController.barButtonItem = barButtonItem
-            } else if let sourceView = sourceView, let sourceRect = sourceRect {
-                popoverPresentationController.sourceView = sourceView
-                popoverPresentationController.sourceRect = sourceRect
-            }
-            popoverPresentationController.delegate = self
-            setupPopoverPresentationControllerEvent?(popoverPresentationController)
+    }
+
+    private func setPopoverSettings(forViewController viewController: UIViewController) {
+        viewController.modalPresentationStyle = .popover
+        guard let popoverPresentationController = viewController.popoverPresentationController else {
+            return
         }
+        setPopoverSettings(forPopoverPresentationController: popoverPresentationController)
+    }
+
+    private func setPopoverSettings(forPopoverPresentationController popoverPresentationController: UIPopoverPresentationController) {
+        if let barButtonItem = barButtonItem {
+            popoverPresentationController.barButtonItem = barButtonItem
+        } else if let sourceView = sourceView, let sourceRect = sourceRect {
+            popoverPresentationController.sourceView = sourceView
+            popoverPresentationController.sourceRect = sourceRect
+        }
+        popoverPresentationController.delegate = self
+        setupPopoverPresentationControllerEvent?(popoverPresentationController)
     }
     
     /// Override this function if you don't want to show popover over iPhone and return other 'UIModalPresentationStyle'

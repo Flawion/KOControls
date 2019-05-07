@@ -210,7 +210,7 @@ final class PickerViewController: UIViewController {
         let viewToAnimationDuration: TimeInterval = 0.5
         let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
         viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
-        let animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+        let animationControllerPresenting = KOAnimatedTransitioningController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
         
         //override dismissing animation
         let viewFromAnimationDuration: TimeInterval = 0.5
@@ -218,7 +218,7 @@ final class PickerViewController: UIViewController {
             KOFadeOutAnimation(),
             KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
             ], duration: viewFromAnimationDuration)
-        let animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
+        let animationControllerDismissing = KOAnimatedTransitioningController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
         
         dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
     }

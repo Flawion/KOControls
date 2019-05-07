@@ -1,5 +1,5 @@
 //
-//  KOViewErrorInfoFeature.swift
+//  KOControlErrorInfoFeature.swift
 //  KOControls
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -36,7 +36,7 @@ public enum KOShowErrorInfoModes {
     case always
 }
 
-@objc public protocol KOViewErrorInfoFeatureDelegate: NSObjectProtocol {
+@objc public protocol KOControlErrorInfoFeatureDelegate: NSObjectProtocol {
     var featureContainer: UIView { get }
     var errorIsShowing: Bool { get }
     var markerCenterXEualTo: NSLayoutXAxisAnchor { get }
@@ -47,10 +47,10 @@ public enum KOShowErrorInfoModes {
     @objc optional func errorInfoDidShow()
 }
 
-// MARK: - KOViewErrorInfoFeature
-public class KOViewErrorInfoFeature {
+// MARK: - KOControlErrorInfoFeature
+public class KOControlErrorInfoFeature {
     // MARK: - Variables
-    private weak var delegate: KOViewErrorInfoFeatureDelegate?
+    private weak var delegate: KOControlErrorInfoFeatureDelegate?
     
     private var containerForView: UIView!
     private var containerForViewConsts: [NSLayoutConstraint] = []
@@ -106,7 +106,7 @@ public class KOViewErrorInfoFeature {
     
     // MARK: - Functions
     // MARK: Initializations
-    public init(delegate: KOViewErrorInfoFeatureDelegate) {
+    public init(delegate: KOControlErrorInfoFeatureDelegate) {
         self.delegate = delegate
 
         initialize()
