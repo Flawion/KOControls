@@ -191,9 +191,9 @@ final class CustomDialogViewController: KODialogViewController {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         mainViewHorizontalAlignment = .center
         mainViewVerticalAlignment = .center
-        contentWidth = 300
+        mainView.contentWidth = 300
         mainView.layer.cornerRadius = 5
-        barView.titleLabel.text = "Dialog number \(index)"
+        mainView.barView.titleLabel.text = "Dialog number \(index)"
         leftBarButtonAction = KODialogActionModel.cancelAction()
     }
     

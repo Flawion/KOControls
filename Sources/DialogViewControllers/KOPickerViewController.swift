@@ -177,7 +177,7 @@ open class KOOptionsPickerViewController: KODialogViewController, UIPickerViewDa
         super.init(coder: aDecoder)
     }
     
-    override open func createContentView() -> UIView {
+   override open func createContentView() -> UIView {
         let optionsPicker = UIPickerView()
         optionsPicker.dataSource = self
         self.pOptionsPicker = optionsPicker

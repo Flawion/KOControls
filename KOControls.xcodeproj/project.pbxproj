@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051CE6DE2282F639007C64CC /* KODialogMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051CE6DD2282F639007C64CC /* KODialogMainView.swift */; };
 		052099E4214FEC8600603A5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 052099E3214FEC8600603A5D /* Assets.xcassets */; };
 		05251CBD213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */; };
 		053ED24A21162C2E0016ABC4 /* KOControls.h in Headers */ = {isa = PBXBuildFile; fileRef = 053ED24821162C2E0016ABC4 /* KOControls.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -18,7 +19,7 @@
 		0595A2F422818D7A00C4DFB4 /* KOAnimatedTransitioningController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595A2F322818D7A00C4DFB4 /* KOAnimatedTransitioningController.swift */; };
 		0595A2F622818E0900C4DFB4 /* KODimmingPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0595A2F522818E0900C4DFB4 /* KODimmingPresentationController.swift */; };
 		05A121F1227DF2D8000739D6 /* KOTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A121F0227DF2D8000739D6 /* KOTextField.swift */; };
-		05A121F3227DF372000739D6 /* KOVControlErrorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A121F2227DF372000739D6 /* KOVControlErrorFeature.swift */; };
+		05A121F3227DF372000739D6 /* KOControlErrorFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A121F2227DF372000739D6 /* KOControlErrorFeature.swift */; };
 		05A121F5227DFC27000739D6 /* KOControlErrorInfoFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A121F4227DFC27000739D6 /* KOControlErrorInfoFeature.swift */; };
 		05A121F7227E1BF6000739D6 /* KOControlValidationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A121F6227E1BF6000739D6 /* KOControlValidationFeature.swift */; };
 		05B4DF8A21674E05002556B9 /* KOAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B4DF8921674E05002556B9 /* KOAnimation.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		051CE6DD2282F639007C64CC /* KODialogMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogMainView.swift; sourceTree = "<group>"; };
 		052099E3214FEC8600603A5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOEdgesConstraintsInsets.swift; sourceTree = "<group>"; };
 		053ED24521162C2E0016ABC4 /* KOControls.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KOControls.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,7 +49,7 @@
 		0595A2F322818D7A00C4DFB4 /* KOAnimatedTransitioningController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimatedTransitioningController.swift; sourceTree = "<group>"; };
 		0595A2F522818E0900C4DFB4 /* KODimmingPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODimmingPresentationController.swift; sourceTree = "<group>"; };
 		05A121F0227DF2D8000739D6 /* KOTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextField.swift; sourceTree = "<group>"; };
-		05A121F2227DF372000739D6 /* KOVControlErrorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOVControlErrorFeature.swift; sourceTree = "<group>"; };
+		05A121F2227DF372000739D6 /* KOControlErrorFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlErrorFeature.swift; sourceTree = "<group>"; };
 		05A121F4227DFC27000739D6 /* KOControlErrorInfoFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlErrorInfoFeature.swift; sourceTree = "<group>"; };
 		05A121F6227E1BF6000739D6 /* KOControlValidationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlValidationFeature.swift; sourceTree = "<group>"; };
 		05B4DF8921674E05002556B9 /* KOAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimation.swift; sourceTree = "<group>"; };
@@ -115,7 +117,7 @@
 			children = (
 				05CDF659227EDBF5005D82A0 /* KOControlBorderFeature.swift */,
 				05A121F6227E1BF6000739D6 /* KOControlValidationFeature.swift */,
-				05A121F2227DF372000739D6 /* KOVControlErrorFeature.swift */,
+				05A121F2227DF372000739D6 /* KOControlErrorFeature.swift */,
 				05A121F4227DFC27000739D6 /* KOControlErrorInfoFeature.swift */,
 				053ED28B211638950016ABC4 /* KOErrorInfoView.swift */,
 			);
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */,
+				051CE6DD2282F639007C64CC /* KODialogMainView.swift */,
 				05E40303214A9156004AB4A4 /* KODialogBarView.swift */,
 				05FD48E2214122390092A3A3 /* KOPickerViewController.swift */,
 			);
@@ -242,6 +245,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				051CE6DE2282F639007C64CC /* KODialogMainView.swift in Sources */,
 				0546FCA622704A5000EE7236 /* KOAnimator.swift in Sources */,
 				0566A6AA213E75D900E87518 /* KOConstraints.swift in Sources */,
 				05E464CB216E28A900AE504D /* KOTouchForwardingView.swift in Sources */,
@@ -256,7 +260,7 @@
 				05E40302214A8E58004AB4A4 /* KOTransition.swift in Sources */,
 				05A121F5227DFC27000739D6 /* KOControlErrorInfoFeature.swift in Sources */,
 				0595A2F422818D7A00C4DFB4 /* KOAnimatedTransitioningController.swift in Sources */,
-				05A121F3227DF372000739D6 /* KOVControlErrorFeature.swift in Sources */,
+				05A121F3227DF372000739D6 /* KOControlErrorFeature.swift in Sources */,
 				05E40304214A9156004AB4A4 /* KODialogBarView.swift in Sources */,
 				05FD48E3214122390092A3A3 /* KOPickerViewController.swift in Sources */,
 				0595A2F622818E0900C4DFB4 /* KODimmingPresentationController.swift in Sources */,

@@ -61,7 +61,7 @@ extension UIViewController {
     public func presentDialog(_ dialogViewControllerToPresent: KODialogViewController, viewLoadedAction: KODialogActionModel, inQueueWithIndex: Int? = nil, popoverSettings: KOPopoverSettings? = nil, animated: Bool = true, completion: (() -> Void)? = nil) -> String? {
         dialogViewControllerToPresent.viewLoadedEvent = {
             dialogViewController in
-            dialogViewController.barView.titleLabel.text = viewLoadedAction.title
+            dialogViewController.mainView.barView.titleLabel.text = viewLoadedAction.title
             viewLoadedAction.action(dialogViewController)
         }
         if popoverSettings != nil {

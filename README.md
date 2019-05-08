@@ -25,8 +25,8 @@ Right now it contains only the few features but it will be getting the new stuff
 
 ## Versions
 
-* Swift 4.2  ~> 1.0
-* Swift 5.0  ~> 1.1
+* Swift 4.2:  from 1.0 to 1.0.3
+* Swift 5.0:  from 1.1 to 1.2 (newest)
 
 ## Installation
 
@@ -36,7 +36,7 @@ KOControls doesn't contains any external dependencies. If you want to stay updat
 
 Add below entry to the target in Podfile
 ```
-pod 'KOControls', '~> 1.1'
+pod 'KOControls', '~> 1.2'
 ```
 
 For example
@@ -47,7 +47,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'Target Name' do
-pod 'KOControls', '~> 1.1'
+pod 'KOControls', '~> 1.2'
 end
 ```
 Install the pods by running
@@ -138,36 +138,36 @@ Text field supports showing and validating an error.
   <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/emailfield3.png" width="500">
 </p>
 
-You always have to set the error description before show it. To show an error manually you need to change the default ```validateMode``` to manual and just change the flag ```isShowingError``` to true. 
+You always have to set the error description before show it. To show an error manually you need to change the default ```validation.mode``` to manual and just change the flag ```error.isShowing``` to true. 
 
 ```swift
-errorField.errorInfoView.descriptionLabel.text = "Error description text"
-errorField.validateMode = .manual
-errorField.isShowingError = true
+errorField.errorInfo.description = "Error description text"
+errorField.validation.mode = .manual
+errorField.error.isShowing = true
 ```
 
 To don't worry about setting the flag manually, you can use auto validation feature. The default validation mode is ```validateOnLostFocus```. So in example if you want to show error when the email isn't correct you need to only add the predefinied validator.
 
 ```swift
-emailField.errorInfoView.descriptionLabel.text = "Email is incorrect"
-emailField.add(validator: KORegexTextValidator.mailValidator)
+emailField.errorInfo.description = "Email is incorrect"
+emailField.validation.add(validator: KORegexTextValidator.mailValidator)
 
 ```
-You can always adjust the border of the field to the state of: normal, error, focus; by setting ```borderSettings```.
+You can always adjust the border of the field to the state of: normal, error, focus; by setting ```border.settings```.
 
 ```swift
-emailField.borderSettings = KOTextFieldBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
+emailField.border.settings = KOControlBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
 ```
 
 Field can be validated with the multiple validators based on function or regex.
 
 ```swift
-passwordField.borderSettings = KOTextFieldBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
-passwordField.errorInfoView.descriptionLabel.text = "Password should contains 8 to 20 chars"
-passwordField.validateMode = .validateOnTextChanged
+passwordField.border.settings = KOControlBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
+passwordField.errorInfo.description = "Password should contains 8 to 20 chars"
+passwordField.validation.validateMode = .validateOnTextChanged
 
 //simple function based validator
-passwordField.add(validator: KOFunctionTextValidator(function: {
+passwordField.validation.add(validator: KOFunctionTextValidator(function: {
 (password) -> Bool in
     return password.count >= 8 && password.count <= 20
 }))
@@ -176,47 +176,47 @@ passwordField.add(validator: KOFunctionTextValidator(function: {
 Regex based validator.
 
 ```swift
-passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
+passwordField.validation.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
 ```
-Error info in default is showing in the field's superview, but you can change this by setting manually  ```showErrorInfoInView```. If you want to show error info always or manually when there is an error you can do this by change ```showErrorInfoMode```. In manually mode you show or hide error info by function  ```showErrorInfoIfCan()``` or  ```hideErrorInfoIfCan()```.
+Error info in default is showing in the field's superview, but you can change this by setting manually  ```showErrorInfoInView```. If you want to show error info always or manually when there is an error you can do this by change ```showErrorInfoMode```. In manually mode you show or hide error info by flag  ```errorInfo.isShowing```.
 
-Showing error info can be customized by changing ```errorInfoView``` and its show / hide animation.
+Showing error info can be customized by changing ```errorInfo.view``` and its show / hide animation.
 
 ```swift
 //changes animations
-passwordField.errorInfoHideAnimation = KOAnimationGroup(animations:[
+passwordField.errorInfo.hideAnimation = KOAnimationGroup(animations:[
     KOTranslationAnimation(toValue: CGPoint(x: -200, y: 20)),
     KOFadeOutAnimation()
 ])
-passwordField.errorInfoShowAnimation = KOAnimationGroup(animations: [
+passwordField.errorInfo.showAnimation = KOAnimationGroup(animations: [
     KOTranslationAnimation(toValue: CGPoint.zero, fromValue: CGPoint(x: -200, y: 20)),
     KOFadeInAnimation(fromValue: 0)
 ], dampingRatio: 0.6)
 
 //adds additional icon
-passwordField.errorInfoView.imageWidthConst.constant = 25
-passwordField.errorInfoView.imageView.image = UIImage(named:"ico_account")
-passwordField.errorInfoView.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-passwordField.errorInfoView.imageView.contentMode = .scaleAspectFit
+passwordField.errorInfo.view.imageWidthConst.constant = 25
+passwordField.errorInfo.view.imageView.image = UIImage(named:"ico_account")
+passwordField.errorInfo.view.imageViewEdgesConstraintsInsets.insets =  UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+passwordField.errorInfo.view.imageView.contentMode = .scaleAspectFit
 
 //other adjustments
-passwordField.errorInfoView.descriptionLabel.textColor = UIColor.black
-passwordField.errorInfoView.contentView.backgroundColor = UIColor.white
-passwordField.errorInfoView.layer.shadowColor = UIColor.black.cgColor
-passwordField.errorInfoView.layer.shadowOffset = CGSize(width: 0, height: -2)
-passwordField.errorInfoView.layer.shadowRadius = 5
-passwordField.errorInfoView.layer.shadowOpacity = 0.7
-passwordField.errorInfoView.markerColor = UIColor.white
+passwordField.errorInfo.view.descriptionLabel.textColor = UIColor.black
+passwordField.errorInfo.view.contentView.backgroundColor = UIColor.white
+passwordField.errorInfo.view.layer.shadowColor = UIColor.black.cgColor
+passwordField.errorInfo.view.layer.shadowOffset = CGSize(width: 0, height: -2)
+passwordField.errorInfo.view.layer.shadowRadius = 5
+passwordField.errorInfo.view.layer.shadowOpacity = 0.7
+passwordField.errorInfo.view.markerColor = UIColor.white
 ```
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/passwordfield3.png" width="500">
 </p>
 
-You can replace ```errorInfoView``` completely by ```customErrorInfoView```, but new view need to implement  ```KOTextFieldErrorInfoProtocol```.
+You can replace ```errorInfo.view``` completely by ```errorInfo.customView```, but new view need to implement  ```KOErrorInfoProtocol```.
 
 ```swift
-class UserNameErrorInfoView : UIView, KOTextFieldErrorInfoProtocol{
+class UserNameErrorInfoView : UIView, KOErrorInfoProtocol{
     func markerCenterXEqualTo(_ constraint: NSLayoutXAxisAnchor) -> NSLayoutConstraint? {
         return nil
     }
@@ -238,14 +238,14 @@ userNameErrorInfoView.addConstraints([
     userNameErrorInfoLabel.topAnchor.constraint(equalTo: userNameErrorInfoView.topAnchor, constant: 8)
 ])
 
-userNameField.customErrorInfoView = userNameErrorInfoView
+userNameField.errorInfo.customView = userNameErrorInfoView
 ```
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/userfield3.png" width="500">
 </p>
 
-Error view that is showing at the right corner of the field, can be customized by changing ```errorIconView``` or replacing it by ```customErrorView```.
+Error view that is showing at the right corner of the field, can be customized by changing ```error.iconView``` or replacing it by ```error.customView```.
 
 ```swift
 //sets custom error view
@@ -255,11 +255,11 @@ passwordErrorLabel.textColor = UIColor.black
 passwordErrorLabel.textAlignment = .center
 passwordErrorLabel.text = "Incorrect"
 
-passwordField.customErrorView = passwordErrorLabel
-passwordField.errorWidth = 100
+passwordField.error.customView = passwordErrorLabel
+passwordField.error.viewWidth = 100
 
 //or just sets the other image
-// passwordField.errorIconView.image = UIImage(named:"someImage")
+// passwordField.error.iconView.image = UIImage(named:"someImage")
 ```
 
 ### KOScrollOffsetProgressController
@@ -330,7 +330,7 @@ class SearchItemsTablePickerViewController : KOItemsTablePickerViewController{
     
         let searchField = KOTextField()
         searchField.borderStyle = .roundedRect
-        searchField.borderSettings = AppSettings.fieldBorder
+        searchField.border.settings = AppSettings.fieldBorder
         searchField.placeholder = "Search country"
         contentView.addSubview(searchField)
         searchField.translatesAutoresizingMaskIntoConstraints = false
@@ -354,16 +354,16 @@ We can additional customize our picker by changing its parameters.
 
 ```swift
 dialogViewController.modalPresentationCapturesStatusBarAppearance = true
-dialogViewController.backgroundVisualEffect = UIBlurEffect(style: .dark)
 dialogViewController.mainViewHorizontalAlignment = .center
 dialogViewController.mainViewVerticalAlignment = .center
+dialogViewController.mainView.backgroundVisualEffect = UIBlurEffect(style: .dark)
 dialogViewController.mainView.layer.cornerRadius = 12
 dialogViewController.mainView.clipsToBounds = true
-dialogViewController.barMode = .bottom
-dialogViewController.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
-dialogViewController.barView.titleLabel.textColor = UIColor.white
-(dialogViewController.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
-(dialogViewController.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+dialogViewController.mainView.barMode = .bottom
+dialogViewController.mainView.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+dialogViewController.mainView.barView.titleLabel.textColor = UIColor.white
+(dialogViewController.mainView.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+(dialogViewController.mainView.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
 ```
 
 Or we can change the transition.
@@ -373,7 +373,7 @@ Or we can change the transition.
 let viewToAnimationDuration : TimeInterval = 0.5
 let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
 viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
-let animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+let animationControllerPresenting = KOAnimatedTransitioningController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
 
 //override dismissing animation
 let viewFromAnimationDuration : TimeInterval = 0.5
@@ -381,7 +381,7 @@ let viewFromAnimation = KOAnimationGroup(animations: [
     KOFadeOutAnimation(),
     KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
 ], duration : viewFromAnimationDuration)
-let animationControllerDismissing = KOAnimationController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
+let animationControllerDismissing = KOAnimatedTransitioningController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
 
 dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
 ```
@@ -465,14 +465,14 @@ Simple way to get the selected option from the user from table.
   <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/itemstablepicker3.png" width="500" title="Default and after customization">
 </p>
 
-You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UITableView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UITableDataSource need to be handle by the user.
+You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```mainView.contentHeight``` or ```mainView.contentWidth``` depending on alignments of main view, because UITableView can't  define how much size need. In the default situation you have to set ```mainView.contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UITableDataSource need to be handle by the user.
 
 ```swift
 _ = presentItemsTablePicker(viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
     [weak self](dialogViewController) in
     let itemsTablePickerViewController = dialogViewController as! KOItemsTablePickerViewController
     //sets contentHeight, because mainViewVerticalAlignment is other than .fill
-    itemsTablePickerViewController.contentHeight = 300
+    itemsTablePickerViewController.mainView.contentHeight = 300
     //sets the cancel button
     itemsTablePickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
     //sets the done button
@@ -499,7 +499,7 @@ Simple way to get the selected option from the user from collection.
   <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/itemscollectionpicker3.png" width="500" title="Default and after customization">
 </p>
 
-You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```contentHeight``` or ```contentWidth``` depending on alignments of main view, because UICollectionView can't  define how much size need. In the default situation you have to set ```contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UICollectionViewDataSource need to be handle by the user.
+You can use predefined function to present items picker at the screen like below.  Action viewLoaded lets you to set title of barView and left / right button to accept or cancel dialog's result. You need to remember to set ```mainView.contentHeight``` or ```mainView.contentWidth``` depending on alignments of main view, because UICollectionView can't  define how much size need. In the default situation you have to set ```mainView.contentHeight``` because ```mainViewVerticalAlignment``` is different than ```.fill```. Setting and managing items through UICollectionViewDataSource need to be handle by the user.
 
 ```swift
 _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLayout(), viewLoadedAction: KODialogActionModel(title: "Select your country", action: {
@@ -510,7 +510,7 @@ _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLay
 
     let itemsCollectionPickerViewController = dialogViewController as! KOItemsCollectionPickerViewController
     //sets contentHeight, because mainViewVerticalAlignment is other than .fill
-    itemsCollectionPickerViewController.contentHeight = 300
+    itemsCollectionPickerViewController.mainView.contentHeight = 300
     //sets the cancel button
     itemsCollectionPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
     //sets the done button
@@ -569,7 +569,7 @@ Presentation animations can be changed by parameters  ```animationControllerPres
 let viewToAnimationDuration : TimeInterval = 0.5
 let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
 viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
-dialogViewController.customTransition?.animationControllerPresenting = KOAnimationController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+dialogViewController.customTransition?.animationControllerPresenting = KOAnimatedTransitioningController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
 ```
 
 You need to remember that in iOS ```UIModalPresentationStyle.custom``` has a fullscreen context, so the view will be always have full screen frame. You can change this by setting ```KODimmingPresentationController.keepFrameOfView```. But the touches outside will not be forwarded to below until you seted ```KODimmingPresentationController.touchForwardingView.passthroughViews```.

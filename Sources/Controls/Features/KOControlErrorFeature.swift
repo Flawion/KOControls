@@ -32,7 +32,7 @@ import UIKit
     @objc optional func errorDidHide()
 }
 
-public class KOVControlErrorFeature {
+public class KOControlErrorFeature {
     // MARK: - Variables
     private weak var delegate: KOControlErrorFeatureDelegate?
     private weak var containerForCustomView: UIView!

@@ -53,14 +53,14 @@ final class TextFieldsViewController: UIViewController {
     private func initializeEmailField() {
         //- email field
         emailField.border.settings = AppSettings.fieldBorder
-        emailField.errorInfo.view.descriptionLabel.text = "Email is incorrect"
+        emailField.errorInfo.description = "Email is incorrect"
         emailField.validation.add(validator: KORegexTextValidator.mailValidator)
     }
     
     private func initializePasswordField() {
         //- password field
         passwordField.border.settings = AppSettings.fieldBorder
-        passwordField.errorInfo.view.descriptionLabel.text = "Password should contains 8 to 20 chars"
+        passwordField.errorInfo.description = "Password should contains 8 to 20 chars"
         passwordField.validation.mode = .validateOnTextChanged
         
         //simple function validation

@@ -49,7 +49,7 @@ open class KOTextField: UITextField {
         }
     }
     
-    public private(set) var error: KOVControlErrorFeature!
+    public private(set) var error: KOControlErrorFeature!
     public private(set) var errorInfo: KOControlErrorInfoFeature!
     public private(set) var validation: KOControlValidationFeature!
     public private(set) var border: KOControlBorderFeature!
@@ -111,7 +111,7 @@ open class KOTextField: UITextField {
     }
     
     private func initializeFeatures() {
-        error = KOVControlErrorFeature(delegate: self)
+        error = KOControlErrorFeature(delegate: self)
         errorInfo = KOControlErrorInfoFeature(delegate: self)
         validation = KOControlValidationFeature(delegate: self)
         border = KOControlBorderFeature(delegate: self)

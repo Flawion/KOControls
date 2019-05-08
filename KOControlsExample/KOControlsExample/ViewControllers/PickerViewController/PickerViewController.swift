@@ -35,6 +35,10 @@ final class PickerViewController: UIViewController {
     @IBOutlet weak var styleModePanel: UIView!
     @IBOutlet weak var styleMode: UISegmentedControl!
     
+    private var isItemsTableSelected: Bool {
+        return countryPickerType.selectedSegmentIndex == 0
+    }
+    
     var popoverSettings: KOPopoverSettings?
     
     var isPresentPopover: Bool {
@@ -44,7 +48,7 @@ final class PickerViewController: UIViewController {
     var isStyleCustomize: Bool {
         return styleMode.selectedSegmentIndex == 1
     }
-    
+   
     //birthday
     @IBOutlet weak var birthdayField: KOTextField!
     var birthdayDate: Date = Date() {
@@ -118,16 +122,26 @@ final class PickerViewController: UIViewController {
     }
     
     private func initializeFields() {
+        initializeBirthdayField()
+        initializeFilmTypeField()
+        initializeCountryFields()
+    }
+    
+    private func initializeBirthdayField() {
         birthdayField.border.settings = AppSettings.fieldBorder
         birthdayField.errorInfo.showMode = .always
         birthdayField.errorInfo.view.descriptionLabel.text = "You are under 18"
         birthdayField.errorInfo.showInView = scrollViewContainer
-        
+    }
+    
+    private func initializeFilmTypeField() {
         filmTypeField.border.settings = AppSettings.fieldBorder
         filmTypeField.errorInfo.showMode = .always
         filmTypeField.errorInfo.view.descriptionLabel.text = "You have selected wrong option"
         filmTypeField.errorInfo.showInView = scrollViewContainer
-        
+    }
+    
+    private func initializeCountryFields() {
         countryField.border.settings = AppSettings.fieldBorder
         customCountryField.border.settings = AppSettings.fieldBorder
     }
@@ -165,9 +179,9 @@ final class PickerViewController: UIViewController {
             return true
         }
     }
-    
+
     private func showItemsPicker() {
-        if countryPickerType.selectedSegmentIndex == 0 {
+        if isItemsTableSelected {
             showItemsTablePicker()
         } else {
             showItemsCollectionPicker()
@@ -175,22 +189,6 @@ final class PickerViewController: UIViewController {
     }
     
     // MARK: Additionals customizations
-    func customize(dialogViewController: KODialogViewController) {
-        if !isPresentPopover {
-            dialogViewController.modalPresentationCapturesStatusBarAppearance = true
-            dialogViewController.backgroundVisualEffect = UIBlurEffect(style: .dark)
-            dialogViewController.mainViewHorizontalAlignment = .center
-            dialogViewController.mainViewVerticalAlignment = .center
-        }
-        dialogViewController.mainView.layer.cornerRadius = 12
-        dialogViewController.mainView.clipsToBounds = true
-        dialogViewController.barMode = .bottom
-        dialogViewController.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
-        dialogViewController.barView.titleLabel.textColor = UIColor.white
-        (dialogViewController.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
-        (dialogViewController.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
-    }
-    
     func customizeIfNeed(popoverSettings: KOPopoverSettings) {
         guard isStyleCustomize else {
             return
@@ -201,26 +199,47 @@ final class PickerViewController: UIViewController {
         }
     }
     
+    func customize(dialogViewController: KODialogViewController) {
+        if !isPresentPopover {
+            dialogViewController.modalPresentationCapturesStatusBarAppearance = true
+            dialogViewController.mainView.backgroundVisualEffect = UIBlurEffect(style: .dark)
+            dialogViewController.mainViewHorizontalAlignment = .center
+            dialogViewController.mainViewVerticalAlignment = .center
+        }
+        dialogViewController.mainView.layer.cornerRadius = 12
+        dialogViewController.mainView.clipsToBounds = true
+        dialogViewController.mainView.barMode = .bottom
+        dialogViewController.mainView.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        dialogViewController.mainView.barView.titleLabel.textColor = UIColor.white
+        (dialogViewController.mainView.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+        (dialogViewController.mainView.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+    }
+    
     func customizeTransitionIfNeed(dialogViewController: KODialogViewController) {
         guard isStyleCustomize && !isPresentPopover else {
             return
         }
         
-        //override presenting animation
+        let animationControllerPresenting = createCustomizedAnimationControllerPresenting()
+        let animationControllerDismissing = createCustomizedAnimationControllerDismissing()
+
+        dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+    }
+    
+    private func createCustomizedAnimationControllerPresenting() -> KOAnimatedTransitioningController {
         let viewToAnimationDuration: TimeInterval = 0.5
         let viewToAnimation = KOScaleAnimation(toValue: CGPoint(x: 1, y: 1), fromValue: CGPoint.zero)
         viewToAnimation.timingParameters = UISpringTimingParameters(dampingRatio: 0.6)
-        let animationControllerPresenting = KOAnimatedTransitioningController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
-        
-        //override dismissing animation
+        return KOAnimatedTransitioningController(duration: viewToAnimationDuration, viewToAnimation: viewToAnimation, viewFromAnimation: nil)
+    }
+    
+    private func createCustomizedAnimationControllerDismissing() -> KOAnimatedTransitioningController {
         let viewFromAnimationDuration: TimeInterval = 0.5
         let viewFromAnimation = KOAnimationGroup(animations: [
             KOFadeOutAnimation(),
             KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
             ], duration: viewFromAnimationDuration)
-        let animationControllerDismissing = KOAnimatedTransitioningController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
-        
-        dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+        return KOAnimatedTransitioningController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
     }
 }
 

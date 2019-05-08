@@ -85,6 +85,15 @@ public class KOControlErrorInfoFeature {
     /// Developer can override the default parent for view. The default one will be superview.
     public weak var showInView: UIView?
     
+    public var description: String? {
+        get {
+            return view.descriptionLabel.text
+        }
+        set {
+            view.descriptionLabel.text = newValue
+        }
+    }
+    
     public var showMode: KOShowErrorInfoModes = .onFocus {
         didSet {
             refresh()

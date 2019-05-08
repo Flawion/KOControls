@@ -36,7 +36,7 @@ extension PickerViewController {
     private func showItemsTablePickerNormal() {
         _ = presentItemsTablePicker(viewLoadedAction: KODialogActionModel(title: "Select your country", action: { [weak self](dialogViewController) in
             let itemsTablePickerViewController = dialogViewController as! KOItemsTablePickerViewController
-            itemsTablePickerViewController.contentHeight = 300
+            itemsTablePickerViewController.mainView.contentHeight = 300
             self?.initializeItemsTablePicker(itemsTablePickerViewController)
         }), postInit: { [weak self] itemsTablePickerViewController in
             self?.customizeTransitionIfNeed(dialogViewController: itemsTablePickerViewController)
@@ -95,7 +95,7 @@ extension PickerViewController {
          we already override  prefered content size
          */
         if presentMode.selectedSegmentIndex == 0 {
-            itemsTablePicker.contentWidth = 320
+            itemsTablePicker.mainView.contentWidth = 320
         }
         customize(dialogViewController: itemsTablePicker)
     }
@@ -116,7 +116,7 @@ extension PickerViewController {
                 return
             }
             let searchItemsTablePickerViewController = dialogViewController as! SearchItemsTablePickerViewController
-            searchItemsTablePickerViewController.contentHeight = 300
+            searchItemsTablePickerViewController.mainView.contentHeight = 300
             self.initializeCustomItemsTablePicker(searchItemsTablePickerViewController)
         }))
     }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'KOControls'
-  s.version = '1.1.1'
+  s.version = '1.2'
 
   s.summary = 'Package of useful controls: pickers, presenting queue, textfield thats supports showing the errors etc.'
   s.homepage = 'https://github.com/Flawion/KOControls'
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.source = { :git => 'https://github.com/Flawion/KOControls.git', :tag => s.version }
 
-  s.source_files = 'Sources/*.swift'
+  s.source_files = 'Sources/**/*.swift'
   s.resources = 'Sources/*.{png,jpeg,jpg,storyboard,xib,xcassets}'
 
   s.requires_arc = true

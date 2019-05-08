@@ -40,7 +40,7 @@ extension PickerViewController {
             }
 
             let itemsCollectionPickerViewController = dialogViewController as! KOItemsCollectionPickerViewController
-            itemsCollectionPickerViewController.contentHeight = 300
+            itemsCollectionPickerViewController.mainView.contentHeight = 300
             self.initializeItemsCollectionPicker(itemsCollectionPickerViewController, availableWidth: self.view.bounds.width, itemMaxWidth: 120)
         }), postInit: { [weak self] itemsCollectionPickerViewController in
             self?.customizeTransitionIfNeed(dialogViewController: itemsCollectionPickerViewController)
@@ -79,7 +79,7 @@ extension PickerViewController {
         countryCollectionsController.attach(collectionView: itemsCollectionPicker.itemsCollection)
 
         customizeIfNeed(itemsCollectionPickerViewController: itemsCollectionPicker)
-        countryCollectionsController.calculateCollectionSize(itemsCollectionPicker.itemsCollection, availableWidth: itemsCollectionPicker.contentWidth ?? availableWidth, itemMaxWidth: itemMaxWidth)
+        countryCollectionsController.calculateCollectionSize(itemsCollectionPicker.itemsCollection, availableWidth: itemsCollectionPicker.mainView.contentWidth ?? availableWidth, itemMaxWidth: itemMaxWidth)
     }
 
     // MARK: Customization
@@ -103,7 +103,7 @@ extension PickerViewController {
          we already override  prefered content size
          */
         if !isPresentPopover {
-            itemsCollectionPickerViewController.contentWidth = 320
+            itemsCollectionPickerViewController.mainView.contentWidth = 320
         }
         customize(dialogViewController: itemsCollectionPickerViewController)
     }
