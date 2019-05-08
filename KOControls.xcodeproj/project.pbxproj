@@ -102,10 +102,10 @@
 				05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */,
 				05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */,
 				058529582151161100FA36DE /* KOPopoverSettings.swift */,
-				053ED24821162C2E0016ABC4 /* KOControls.h */,
-				053ED24921162C2E0016ABC4 /* Info.plist */,
 				0566A6A9213E75D900E87518 /* KOConstraints.swift */,
 				0585295A2151164000FA36DE /* UIViewController+Extensions.swift */,
+				053ED24821162C2E0016ABC4 /* KOControls.h */,
+				053ED24921162C2E0016ABC4 /* Info.plist */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

@@ -33,19 +33,32 @@ internal struct KOConstraintsContainer {
 
     var list: [NSLayoutConstraint] {
         var list: [NSLayoutConstraint] = []
-        if let left = left {
-            list.append(left)
-        }
-        if let top = top {
-            list.append(top)
-        }
-        if let right = right {
-            list.append(right)
-        }
-        if let bottom = bottom {
-            list.append(bottom)
-        }
+        addToList(&list, ifNotNullConstraint: left)
+        addToList(&list, ifNotNullConstraint: top)
+        addToList(&list, ifNotNullConstraint: right)
+        addToList(&list, ifNotNullConstraint: bottom)
         return list
+    }
+
+    private func addToList(_ list: inout [NSLayoutConstraint], ifNotNullConstraint constraint: NSLayoutConstraint?) {
+        guard let constraint = constraint else {
+            return
+        }
+        list.append(constraint)
+    }
+}
+
+internal struct KOOAnchorsContainer {
+    var left: NSLayoutXAxisAnchor?
+    var top: NSLayoutYAxisAnchor?
+    var right: NSLayoutXAxisAnchor?
+    var bottom: NSLayoutYAxisAnchor?
+
+    init(left: NSLayoutXAxisAnchor? = nil, top: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil) {
+        self.left = left
+        self.top = top
+        self.right = right
+        self.bottom = bottom
     }
 }
 
@@ -64,20 +77,6 @@ internal enum KOConstraintsOperations {
     case equalOrGreater
 }
 
-final internal class KOOverrideAnchors {
-    let left: NSLayoutXAxisAnchor?
-    let top: NSLayoutYAxisAnchor?
-    let right: NSLayoutXAxisAnchor?
-    let bottom: NSLayoutYAxisAnchor?
-
-    init(left: NSLayoutXAxisAnchor? = nil, top: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil) {
-        self.left = left
-        self.top = top
-        self.right = right
-        self.bottom = bottom
-    }
-}
-
 extension NSLayoutConstraint {
     internal func withPriority(_ priority: Float) -> NSLayoutConstraint {
         return withPriority(UILayoutPriority(priority))
@@ -89,22 +88,72 @@ extension NSLayoutConstraint {
     }
 }
 
-// MARK: Internal extensions
+internal struct KOAddAutoLayoutSubviewSettings {
+    var overrideAnchors: KOOAnchorsContainer?
+    var toAddConstraints: [KOConstraintsDirections]
+    var insets: UIEdgeInsets
+    var operations: [KOConstraintsDirections: KOConstraintsOperations]
+    var priorities: [KOConstraintsDirections: Float]
+
+    init(overrideAnchors: KOOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom], insets: UIEdgeInsets = UIEdgeInsets.zero, operations: [KOConstraintsDirections: KOConstraintsOperations] = [:], priorities: [KOConstraintsDirections: Float] = [:]) {
+        self.overrideAnchors = overrideAnchors
+        self.toAddConstraints = toAddConstraints
+        self.insets = insets
+        self.operations = operations
+        self.priorities = priorities
+    }
+}
+
+// MARK: Internal extensions, Constraints helpers
 extension UIView {
-    //- MARK: Constraints helpers
-    // MARK: Private
-    private func priority(_ priorities: [KOConstraintsDirections: Float], forDirection direction: KOConstraintsDirections) -> Float {
-        if let priority = priorities[.useForAll] {
-            return priority
-        }
-        return priorities[direction] ?? UILayoutPriority.required.rawValue
+
+     internal func addAutoLayoutSubview(_ view: UIView, overrideAnchors: KOOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom]) -> KOConstraintsContainer {
+        return addAutoLayoutSubview(view, settings: KOAddAutoLayoutSubviewSettings(overrideAnchors: overrideAnchors, toAddConstraints: toAddConstraints))
     }
 
-    private func operation(_ operations: [KOConstraintsDirections: KOConstraintsOperations], forDirection direction: KOConstraintsDirections) -> KOConstraintsOperations {
-        if let operations = operations[.useForAll] {
-            return operations
+    internal func addAutoLayoutSubview(_ view: UIView, settings: KOAddAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()) -> KOConstraintsContainer {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(view)
+        let constraintsContainer = createConstraintsContainer(forAddingView: view, settings: settings)
+        addConstraints(constraintsContainer.list)
+        return constraintsContainer
+    }
+
+    private func createConstraintsContainer(forAddingView view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> KOConstraintsContainer {
+        var constraintsContainer = KOConstraintsContainer()
+        constraintsContainer.left = tryToCreateLeftConstraint(addingView: view, settings: settings)
+        constraintsContainer.top = tryToCreateTopConstraint(addingView: view, settings: settings)
+        constraintsContainer.right = tryToCreateRightConstraint(addingView: view, settings: settings)
+        constraintsContainer.bottom = tryToCreateBottomConstraint(addingView: view, settings: settings)
+        return constraintsContainer
+    }
+
+    private func tryToCreateLeftConstraint(addingView view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> NSLayoutConstraint? {
+        guard settings.toAddConstraints.contains(.left) else {
+            return nil
         }
-        return operations[direction] ?? .equal
+        return createConstraints(fromAnchor: view.leftAnchor, toAnchor: (settings.overrideAnchors?.left ?? leftAnchor), operation: operation(settings.operations, forDirection: .left), priority: priority(settings.priorities, forDirection: .left), inset: settings.insets.left)
+    }
+
+    private func tryToCreateTopConstraint(addingView view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> NSLayoutConstraint? {
+        guard settings.toAddConstraints.contains(.top) else {
+            return nil
+        }
+        return createConstraints(fromAnchor: view.topAnchor, toAnchor: (settings.overrideAnchors?.top ?? topAnchor), operation: operation(settings.operations, forDirection: .top), priority: priority(settings.priorities, forDirection: .top), inset: settings.insets.top)
+    }
+
+    private func tryToCreateRightConstraint(addingView view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> NSLayoutConstraint? {
+        guard settings.toAddConstraints.contains(.right) else {
+            return nil
+        }
+        return createConstraints(fromAnchor: view.rightAnchor, toAnchor: (settings.overrideAnchors?.right ?? rightAnchor), operation: operation(settings.operations, forDirection: .right), priority: priority(settings.priorities, forDirection: .right), inset: -settings.insets.right)
+    }
+
+    private func tryToCreateBottomConstraint(addingView view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> NSLayoutConstraint? {
+        guard settings.toAddConstraints.contains(.bottom) else {
+            return nil
+        }
+        return createConstraints(fromAnchor: view.bottomAnchor, toAnchor: (settings.overrideAnchors?.bottom ?? bottomAnchor), operation: operation(settings.operations, forDirection: .bottom), priority: priority(settings.priorities, forDirection: .bottom), inset: -settings.insets.bottom)
     }
 
     private func createConstraints<Axis>(fromAnchor anchor: NSLayoutAnchor<Axis>, toAnchor: NSLayoutAnchor<Axis>, operation: KOConstraintsOperations, priority: Float, inset: CGFloat) -> NSLayoutConstraint {
@@ -118,41 +167,28 @@ extension UIView {
         }
     }
 
-    // MARK: Public
-    internal func addAutoLayoutSubview(_ view: UIView, overrideAnchors: KOOverrideAnchors? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom], insets: UIEdgeInsets = UIEdgeInsets.zero, operations: [KOConstraintsDirections: KOConstraintsOperations] = [:], priorities: [KOConstraintsDirections: Float] = [:]) -> KOConstraintsContainer {
-
-        view.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(view)
-
-        var constraintsContainer = KOConstraintsContainer()
-        var constraints: [NSLayoutConstraint] = []
-        if toAddConstraints.contains(.left) {
-            let constraint = createConstraints(fromAnchor: view.leftAnchor, toAnchor: (overrideAnchors?.left ?? leftAnchor), operation: operation(operations, forDirection: .left), priority: priority(priorities, forDirection: .left), inset: insets.left)
-            constraintsContainer.left = constraint
-            constraints.append(constraint)
+    private func operation(_ operations: [KOConstraintsDirections: KOConstraintsOperations], forDirection direction: KOConstraintsDirections) -> KOConstraintsOperations {
+        if let operations = operations[.useForAll] {
+            return operations
         }
-        if toAddConstraints.contains(.top) {
-            let constraint = createConstraints(fromAnchor: view.topAnchor, toAnchor: (overrideAnchors?.top ?? topAnchor), operation: operation(operations, forDirection: .top), priority: priority(priorities, forDirection: .top), inset: insets.top)
-            constraintsContainer.top = constraint
-            constraints.append(constraint)
-        }
-        if toAddConstraints.contains(.right) {
-            let constraint = createConstraints(fromAnchor: view.rightAnchor, toAnchor: (overrideAnchors?.right ?? rightAnchor), operation: operation(operations, forDirection: .right), priority: priority(priorities, forDirection: .right), inset: -insets.right)
-            constraintsContainer.right = constraint
-            constraints.append(constraint)
-        }
-        if toAddConstraints.contains(.bottom) {
-            let constraint = createConstraints(fromAnchor: view.bottomAnchor, toAnchor: (overrideAnchors?.bottom ?? bottomAnchor), operation: operation(operations, forDirection: .bottom), priority: priority(priorities, forDirection: .bottom), inset: -insets.bottom)
-            constraintsContainer.bottom = constraint
-            constraints.append(constraint)
-        }
-
-        addConstraints(constraints)
-        return constraintsContainer
+        return operations[direction] ?? .equal
     }
 
-    @available(iOS 11.0, *) internal func addSafeAutoLayoutSubview(_ view: UIView, overrideAnchors: KOOverrideAnchors? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom], insets: UIEdgeInsets = UIEdgeInsets.zero, operations: [KOConstraintsDirections: KOConstraintsOperations] = [:], priorities: [KOConstraintsDirections: Float] = [:]) -> KOConstraintsContainer {
-        return addAutoLayoutSubview(view, overrideAnchors: KOOverrideAnchors(left: overrideAnchors?.left ?? safeAreaLayoutGuide.leftAnchor, top: overrideAnchors?.top ?? safeAreaLayoutGuide.topAnchor, right: overrideAnchors?.right ?? safeAreaLayoutGuide.rightAnchor, bottom: overrideAnchors?.bottom ?? safeAreaLayoutGuide.bottomAnchor), toAddConstraints: toAddConstraints, insets: insets, operations: operations, priorities: priorities)
+    private func priority(_ priorities: [KOConstraintsDirections: Float], forDirection direction: KOConstraintsDirections) -> Float {
+        if let priority = priorities[.useForAll] {
+            return priority
+        }
+        return priorities[direction] ?? UILayoutPriority.required.rawValue
+    }
+
+    @available(iOS 11.0, *) internal func addSafeAutoLayoutSubview(_ view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> KOConstraintsContainer {
+        var newSettings = settings
+        newSettings.overrideAnchors = KOOAnchorsContainer(left: settings.overrideAnchors?.left ?? safeAreaLayoutGuide.leftAnchor,
+                                                        top: settings.overrideAnchors?.top ?? safeAreaLayoutGuide.topAnchor,
+                                                        right: settings.overrideAnchors?.right ?? safeAreaLayoutGuide.rightAnchor,
+                                                        bottom: settings.overrideAnchors?.bottom ?? safeAreaLayoutGuide.bottomAnchor)
+
+        return addAutoLayoutSubview(view, settings: newSettings)
     }
 
     internal func fill(withView filingView: UIView?) {
@@ -161,16 +197,18 @@ extension UIView {
             return
         }
         
-        //delete old ones
-        removeConstraints(constraints)
-        for subview in subviews {
-            subview.removeFromSuperview()
-        }
-        
-        //add new one if need
+        removeSubviews()
+
         guard let filingView = filingView else {
             return
         }
         _ = addAutoLayoutSubview(filingView)
+    }
+
+    private func removeSubviews() {
+        removeConstraints(constraints)
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
     }
 }

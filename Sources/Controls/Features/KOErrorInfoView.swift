@@ -161,7 +161,7 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
 
     private func initializeMarkerView() {
         let markerView = UIView()
-        let markerConstraints = addAutoLayoutSubview(markerView, overrideAnchors: KOOverrideAnchors(left: contentView.leftAnchor, right: contentView.rightAnchor, bottom: contentView.topAnchor), insets: UIEdgeInsets(top: 0, left: defaultMarkerMinHorizontalInsets, bottom: 0, right: defaultMarkerMinHorizontalInsets), operations: [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater, KOConstraintsDirections.right: KOConstraintsOperations.equalOrLess])
+        let markerConstraints = addAutoLayoutSubview(markerView, settings: createAddAutoLayoutSubviewSettings(forMarkerView: markerView))
         self.markerView = markerView
 
         let markerWidthConst = markerView.widthAnchor.constraint(equalToConstant: markerWidth)
@@ -174,6 +174,14 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
         self.markerHeightConst = markerHeightConst
 
         markerMinHorizontalConstraintsInsets = KOHorizontalConstraintsInsets(leftConst: markerConstraints.left!, rightConst: markerConstraints.right!)
+    }
+
+    private func createAddAutoLayoutSubviewSettings(forMarkerView markerView: UIView) -> KOAddAutoLayoutSubviewSettings {
+        var addAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()
+        addAutoLayoutSubviewSettings.overrideAnchors = KOOAnchorsContainer(left: contentView.leftAnchor, right: contentView.rightAnchor, bottom: contentView.topAnchor)
+        addAutoLayoutSubviewSettings.insets = UIEdgeInsets(top: 0, left: defaultMarkerMinHorizontalInsets, bottom: 0, right: defaultMarkerMinHorizontalInsets)
+        addAutoLayoutSubviewSettings.operations = [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater, KOConstraintsDirections.right: KOConstraintsOperations.equalOrLess]
+        return addAutoLayoutSubviewSettings
     }
 
     private func initializeMarkerLineView() {
@@ -189,22 +197,34 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
         let descriptionLabel = UILabel()
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
-        descriptionLabelConstsContainer = contentView.addAutoLayoutSubview(descriptionLabel, overrideAnchors: KOOverrideAnchors(top: markerLineView.bottomAnchor),
-                                                                           toAddConstraints: [.top, .right, .bottom],
-                                                                           insets: UIEdgeInsets(top: defaultDescriptionInsets.top, left: 0, bottom: defaultDescriptionInsets.bottom, right: defaultDescriptionInsets.right))
+        descriptionLabelConstsContainer = contentView.addAutoLayoutSubview(descriptionLabel, settings: createAddAutoLayoutSubviewSettings(forDescriptionLabel: descriptionLabel))
         self.descriptionLabel = descriptionLabel
+    }
+
+    private func createAddAutoLayoutSubviewSettings(forDescriptionLabel descriptionLabel: UILabel) -> KOAddAutoLayoutSubviewSettings {
+        var addAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()
+        addAutoLayoutSubviewSettings.overrideAnchors = KOOAnchorsContainer(top: markerLineView.bottomAnchor)
+        addAutoLayoutSubviewSettings.toAddConstraints = [.top, .right, .bottom]
+        addAutoLayoutSubviewSettings.insets = UIEdgeInsets(top: defaultDescriptionInsets.top, left: 0, bottom: defaultDescriptionInsets.bottom, right: defaultDescriptionInsets.right)
+        return addAutoLayoutSubviewSettings
     }
     
     private func initializeImageView() {
         let imageView = UIImageView()
-        imageViewConstsContainer = contentView.addAutoLayoutSubview(imageView, overrideAnchors: KOOverrideAnchors(right: descriptionLabel.leftAnchor),
-                                                                insets: UIEdgeInsets(top: defaultImageInsets.top, left: defaultImageInsets.left, bottom: defaultImageInsets.bottom, right: defaultImageInsets.right + defaultDescriptionInsets.left))
+        imageViewConstsContainer = contentView.addAutoLayoutSubview(imageView, settings: createAddAutoLayoutSubviewSettings(forImageView: imageView))
         self.imageView = imageView
 
         let imageWidthConst = imageView.widthAnchor.constraint(equalToConstant: 0)
         contentView.addConstraint(imageWidthConst)
         self.imageWidthConst = imageWidthConst
         imageViewEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: imageViewConstsContainer.left!, rightConst: imageViewConstsContainer.right!), vertical: KOVerticalConstraintsInsets(topConst: imageViewConstsContainer.top!, bottomConst: imageViewConstsContainer.bottom!))
+    }
+
+    private func createAddAutoLayoutSubviewSettings(forImageView imageView: UIImageView) -> KOAddAutoLayoutSubviewSettings {
+        var addAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()
+        addAutoLayoutSubviewSettings.overrideAnchors = KOOAnchorsContainer(right: descriptionLabel.leftAnchor)
+        addAutoLayoutSubviewSettings.insets = UIEdgeInsets(top: defaultImageInsets.top, left: defaultImageInsets.left, bottom: defaultImageInsets.bottom, right: defaultImageInsets.right + defaultDescriptionInsets.left)
+        return addAutoLayoutSubviewSettings
     }
     
     private func initializeDescriptionLabelEdgesConstraintsInsets() {

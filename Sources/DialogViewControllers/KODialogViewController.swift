@@ -81,13 +81,13 @@ public enum KODialogBarModes {
     @objc optional func dialogViewControllerLeftButtonClicked(_ dialogViewController: KODialogViewController)
     @objc optional func dialogViewControllerRightButtonClicked(_ dialogViewController: KODialogViewController)
     
-    /// This function will be invoked at the of viewDidLoad, you can use 'viewLoadedEvent' instead
+    /// You can use 'viewLoadedEvent' instead
     @objc optional func dialogViewControllerInitialized(_ dialogViewController: KODialogViewController)
     
-    /// This function will be invoked at the of viewWillDisappear, you can use 'viewWillDisappearEvent' instead
+    /// You can use 'viewWillDisappearEvent' instead
     @objc optional func dialogViewControllerViewWillDisappear(_ dialogViewController: KODialogViewController)
     
-    /// This function will be invoked at the of viewDidDisappear, you can use 'viewDidDisappearEvent' instead
+    /// You can use 'viewDidDisappearEvent' instead
     @objc optional func dialogViewControllerViewDidDisappear(_ dialogViewController: KODialogViewController)
 }
 
@@ -129,7 +129,22 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     
     private var mainViewAllVerticalConsts: [NSLayoutConstraint] = []
     private var mainViewVerticalConstraintsInsets: KOVerticalConstraintsInsets!
-    
+
+    private var mainViewAnchors: KOOAnchorsContainer {
+        var leftAnchor: NSLayoutXAxisAnchor = pMainView.leftAnchor
+        var topAnchor: NSLayoutYAxisAnchor = pMainView.topAnchor
+        var rightAnchor: NSLayoutXAxisAnchor = pMainView.rightAnchor
+        var bottomAnchor: NSLayoutYAxisAnchor = pMainView.bottomAnchor
+
+        if #available(iOS 11.0, *) {
+            leftAnchor = pMainView.safeAreaLayoutGuide.leftAnchor
+            topAnchor = pMainView.safeAreaLayoutGuide.topAnchor
+            rightAnchor = pMainView.safeAreaLayoutGuide.rightAnchor
+            bottomAnchor = pMainView.safeAreaLayoutGuide.bottomAnchor
+        }
+        return KOOAnchorsContainer(left: leftAnchor, top: topAnchor, right: rightAnchor, bottom: bottomAnchor)
+    }
+
     private var dismissOnTapRecognizer: UITapGestureRecognizer!
 
     //public
@@ -610,52 +625,9 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         guard isViewLoaded else {
             return
         }
-        
         deleteBarConstraints()
-        
-        //get main view anchors
-        var mLeftAnchor: NSLayoutXAxisAnchor = pMainView.leftAnchor
-        var mTopAnchor: NSLayoutYAxisAnchor = pMainView.topAnchor
-        var mRightAnchor: NSLayoutXAxisAnchor = pMainView.rightAnchor
-        var mBottomAnchor: NSLayoutYAxisAnchor = pMainView.bottomAnchor
-
-        if #available(iOS 11.0, *) {
-            mLeftAnchor = pMainView.safeAreaLayoutGuide.leftAnchor
-            mTopAnchor = pMainView.safeAreaLayoutGuide.topAnchor
-            mRightAnchor = pMainView.safeAreaLayoutGuide.rightAnchor
-            mBottomAnchor = pMainView.safeAreaLayoutGuide.bottomAnchor
-        }
-        
-        //create new one
-        let defaultContentInsets = self.defaultContentInsets
-        let contentLeftConst: NSLayoutConstraint = pContentView.leftAnchor.constraint(equalTo: mLeftAnchor, constant: defaultContentInsets.left)
-        let contentRightConst: NSLayoutConstraint = pContentView.rightAnchor.constraint(equalTo: mRightAnchor, constant: -defaultContentInsets.right)
-        var contentTopConst: NSLayoutConstraint!
-        var contentBottomConst: NSLayoutConstraint!
-        
         addOrRemoveBarView()
-        
-        //create bar constraints
-        switch barMode {
-        case .top:
-            contentTopConst = pContentView.topAnchor.constraint(equalTo: pBarView.bottomAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = pContentView.bottomAnchor.constraint(equalTo: mBottomAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mLeftAnchor), pBarView.rightAnchor.constraint(equalTo: mRightAnchor), pBarView.topAnchor.constraint(equalTo: mTopAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
-            pMainView.addConstraints(allConstraints)
-
-        case .bottom:
-            contentTopConst = pContentView.topAnchor.constraint(equalTo: mTopAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = pContentView.bottomAnchor.constraint(equalTo: pBarView.topAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mLeftAnchor), pBarView.rightAnchor.constraint(equalTo: mRightAnchor), pBarView.bottomAnchor.constraint(equalTo: mBottomAnchor), contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
-            pMainView.addConstraints(allConstraints)
-            
-        case .hidden:
-            contentTopConst = pContentView.topAnchor.constraint(equalTo: mTopAnchor, constant: defaultContentInsets.top)
-            contentBottomConst = pContentView.bottomAnchor.constraint(equalTo: mBottomAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [contentLeftConst, contentTopConst, contentRightConst, contentBottomConst]
-            pMainView.addConstraints(allConstraints)
-        }
-        contentEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: contentLeftConst, rightConst: contentRightConst), vertical: KOVerticalConstraintsInsets(topConst: contentTopConst, bottomConst: contentBottomConst))
+        createBarConstraints()
     }
 
     private func deleteBarConstraints() {
@@ -679,6 +651,39 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         }
         pBarView.removeFromSuperview()
         pMainView.addSubview(barView)
+    }
+
+    private func createBarConstraints() {
+        let mainViewAnchors = self.mainViewAnchors
+        let defaultContentInsets = self.defaultContentInsets
+        let contentLeftConstraint: NSLayoutConstraint = pContentView.leftAnchor.constraint(equalTo: mainViewAnchors.left!, constant: defaultContentInsets.left)
+        let contentRightConstraint: NSLayoutConstraint = pContentView.rightAnchor.constraint(equalTo: mainViewAnchors.right!, constant: -defaultContentInsets.right)
+        var contentViewConstraints = KOConstraintsContainer(left: contentLeftConstraint, top: nil, right: contentRightConstraint, bottom: nil)
+
+        switch barMode {
+        case .top:
+            contentViewConstraints.top = pContentView.topAnchor.constraint(equalTo: pBarView.bottomAnchor, constant: defaultContentInsets.top)
+            contentViewConstraints.bottom = pContentView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!, constant: -defaultContentInsets.bottom)
+            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mainViewAnchors.left!), pBarView.rightAnchor.constraint(equalTo: mainViewAnchors.right!), pBarView.topAnchor.constraint(equalTo: mainViewAnchors.top!), contentViewConstraints.left!, contentViewConstraints.top!, contentViewConstraints.right!, contentViewConstraints.bottom!]
+            pMainView.addConstraints(allConstraints)
+
+        case .bottom:
+            contentViewConstraints.top = pContentView.topAnchor.constraint(equalTo: mainViewAnchors.top!, constant: defaultContentInsets.top)
+            contentViewConstraints.bottom = pContentView.bottomAnchor.constraint(equalTo: pBarView.topAnchor, constant: -defaultContentInsets.bottom)
+            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mainViewAnchors.left!), pBarView.rightAnchor.constraint(equalTo: mainViewAnchors.right!), pBarView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!), contentViewConstraints.left!, contentViewConstraints.top!, contentViewConstraints.right!, contentViewConstraints.bottom!]
+            pMainView.addConstraints(allConstraints)
+
+        case .hidden:
+            contentViewConstraints.top = pContentView.topAnchor.constraint(equalTo: mainViewAnchors.top!, constant: defaultContentInsets.top)
+            contentViewConstraints.bottom = pContentView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!, constant: -defaultContentInsets.bottom)
+            allConstraints = [contentViewConstraints.left!, contentViewConstraints.top!, contentViewConstraints.right!, contentViewConstraints.bottom!]
+            pMainView.addConstraints(allConstraints)
+        }
+        refreshContentEdgesConstraintsInsets(constraints: contentViewConstraints)
+    }
+
+    private func refreshContentEdgesConstraintsInsets(constraints: KOConstraintsContainer) {
+        contentEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: constraints.left!, rightConst: constraints.right!), vertical: KOVerticalConstraintsInsets(topConst: constraints.top!, bottomConst: constraints.bottom!))
     }
     
     private func refreshLeftBarButtonAction() {

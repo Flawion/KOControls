@@ -206,18 +206,23 @@ public class KOControlErrorInfoFeature {
         guard let delegate = delegate else {
             return
         }
-        
-        let constraintsToView = delegate.featureContainer
-        var containerForViewConsts = showInView.addAutoLayoutSubview(containerForView,
-                                                                          overrideAnchors: KOOverrideAnchors(left: constraintsToView.leftAnchor, top: constraintsToView.bottomAnchor, right: constraintsToView.rightAnchor), toAddConstraints: [.left, .top, .right],
-                                                                          insets: UIEdgeInsets(top: insets.top - insets.bottom, left: insets.left, bottom: 0, right: insets.right),
-                                                                          operations: [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater]).list
+
+        var containerForViewConsts = showInView.addAutoLayoutSubview(containerForView, settings: createAddAutoLayoutSubviewSettingsForContainerForView(constraintsToView: delegate.featureContainer)).list
         let markerCenterXEqualTo = view.markerCenterXEqualTo(delegate.markerCenterXEualTo)!
         showInView.addConstraint(markerCenterXEqualTo)
         containerForViewConsts.append(markerCenterXEqualTo)
         
         self.containerForViewConsts = containerForViewConsts
         showedInView = showInView
+    }
+
+    private func createAddAutoLayoutSubviewSettingsForContainerForView(constraintsToView: UIView) -> KOAddAutoLayoutSubviewSettings {
+        var addViewSettings = KOAddAutoLayoutSubviewSettings()
+        addViewSettings.overrideAnchors = KOOAnchorsContainer(left: constraintsToView.leftAnchor, top: constraintsToView.bottomAnchor, right: constraintsToView.rightAnchor)
+        addViewSettings.toAddConstraints = [.left, .top, .right]
+        addViewSettings.insets = UIEdgeInsets(top: insets.top - insets.bottom, left: insets.left, bottom: 0, right: insets.right)
+        addViewSettings.operations = [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater]
+        return addViewSettings
     }
     
     private func hideAnimated() {
