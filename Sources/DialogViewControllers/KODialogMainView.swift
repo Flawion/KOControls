@@ -25,7 +25,7 @@
 
 import UIKit
 
-open class KODialogMainView: UIView {
+public final class KODialogMainView: UIView {
      // MARK: - Variables
 
     // MARK: Content view
@@ -34,6 +34,7 @@ open class KODialogMainView: UIView {
 
     //public
     public private(set) weak var contentView: UIView!
+    public let defaultContentInsets: UIEdgeInsets
 
     public var contentEdgesConstraintsInsets: KOEdgesConstraintsInsets!
 
@@ -49,10 +50,6 @@ open class KODialogMainView: UIView {
         didSet {
             refreshContentWidth()
         }
-    }
-
-    open var defaultContentInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 
     // MARK: Bar view
@@ -106,9 +103,11 @@ open class KODialogMainView: UIView {
 
     // MARK: - Functions
     // MARK: Initialization
-    public init(contentView: UIView) {
-        super.init(frame: CGRect.zero)
+    public init(contentView: UIView, withInsets contentInsets: UIEdgeInsets) {
         self.contentView = contentView
+        self.defaultContentInsets = contentInsets
+        
+        super.init(frame: CGRect.zero)
         initialize()
     }
 

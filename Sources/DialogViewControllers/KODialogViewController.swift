@@ -246,7 +246,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     private func initializeMainView() {
-        let mainView = KODialogMainView(contentView: createContentView())
+        let mainView = KODialogMainView(contentView: createContentView(), withInsets: defaultContentInsets)
         mainView.translatesAutoresizingMaskIntoConstraints = false
         self.pMainView = mainView
         view.addSubview(mainView)
@@ -259,6 +259,10 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     open func createContentView() -> UIView {
         //method to overrride by subclasses
         return UIView()
+    }
+    
+    open var defaultContentInsets: UIEdgeInsets {
+        return UIEdgeInsets.zero
     }
 
     open func initializeAppearance() {
