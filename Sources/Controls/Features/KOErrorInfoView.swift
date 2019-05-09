@@ -178,7 +178,7 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
 
     private func createAddAutoLayoutSubviewSettings(forMarkerView markerView: UIView) -> KOAddAutoLayoutSubviewSettings {
         var addAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()
-        addAutoLayoutSubviewSettings.overrideAnchors = KOOAnchorsContainer(left: contentView.leftAnchor, right: contentView.rightAnchor, bottom: contentView.topAnchor)
+        addAutoLayoutSubviewSettings.overrideAnchors = KOAnchorsContainer(left: contentView.leftAnchor, right: contentView.rightAnchor, bottom: contentView.topAnchor)
         addAutoLayoutSubviewSettings.insets = UIEdgeInsets(top: 0, left: defaultMarkerMinHorizontalInsets, bottom: 0, right: defaultMarkerMinHorizontalInsets)
         addAutoLayoutSubviewSettings.operations = [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater, KOConstraintsDirections.right: KOConstraintsOperations.equalOrLess]
         return addAutoLayoutSubviewSettings
@@ -203,7 +203,7 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
 
     private func createAddAutoLayoutSubviewSettings(forDescriptionLabel descriptionLabel: UILabel) -> KOAddAutoLayoutSubviewSettings {
         var addAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()
-        addAutoLayoutSubviewSettings.overrideAnchors = KOOAnchorsContainer(top: markerLineView.bottomAnchor)
+        addAutoLayoutSubviewSettings.overrideAnchors = KOAnchorsContainer(top: markerLineView.bottomAnchor)
         addAutoLayoutSubviewSettings.toAddConstraints = [.top, .right, .bottom]
         addAutoLayoutSubviewSettings.insets = UIEdgeInsets(top: defaultDescriptionInsets.top, left: 0, bottom: defaultDescriptionInsets.bottom, right: defaultDescriptionInsets.right)
         return addAutoLayoutSubviewSettings
@@ -222,7 +222,7 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
 
     private func createAddAutoLayoutSubviewSettings(forImageView imageView: UIImageView) -> KOAddAutoLayoutSubviewSettings {
         var addAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()
-        addAutoLayoutSubviewSettings.overrideAnchors = KOOAnchorsContainer(right: descriptionLabel.leftAnchor)
+        addAutoLayoutSubviewSettings.overrideAnchors = KOAnchorsContainer(right: descriptionLabel.leftAnchor)
         addAutoLayoutSubviewSettings.insets = UIEdgeInsets(top: defaultImageInsets.top, left: defaultImageInsets.left, bottom: defaultImageInsets.bottom, right: defaultImageInsets.right + defaultDescriptionInsets.left)
         return addAutoLayoutSubviewSettings
     }

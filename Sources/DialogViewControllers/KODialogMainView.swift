@@ -86,7 +86,7 @@ public final class KODialogMainView: UIView {
 
     private var allConstraints: [NSLayoutConstraint] = []
 
-    private var safeAnchorsContainer: KOOAnchorsContainer {
+    private var safeAnchorsContainer: KOAnchorsContainer {
         var leftAnchor: NSLayoutXAxisAnchor = self.leftAnchor
         var topAnchor: NSLayoutYAxisAnchor = self.topAnchor
         var rightAnchor: NSLayoutXAxisAnchor = self.rightAnchor
@@ -98,7 +98,7 @@ public final class KODialogMainView: UIView {
             rightAnchor = safeAreaLayoutGuide.rightAnchor
             bottomAnchor = safeAreaLayoutGuide.bottomAnchor
         }
-        return KOOAnchorsContainer(left: leftAnchor, top: topAnchor, right: rightAnchor, bottom: bottomAnchor)
+        return KOAnchorsContainer(left: leftAnchor, top: topAnchor, right: rightAnchor, bottom: bottomAnchor)
     }
 
     // MARK: - Functions
@@ -261,7 +261,7 @@ public final class KODialogMainView: UIView {
     }
 
     private func createBarConstraints() {
-        let mainViewAnchors: KOOAnchorsContainer = self.safeAnchorsContainer
+        let mainViewAnchors: KOAnchorsContainer = self.safeAnchorsContainer
         let defaultContentInsets = self.defaultContentInsets
         let contentLeftConstraint: NSLayoutConstraint = contentView.leftAnchor.constraint(equalTo: mainViewAnchors.left!, constant: defaultContentInsets.left)
         let contentRightConstraint: NSLayoutConstraint = contentView.rightAnchor.constraint(equalTo: mainViewAnchors.right!, constant: -defaultContentInsets.right)

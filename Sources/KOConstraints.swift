@@ -48,7 +48,7 @@ internal struct KOConstraintsContainer {
     }
 }
 
-internal struct KOOAnchorsContainer {
+internal struct KOAnchorsContainer {
     var left: NSLayoutXAxisAnchor?
     var top: NSLayoutYAxisAnchor?
     var right: NSLayoutXAxisAnchor?
@@ -89,13 +89,13 @@ extension NSLayoutConstraint {
 }
 
 internal struct KOAddAutoLayoutSubviewSettings {
-    var overrideAnchors: KOOAnchorsContainer?
+    var overrideAnchors: KOAnchorsContainer?
     var toAddConstraints: [KOConstraintsDirections]
     var insets: UIEdgeInsets
     var operations: [KOConstraintsDirections: KOConstraintsOperations]
     var priorities: [KOConstraintsDirections: Float]
 
-    init(overrideAnchors: KOOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom], insets: UIEdgeInsets = UIEdgeInsets.zero, operations: [KOConstraintsDirections: KOConstraintsOperations] = [:], priorities: [KOConstraintsDirections: Float] = [:]) {
+    init(overrideAnchors: KOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom], insets: UIEdgeInsets = UIEdgeInsets.zero, operations: [KOConstraintsDirections: KOConstraintsOperations] = [:], priorities: [KOConstraintsDirections: Float] = [:]) {
         self.overrideAnchors = overrideAnchors
         self.toAddConstraints = toAddConstraints
         self.insets = insets
@@ -107,7 +107,7 @@ internal struct KOAddAutoLayoutSubviewSettings {
 // MARK: Internal extensions, Constraints helpers
 extension UIView {
 
-     internal func addAutoLayoutSubview(_ view: UIView, overrideAnchors: KOOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom]) -> KOConstraintsContainer {
+     internal func addAutoLayoutSubview(_ view: UIView, overrideAnchors: KOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom]) -> KOConstraintsContainer {
         return addAutoLayoutSubview(view, settings: KOAddAutoLayoutSubviewSettings(overrideAnchors: overrideAnchors, toAddConstraints: toAddConstraints))
     }
 
@@ -181,9 +181,13 @@ extension UIView {
         return priorities[direction] ?? UILayoutPriority.required.rawValue
     }
 
-    @available(iOS 11.0, *) internal func addSafeAutoLayoutSubview(_ view: UIView, settings: KOAddAutoLayoutSubviewSettings) -> KOConstraintsContainer {
+    @available(iOS 11.0, *) internal func addSafeAutoLayoutSubview(_ view: UIView, overrideAnchors: KOAnchorsContainer? = nil, toAddConstraints: [KOConstraintsDirections] = [.left, .top, .right, .bottom]) -> KOConstraintsContainer {
+        return addSafeAutoLayoutSubview(view, settings: KOAddAutoLayoutSubviewSettings(overrideAnchors: overrideAnchors, toAddConstraints: toAddConstraints))
+    }
+
+    @available(iOS 11.0, *) internal func addSafeAutoLayoutSubview(_ view: UIView, settings: KOAddAutoLayoutSubviewSettings = KOAddAutoLayoutSubviewSettings()) -> KOConstraintsContainer {
         var newSettings = settings
-        newSettings.overrideAnchors = KOOAnchorsContainer(left: settings.overrideAnchors?.left ?? safeAreaLayoutGuide.leftAnchor,
+        newSettings.overrideAnchors = KOAnchorsContainer(left: settings.overrideAnchors?.left ?? safeAreaLayoutGuide.leftAnchor,
                                                         top: settings.overrideAnchors?.top ?? safeAreaLayoutGuide.topAnchor,
                                                         right: settings.overrideAnchors?.right ?? safeAreaLayoutGuide.rightAnchor,
                                                         bottom: settings.overrideAnchors?.bottom ?? safeAreaLayoutGuide.bottomAnchor)

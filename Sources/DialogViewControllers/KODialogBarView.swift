@@ -174,7 +174,7 @@ open class KODialogBarView: UIView {
 
     private func initializeLeftContainerForView() {
         let leftContainerForView = UIView()
-        let leftContainerConstraints = containerView.addAutoLayoutSubview(leftContainerForView, overrideAnchors: KOOAnchorsContainer(right: titleContainerView.leftAnchor))
+        let leftContainerConstraints = containerView.addAutoLayoutSubview(leftContainerForView, overrideAnchors: KOAnchorsContainer(right: titleContainerView.leftAnchor))
         leftContainerForViewRightConst = leftContainerConstraints.right!
         self.leftContainerForView = leftContainerForView
 
@@ -187,7 +187,7 @@ open class KODialogBarView: UIView {
 
     private func initializeRightContainerForView() {
         let rightContainerForView = UIView()
-        let rightContainerConstraints = containerView.addAutoLayoutSubview(rightContainerForView, overrideAnchors: KOOAnchorsContainer(left: titleContainerView.rightAnchor))
+        let rightContainerConstraints = containerView.addAutoLayoutSubview(rightContainerForView, overrideAnchors: KOAnchorsContainer(left: titleContainerView.rightAnchor))
         rightContainerForViewLeftConst = rightContainerConstraints.left!
         self.rightContainerForView = rightContainerForView
 

@@ -227,7 +227,7 @@ public class KOControlErrorInfoFeature {
 
     private func createAddAutoLayoutSubviewSettingsForContainerForView(constraintsToView: UIView) -> KOAddAutoLayoutSubviewSettings {
         var addViewSettings = KOAddAutoLayoutSubviewSettings()
-        addViewSettings.overrideAnchors = KOOAnchorsContainer(left: constraintsToView.leftAnchor, top: constraintsToView.bottomAnchor, right: constraintsToView.rightAnchor)
+        addViewSettings.overrideAnchors = KOAnchorsContainer(left: constraintsToView.leftAnchor, top: constraintsToView.bottomAnchor, right: constraintsToView.rightAnchor)
         addViewSettings.toAddConstraints = [.left, .top, .right]
         addViewSettings.insets = UIEdgeInsets(top: insets.top - insets.bottom, left: insets.left, bottom: 0, right: insets.right)
         addViewSettings.operations = [KOConstraintsDirections.left: KOConstraintsOperations.equalOrGreater]
