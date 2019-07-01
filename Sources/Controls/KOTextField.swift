@@ -34,6 +34,8 @@ import UIKit
     
     @objc optional func textFieldDidShowErrorInfo(_ textField: UITextField)
     @objc optional func textFieldDidHideErrorInfo(_ textField: UITextField)
+    
+    @objc optional func textField(_ textField: UITextField, overrideValidationFailureText: String, fromValidators: [KOTextValidatorProtocol]) -> String?
 }
 
 // MARK: - KOTextField
@@ -169,6 +171,10 @@ extension KOTextField: KOControlValidationFeatureDelegate {
     
     public func validationFailure() {
         error.isShowing = true
+    }
+    
+    public func validationFailureTextComposed(_ failureText: String, fromValidators: [KOTextValidatorProtocol]) {
+        errorInfo.description = koDelegate?.textField?(self, overrideValidationFailureText: failureText, fromValidators: fromValidators) ?? failureText
     }
 }
 

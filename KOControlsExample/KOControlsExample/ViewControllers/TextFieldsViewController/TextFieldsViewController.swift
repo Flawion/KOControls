@@ -53,20 +53,29 @@ final class TextFieldsViewController: UIViewController {
     private func initializeEmailField() {
         //- email field
         emailField.border.settings = AppSettings.fieldBorder
-        emailField.errorInfo.description = "Email is incorrect"
-        emailField.validation.add(validator: KORegexTextValidator.mailValidator)
+        emailField.validation.add(validator: KORegexTextValidator.mailValidator(failureText: "Email is incorrect"))
     }
     
     private func initializePasswordField() {
         //- password field
         passwordField.border.settings = AppSettings.fieldBorder
-        passwordField.errorInfo.description = "Password should contains 8 to 20 chars"
         passwordField.validation.mode = .validateOnTextChanged
         
         //simple function validation
         passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
             return password.count >= 8 && password.count <= 20
-        }))
+        }, failureText: "Password should contain 8 to 20 chars"))
+        
+       
+        /*
+        passwordField.validation.failureTextPrefix = "Password:\n"
+        passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
+            return password.rangeOfCharacter(from: .decimalDigits) != nil
+        }, failureText: "Should contain at least one digit"))
+        
+        passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
+            return password.rangeOfCharacter(from: .uppercaseLetters) != nil
+        }, failureText: "Should contain at least one uppercase letter"))*/
         
         //or regex validation
         //passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
