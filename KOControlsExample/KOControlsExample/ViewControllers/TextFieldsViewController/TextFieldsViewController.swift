@@ -62,23 +62,19 @@ final class TextFieldsViewController: UIViewController {
         passwordField.validation.mode = .validateOnTextChanged
         
         //simple function validation
+        passwordField.validation.failureTextPrefix = "Password should contain:\n"
         passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
             return password.count >= 8 && password.count <= 20
-        }, failureText: "Password should contain 8 to 20 chars"))
-        
-       
-        /*
-        passwordField.validation.failureTextPrefix = "Password:\n"
+        }, failureText: "from 8 to 20 chars"))
         passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
             return password.rangeOfCharacter(from: .decimalDigits) != nil
-        }, failureText: "Should contain at least one digit"))
-        
+        }, failureText: "one digit"))
         passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
             return password.rangeOfCharacter(from: .uppercaseLetters) != nil
-        }, failureText: "Should contain at least one uppercase letter"))*/
+        }, failureText: "one uppercase letter"))
         
         //or regex validation
-        //passwordField.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
+        /*passwordField.validation.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$", failureText: "Password should contain from 8 to 20 chars, one digit, uppercase letter and special char."))*/
         
         //changes animations
         passwordField.errorInfo.hideAnimation = KOAnimationGroup(animations: [

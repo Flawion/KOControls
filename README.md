@@ -26,7 +26,7 @@ Right now it contains only the few features but it will be getting the new stuff
 ## Versions
 
 * Swift 4.2:  from 1.0 to 1.0.3
-* Swift 5.0:  from 1.1 to 1.2 (newest)
+* Swift 5.0:  from 1.1 to 1.2.1 (newest)
 
 ## Installation
 
@@ -36,7 +36,7 @@ KOControls doesn't contains any external dependencies. If you want to stay updat
 
 Add below entry to the target in Podfile
 ```
-pod 'KOControls', '~> 1.2'
+pod 'KOControls', '~> 1.2.1'
 ```
 
 For example
@@ -47,7 +47,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'Target Name' do
-pod 'KOControls', '~> 1.2'
+pod 'KOControls', '~> 1.2.1'
 end
 ```
 Install the pods by running
@@ -149,9 +149,7 @@ errorField.error.isShowing = true
 To don't worry about setting the flag manually, you can use auto validation feature. The default validation mode is ```validateOnLostFocus```. So in example if you want to show error when the email isn't correct you need to only add the predefinied validator.
 
 ```swift
-emailField.errorInfo.description = "Email is incorrect"
-emailField.validation.add(validator: KORegexTextValidator.mailValidator)
-
+emailField.validation.add(validator: KORegexTextValidator.mailValidator(failureText: "Email is incorrect"))
 ```
 You can always adjust the border of the field to the state of: normal, error, focus; by setting ```border.settings```.
 
@@ -163,20 +161,25 @@ Field can be validated with the multiple validators based on function or regex.
 
 ```swift
 passwordField.border.settings = KOControlBorderSettings(color: UIColor.lightGray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.blue.cgColor, errorFocusedColor : UIColor.red.cgColor,  width: 1, focusedWidth: 2)
-passwordField.errorInfo.description = "Password should contains 8 to 20 chars"
 passwordField.validation.validateMode = .validateOnTextChanged
 
 //simple function based validator
-passwordField.validation.add(validator: KOFunctionTextValidator(function: {
-(password) -> Bool in
+passwordField.validation.failureTextPrefix = "Password should contain:\n"
+passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
     return password.count >= 8 && password.count <= 20
-}))
+}, failureText: "from 8 to 20 chars"))
+passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
+    return password.rangeOfCharacter(from: .decimalDigits) != nil
+}, failureText: "one digit"))
+passwordField.validation.add(validator: KOFunctionTextValidator(function: { password -> Bool in
+    return password.rangeOfCharacter(from: .uppercaseLetters) != nil
+}, failureText: "one uppercase letter"))
 ```
 
 Regex based validator.
 
 ```swift
-passwordField.validation.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$"))
+passwordField.validation.add(validator: KORegexTextValidator(regexPattern: "^(?=.*[a-z]{1,}.*)(?=.*[A-Z]{1,}.*)(?=.*[0-9]{1,}.*)(?=.*[^a-zA-Z0-9]{1,}.*).{8,20}$", failureText: "Password should contain from 8 to 20 chars, one digit, letter, uppercase letter and special char."))
 ```
 Error info in default is showing in the field's superview, but you can change this by setting manually  ```showErrorInfoInView```. If you want to show error info always or manually when there is an error you can do this by change ```showErrorInfoMode```. In manually mode you show or hide error info by flag  ```errorInfo.isShowing```.
 
