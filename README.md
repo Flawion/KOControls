@@ -213,7 +213,7 @@ passwordField.errorInfo.view.markerColor = UIColor.white
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.0/ReadmeImages/passwordfield3.png" width="500">
+  <img src="https://raw.githubusercontent.com/Flawion/KOControls/1.2.1/ReadmeImages/passwordfield3.png" width="500">
 </p>
 
 You can replace ```errorInfo.view``` completely by ```errorInfo.customView```, but new view need to implement  ```KOErrorInfoProtocol```.
