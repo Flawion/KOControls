@@ -33,8 +33,8 @@ import UIKit
 /// - clearErrorOnTextChanged: errors will be hidding when text changed
 public enum KOTextValidateModes {
     case manual
-    case validateOnTextChanged //by default
-    case validateOnLostFocus
+    case validateOnTextChanged
+    case validateOnLostFocus //by default
     case clearErrorOnTextChanged
 }
 
