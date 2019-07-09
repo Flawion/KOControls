@@ -29,6 +29,10 @@ import XCTest
 final class KOControlValidationFeatureTests: XCTestCase {
     fileprivate var featureContainer: FeatureContainerView!
 
+    private var defaultFailureTextSeparator: String = "\n"
+    private var defaultFailureTextPrefixOfEnumeration: String = "∙ "
+    private var defaultFailureTextPrefix: String = ""
+
     override func setUp() {
         featureContainer = FeatureContainerView()
         super.setUp()
@@ -39,6 +43,7 @@ final class KOControlValidationFeatureTests: XCTestCase {
         featureContainer = nil
     }
 
+    // MARK: - Tests
     func testIsDefaultModeValidateOnLostFocus() {
         XCTAssertEqual(featureContainer.validationFeature.mode, KOTextValidateModes.validateOnLostFocus)
     }
@@ -64,25 +69,25 @@ final class KOControlValidationFeatureTests: XCTestCase {
     }
 
     func testSuccessValidateOnTextChanged() {
-        _ = createCountValidatorAndFillWithSuccessText(featureContainerView: featureContainer, withMode: .validateOnTextChanged)
+        _ = createCountValidatorAndFillWithSuccessTextValidationFeature(withMode: .validateOnTextChanged)
         XCTAssertEqual(featureContainer.isValidationSuccess, true)
     }
 
     func testFailureValidateOnTextChanged() {
-        let countValidation = createCountValidatorAndFillWithFailureText(featureContainerView: featureContainer, withMode: .validateOnTextChanged)
+        let countValidation = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnTextChanged)
         XCTAssertEqual(featureContainer.isValidationSuccess, false)
         XCTAssertEqual(featureContainer.validationFailureText, countValidation.failureText?())
     }
 
     func testSuccessValidateOnLostFocus() {
-        _ = createCountValidatorAndFillWithSuccessText(featureContainerView: featureContainer, withMode: .validateOnLostFocus)
+        _ = createCountValidatorAndFillWithSuccessTextValidationFeature(withMode: .validateOnLostFocus)
         _ = featureContainer.becomeFirstResponder()
         _ = featureContainer.resignFirstResponder()
         XCTAssertEqual(featureContainer.isValidationSuccess, true)
     }
 
     func testFailureValidateOnLostFocus() {
-        let countValidation = createCountValidatorAndFillWithFailureText(featureContainerView: featureContainer, withMode: .validateOnLostFocus)
+        let countValidation = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnLostFocus)
         _ = featureContainer.becomeFirstResponder()
         _ = featureContainer.resignFirstResponder()
         XCTAssertEqual(featureContainer.isValidationSuccess, false)
@@ -90,20 +95,20 @@ final class KOControlValidationFeatureTests: XCTestCase {
     }
 
     func testSuccessValidateManual() {
-        _ = createCountValidatorAndFillWithSuccessText(featureContainerView: featureContainer, withMode: .manual)
+        _ = createCountValidatorAndFillWithSuccessTextValidationFeature(withMode: .manual)
         featureContainer.validationFeature.validate()
         XCTAssertEqual(featureContainer.isValidationSuccess, true)
     }
 
     func testFailureValidateManual() {
-        let countValidation = createCountValidatorAndFillWithFailureText(featureContainerView: featureContainer, withMode: .manual)
+        let countValidation = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .manual)
         featureContainer.validationFeature.validate()
         XCTAssertEqual(featureContainer.isValidationSuccess, false)
         XCTAssertEqual(featureContainer.validationFailureText, countValidation.failureText?())
     }
 
     func testClearErrorOnTextChanged() {
-        let countValidation = createCountValidatorAndFillWithFailureText(featureContainerView: featureContainer, withMode: .clearErrorOnTextChanged)
+        let countValidation = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .clearErrorOnTextChanged)
         featureContainer.validationFeature.validate()
         XCTAssertEqual(featureContainer.isValidationSuccess, false)
         XCTAssertEqual(featureContainer.validationFailureText, countValidation.failureText?())
@@ -125,7 +130,50 @@ final class KOControlValidationFeatureTests: XCTestCase {
         XCTAssertEqual(featureContainer.isValidationSuccess, true)
     }
 
-    /*func testFailureMultipleValidatorsOnTextChanged() {
+    func testDefaultFailureTextSeparator() {
+        XCTAssertEqual(featureContainer.validationFeature.failureTextSeparator, defaultFailureTextSeparator)
+    }
+
+    func testFailureTextSeparator() {
+        let testFailureTextSeparator = ","
+        featureContainer.validationFeature.mode = .validateOnTextChanged
+        featureContainer.validationFeature.failureTextSeparator = testFailureTextSeparator
+        let countValidator = createCountValidator()
+        featureContainer.validationFeature.add(validator: countValidator)
+        let oneDigitValidator = createOneDigitValidator()
+        featureContainer.validationFeature.add(validator: oneDigitValidator)
+
+        let failureTextToCompare = "\(defaultFailureTextPrefixOfEnumeration)\(countValidator.failureText?() ?? "")\(testFailureTextSeparator)\(defaultFailureTextPrefixOfEnumeration)\(oneDigitValidator.failureText?() ?? "")"
+        featureContainer.textToValidate = "abcdef"
+        XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
+        XCTAssertEqual(featureContainer.isValidationSuccess, false)
+    }
+
+    func testDefaultFailureTextPrefixOfEnumeration() {
+        XCTAssertEqual(featureContainer.validationFeature.failureTextPrefixOfEnumeration, defaultFailureTextPrefixOfEnumeration)
+    }
+
+    func testFailureTextPrefixOfEnumeration() {
+        let testFailureTextPrefixOfEnumeration = "+ "
+        featureContainer.validationFeature.failureTextPrefixOfEnumeration = testFailureTextPrefixOfEnumeration
+        featureContainer.validationFeature.failureTextEnumerationMode = .always
+        let validator = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnTextChanged)
+        let failureTextToCompare = "\(testFailureTextPrefixOfEnumeration)\(validator.failureText?() ?? "")"
+        XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
+    }
+
+    func testDefaultFailureTextPrefix() {
+        XCTAssertEqual(featureContainer.validationFeature.failureTextPrefix, defaultFailureTextPrefix)
+    }
+
+    func testFailureTextPrefix() {
+        let testFailureTextPrefix = "Prefix test:"
+        featureContainer.validationFeature.failureTextPrefix = testFailureTextPrefix
+        _ = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnTextChanged)
+        XCTAssertEqual(featureContainer.validationFailureText?.starts(with: testFailureTextPrefix), true)
+    }
+
+    func testFailureMultipleValidatorsOnTextChanged() {
         featureContainer.validationFeature.mode = .validateOnTextChanged
         let countValidator = createCountValidator()
         featureContainer.validationFeature.add(validator: countValidator)
@@ -134,23 +182,73 @@ final class KOControlValidationFeatureTests: XCTestCase {
         let oneDigitValidator = createOneDigitValidator()
         featureContainer.validationFeature.add(validator: oneDigitValidator)
 
-        let failureTextToCompare = createFailureTextFrom(validators: [oneUppercaseLetterValidator, oneDigitValidator], separator: "\n")
+        let failureTextToCompare = "\(defaultFailureTextPrefixOfEnumeration)\(oneUppercaseLetterValidator.failureText?() ?? "")\(defaultFailureTextSeparator)\(defaultFailureTextPrefixOfEnumeration)\(oneDigitValidator.failureText?() ?? "")"
         featureContainer.textToValidate = "abcdefgh"
         XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
         XCTAssertEqual(featureContainer.isValidationSuccess, false)
-    }*/
+    }
 
-    private func createFailureTextFrom(validators: [KOTextValidatorProtocol], separator: String) -> String {
-        var failureText = ""
-        for i in 0..<validators.count {
-            if let textToAdd = validators[i].failureText?() {
-                if !failureText.isEmpty {
-                    failureText += separator
-                }
-                failureText += textToAdd
-            }
-        }
-        return failureText
+    func testFailureTextEnumerationModeAlways() {
+        featureContainer.validationFeature.failureTextEnumerationMode = .always
+        let validator = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnTextChanged)
+        let failureTextToCompare = "\(defaultFailureTextPrefixOfEnumeration)\(validator.failureText?() ?? "")"
+        XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
+        XCTAssertEqual(featureContainer.isValidationSuccess, false)
+    }
+
+    func testFailureTextEnumerationModeMoreThanOne() {
+        featureContainer.validationFeature.failureTextEnumerationMode = .moreFailureThanOne
+        let countValidator = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnTextChanged)
+        var failureTextToCompare = "\(countValidator.failureText?() ?? "")"
+        XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
+        XCTAssertEqual(featureContainer.isValidationSuccess, false)
+
+        let oneUppercaseLetter = createOneUppercaseLetterValidator()
+        featureContainer.validationFeature.add(validator: oneUppercaseLetter)
+        featureContainer.validationFeature.validate()
+        failureTextToCompare = "\(defaultFailureTextPrefixOfEnumeration)\(countValidator.failureText?() ?? "")\(defaultFailureTextSeparator)\(defaultFailureTextPrefixOfEnumeration)\(oneUppercaseLetter.failureText?() ?? "")"
+        XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
+        XCTAssertEqual(featureContainer.isValidationSuccess, false)
+    }
+
+    func testFailureTextEnumerationModeDisabled() {
+        featureContainer.validationFeature.failureTextEnumerationMode = .disabled
+        featureContainer.validationFeature.mode = .validateOnTextChanged
+        let countValidator = createCountValidator()
+        featureContainer.validationFeature.add(validator: countValidator)
+        let oneUppercaseLetterValidator = createOneUppercaseLetterValidator()
+        featureContainer.validationFeature.add(validator: oneUppercaseLetterValidator)
+        featureContainer.textToValidate = "1234"
+
+        let failureTextToCompare = "\(countValidator.failureText?() ?? "")\(defaultFailureTextSeparator)\(oneUppercaseLetterValidator.failureText?() ?? "")"
+        XCTAssertEqual(featureContainer.validationFailureText, failureTextToCompare)
+        XCTAssertEqual(featureContainer.isValidationSuccess, false)
+    }
+
+    // MARK: - Helpers
+    private func createCountValidatorAndFillWithSuccessTextValidationFeature(withMode mode: KOTextValidateModes) -> KOTextValidatorProtocol {
+        let validator = createCountValidatorAndFillValidationFeature(withMode: mode)
+        featureContainer.textToValidate = "12345678"
+        return validator
+    }
+
+    private func createCountValidatorAndFillWithFailureTextValidationFeature(withMode mode: KOTextValidateModes) -> KOTextValidatorProtocol {
+        let validator = createCountValidatorAndFillValidationFeature(withMode: mode)
+        featureContainer.textToValidate = "1234567"
+        return validator
+    }
+
+    private func createCountValidatorAndFillValidationFeature(withMode mode: KOTextValidateModes) -> KOTextValidatorProtocol {
+        let countValidation = createCountValidator()
+        featureContainer.validationFeature.mode = mode
+        featureContainer.validationFeature.add(validator: countValidation)
+        return countValidation
+    }
+
+    private func createCountValidator() -> KOTextValidatorProtocol {
+        return KOFunctionTextValidator(function: { (text) -> Bool in
+            return text.count >= 8 && text.count <= 20
+        }, failureText: "text should contain from 8 to 20 chars")
     }
 
     private func createOneDigitValidator() -> KOTextValidatorProtocol {
@@ -163,31 +261,6 @@ final class KOControlValidationFeatureTests: XCTestCase {
         return KOFunctionTextValidator(function: { password -> Bool in
             return password.rangeOfCharacter(from: .uppercaseLetters) != nil
         }, failureText: "one uppercase letter")
-    }
-
-    private func createCountValidator() -> KOTextValidatorProtocol {
-        return KOFunctionTextValidator(function: { (text) -> Bool in
-            return text.count >= 8 && text.count <= 20
-        }, failureText: "text should contain from 8 to 20 chars")
-    }
-
-    private func createCountValidatorAndFill(validationFeature: KOControlValidationFeature, withMode mode: KOTextValidateModes) -> KOTextValidatorProtocol {
-        let countValidation = createCountValidator()
-        featureContainer.validationFeature.mode = mode
-        featureContainer.validationFeature.add(validator: countValidation)
-        return countValidation
-    }
-
-    private func createCountValidatorAndFillWithSuccessText(featureContainerView: FeatureContainerView, withMode mode: KOTextValidateModes) -> KOTextValidatorProtocol {
-        let validator = createCountValidatorAndFill(validationFeature: featureContainerView.validationFeature, withMode: mode)
-        featureContainerView.textToValidate = "12345678"
-        return validator
-    }
-
-    private func createCountValidatorAndFillWithFailureText(featureContainerView: FeatureContainerView, withMode mode: KOTextValidateModes) -> KOTextValidatorProtocol {
-        let validator = createCountValidatorAndFill(validationFeature: featureContainerView.validationFeature, withMode: mode)
-        featureContainerView.textToValidate = "1234567"
-        return validator
     }
 }
 
