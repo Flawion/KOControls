@@ -13,6 +13,8 @@
 		053ED24A21162C2E0016ABC4 /* KOControls.h in Headers */ = {isa = PBXBuildFile; fileRef = 053ED24821162C2E0016ABC4 /* KOControls.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		053ED28C211638950016ABC4 /* KOErrorInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOErrorInfoView.swift */; };
 		0546FCA622704A5000EE7236 /* KOAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0546FCA522704A5000EE7236 /* KOAnimator.swift */; };
+		0555086122D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */; };
+		0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */; };
 		0566A6AA213E75D900E87518 /* KOConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566A6A9213E75D900E87518 /* KOConstraints.swift */; };
 		058529592151161100FA36DE /* KOPopoverSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058529582151161100FA36DE /* KOPopoverSettings.swift */; };
 		0585295B2151164000FA36DE /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585295A2151164000FA36DE /* UIViewController+Extensions.swift */; };
@@ -59,6 +61,8 @@
 		053ED24921162C2E0016ABC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		053ED28B211638950016ABC4 /* KOErrorInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOErrorInfoView.swift; sourceTree = "<group>"; };
 		0546FCA522704A5000EE7236 /* KOAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimator.swift; sourceTree = "<group>"; };
+		0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlErrorInfoFeatureTests.swift; sourceTree = "<group>"; };
+		0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Extension.swift"; sourceTree = "<group>"; };
 		0566A6A9213E75D900E87518 /* KOConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOConstraints.swift; sourceTree = "<group>"; };
 		058529582151161100FA36DE /* KOPopoverSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPopoverSettings.swift; sourceTree = "<group>"; };
 		0585295A2151164000FA36DE /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -221,6 +225,7 @@
 				05E2B4D422D351DF00E7F75A /* KOControlBorderFeatureTests.swift */,
 				05E2B4D622D35D0100E7F75A /* KOControlValidationFeatureTests.swift */,
 				058E7E3822D48B3000208252 /* KOControlErrorFeatureTests.swift */,
+				0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -230,6 +235,7 @@
 			children = (
 				05E2B4D922D3648200E7F75A /* FirstResponderSimulatorView.swift */,
 				058E7E3A22D492ED00208252 /* WindowSimulator.swift */,
+				0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -379,7 +385,9 @@
 				058E7E3B22D492ED00208252 /* WindowSimulator.swift in Sources */,
 				05E2B4D522D351DF00E7F75A /* KOControlBorderFeatureTests.swift in Sources */,
 				05E2B4D722D35D0100E7F75A /* KOControlValidationFeatureTests.swift in Sources */,
+				0555086122D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift in Sources */,
 				058E7E3922D48B3000208252 /* KOControlErrorFeatureTests.swift in Sources */,
+				0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */,
 				05E2B4DA22D3648200E7F75A /* FirstResponderSimulatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
