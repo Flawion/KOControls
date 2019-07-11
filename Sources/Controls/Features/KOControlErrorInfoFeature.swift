@@ -55,9 +55,9 @@ public class KOControlErrorInfoFeature {
     private var containerForView: UIView!
     private var containerForViewConsts: [NSLayoutConstraint] = []
     private weak var containerForCustomView: UIView!
-    private var customViewMarkerCenterXConst: NSLayoutConstraint?
+    private weak var customViewMarkerCenterXConst: NSLayoutConstraint?
     private weak var showedInView: UIView!
-    private var isHideAnimationRunning: Bool = false
+    private var isNeedToCompleteHideAnimation: Bool = false
     
     private var isShowed: Bool {
         return showedInView != nil
@@ -197,7 +197,7 @@ public class KOControlErrorInfoFeature {
         
         if isShowed {
             //if is showed in the other superview than needs, it will have removed from old parent before add
-            isHideAnimationRunning = false
+            isNeedToCompleteHideAnimation = false
             animator.stopViewAnimation()
             guard showInView != showedInView else {
                 return
@@ -244,11 +244,12 @@ public class KOControlErrorInfoFeature {
         //hide marker before animation to avoid strange behaviour
         setViewMarkerHiddenIfCan(!(delegate?.errorIsShowing ?? false))
         delegate?.errorInfoStartingHideAnimation?()
-        isHideAnimationRunning = true
+        isNeedToCompleteHideAnimation = true
         animator.runViewAnimation(hideAnimation) { [weak self] _ in
-            guard let self = self, self.isHideAnimationRunning  else {
+            guard let self = self, self.isNeedToCompleteHideAnimation  else {
                 return
             }
+            self.isNeedToCompleteHideAnimation = false
             self.hide()
         }
     }
@@ -304,14 +305,16 @@ public class KOControlErrorInfoFeature {
         removeCustomViewMarkerCenterXConst()
         if let errorViewCenterXAnchor = delegate?.markerCenterXEualTo, let customViewMarkerCenterXConst = customView.markerCenterXEqualTo(errorViewCenterXAnchor) {
             showedInView.addConstraint(customViewMarkerCenterXConst)
+            self.customViewMarkerCenterXConst = customViewMarkerCenterXConst
         }
     }
     
     private func removeCustomViewMarkerCenterXConst() {
-        guard let showedInView = showedInView, let customViewMarkerCenterXConst = customViewMarkerCenterXConst else {
+        guard let showedInView = showedInView, let customViewMarkerCenterXConst = self.customViewMarkerCenterXConst else {
             return
         }
         showedInView.removeConstraint(customViewMarkerCenterXConst)
+        self.customViewMarkerCenterXConst = nil
     }
     
     // MARK: Must be invoked by parent container

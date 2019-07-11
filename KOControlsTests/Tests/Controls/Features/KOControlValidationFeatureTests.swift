@@ -89,6 +89,7 @@ final class KOControlValidationFeatureTests: XCTestCase {
     func testFailureValidateOnLostFocus() {
         let countValidation = createCountValidatorAndFillWithFailureTextValidationFeature(withMode: .validateOnLostFocus)
         _ = featureContainer.becomeFirstResponder()
+        XCTAssertEqual(featureContainer.isValidationSuccess, true)
         _ = featureContainer.resignFirstResponder()
         XCTAssertEqual(featureContainer.isValidationSuccess, false)
         XCTAssertEqual(featureContainer.validationFailureText, countValidation.failureText?())

@@ -55,41 +55,49 @@ open class KOTextField: UITextField {
     public private(set) var errorInfo: KOControlErrorInfoFeature!
     public private(set) var validation: KOControlValidationFeature!
     public private(set) var border: KOControlBorderFeature!
-    
+
+    override open var text: String? {
+        didSet {
+            validation.eventTextChanged()
+        }
+    }
+
     // MARK: - Functions
     // MARK: Overridden rects to avoid intersection with the error icon view
     override open func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        let rightViewRect = super.rightViewRect(forBounds: bounds)
-        guard let errorCurrentViewWidth = error.currentViewWidth, bounds.isEmpty else {
-            return rightViewRect
-        }
-        return rightViewRect.offsetBy(dx: -errorCurrentViewWidth, dy: 0)
+        return shiftLeftRectOnError(super.rightViewRect(forBounds: bounds))
     }
     
     override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-        let clearButtonRect = super.clearButtonRect(forBounds: bounds)
-        guard let errorCurrentViewWidth = error.currentViewWidth, bounds.isEmpty else {
-            return clearButtonRect
-        }
-        return clearButtonRect.offsetBy(dx: -errorCurrentViewWidth, dy: 0)
+        return shiftLeftRectOnError(super.clearButtonRect(forBounds: bounds))
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        var textRect = super.textRect(forBounds: bounds)
-        guard let errorCurrentViewWidth = error.currentViewWidth, bounds.isEmpty else {
-            return textRect
-        }
-        textRect.size.width -= errorCurrentViewWidth
-        return textRect
+        return decreaseRectWidthOnError(super.textRect(forBounds: bounds))
+    }
+
+    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return decreaseRectWidthOnError(super.placeholderRect(forBounds: bounds))
     }
     
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        var editingRect = super.editingRect(forBounds: bounds)
-        guard let errorCurrentViewWidth = error.currentViewWidth, bounds.isEmpty else {
-            return editingRect
+        return decreaseRectWidthOnError(super.editingRect(forBounds: bounds))
+    }
+
+    private func shiftLeftRectOnError(_ rect: CGRect) -> CGRect {
+        guard let errorCurrentViewWidth = error.currentViewWidth, errorCurrentViewWidth > 0, !bounds.isEmpty else {
+            return rect
         }
-        editingRect.size.width -= errorCurrentViewWidth
-        return editingRect
+        return rect.offsetBy(dx: -errorCurrentViewWidth, dy: 0)
+    }
+
+    private func decreaseRectWidthOnError(_ rect: CGRect) -> CGRect {
+        var rect = rect
+        guard let errorCurrentViewWidth = error.currentViewWidth, errorCurrentViewWidth > 0, !rect.isEmpty else {
+            return rect
+        }
+        rect.size.width -= errorCurrentViewWidth
+        return rect
     }
     
     // MARK: Initialization
@@ -204,7 +212,7 @@ extension KOTextField: KOControlErrorInfoFeatureDelegate {
     }
     
     public func errorInfoDidHide() {
-        koDelegate?.textFieldDidHideError?(self)
+        koDelegate?.textFieldDidHideErrorInfo?(self)
     }
     
     public func errorInfoStartingShowAnimation() {
@@ -212,6 +220,6 @@ extension KOTextField: KOControlErrorInfoFeatureDelegate {
     }
     
     public func errorInfoDidShow() {
-        koDelegate?.textFieldDidShowError?(self)
+        koDelegate?.textFieldDidShowErrorInfo?(self)
     }
 }
