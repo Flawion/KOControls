@@ -85,10 +85,13 @@ open class KOTextField: UITextField {
     }
 
     private func shiftLeftRectOnError(_ rect: CGRect) -> CGRect {
-        guard let errorCurrentViewWidth = error.currentViewWidth, errorCurrentViewWidth > 0, !bounds.isEmpty else {
+        var rect = rect
+        guard let errorCurrentViewWidth = error.currentViewWidth, errorCurrentViewWidth > 0, !rect.isEmpty else {
             return rect
         }
-        return rect.offsetBy(dx: -errorCurrentViewWidth, dy: 0)
+        rect = rect.offsetBy(dx: -errorCurrentViewWidth, dy: 0)
+        rect.origin.x = max(0, rect.origin.x)
+        return rect
     }
 
     private func decreaseRectWidthOnError(_ rect: CGRect) -> CGRect {
@@ -96,7 +99,7 @@ open class KOTextField: UITextField {
         guard let errorCurrentViewWidth = error.currentViewWidth, errorCurrentViewWidth > 0, !rect.isEmpty else {
             return rect
         }
-        rect.size.width -= errorCurrentViewWidth
+        rect.size.width = max(0, rect.size.width - errorCurrentViewWidth)
         return rect
     }
     
