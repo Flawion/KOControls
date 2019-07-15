@@ -31,7 +31,7 @@ final class WindowSimulator {
 
     init(rootViewController: UIViewController?) {
         window = UIWindow(frame: UIScreen.main.bounds)
-        window.isHidden = false
+        window.makeKeyAndVisible()
         guard let rootViewController = rootViewController else {
             return
         }

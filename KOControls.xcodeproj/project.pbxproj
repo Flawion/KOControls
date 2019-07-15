@@ -28,6 +28,8 @@
 		05A121F7227E1BF6000739D6 /* KOControlValidationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A121F6227E1BF6000739D6 /* KOControlValidationFeature.swift */; };
 		05ADEECD22D744C30042A47F /* KOTextFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05ADEECC22D744C30042A47F /* KOTextFieldTests.swift */; };
 		05B4DF8A21674E05002556B9 /* KOAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B4DF8921674E05002556B9 /* KOAnimation.swift */; };
+		05BBDE2522DC62B500841A3D /* KOPresentationQueuesServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BBDE2422DC62B500841A3D /* KOPresentationQueuesServiceTests.swift */; };
+		05BBDE2722DC82E500841A3D /* ViewControllerSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BBDE2622DC82E500841A3D /* ViewControllerSimulator.swift */; };
 		05CBB2BF213D325F00EE6264 /* KODialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */; };
 		05CCFDCE21256B4F00208BD5 /* KOScrollOffsetProgressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */; };
 		05CD3798217F53C200E8EEB4 /* KOPropertyObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CD3797217F53C200E8EEB4 /* KOPropertyObserver.swift */; };
@@ -77,6 +79,8 @@
 		05A121F6227E1BF6000739D6 /* KOControlValidationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlValidationFeature.swift; sourceTree = "<group>"; };
 		05ADEECC22D744C30042A47F /* KOTextFieldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOTextFieldTests.swift; sourceTree = "<group>"; };
 		05B4DF8921674E05002556B9 /* KOAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimation.swift; sourceTree = "<group>"; };
+		05BBDE2422DC62B500841A3D /* KOPresentationQueuesServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPresentationQueuesServiceTests.swift; sourceTree = "<group>"; };
+		05BBDE2622DC82E500841A3D /* ViewControllerSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerSimulator.swift; sourceTree = "<group>"; };
 		05CBB2BE213D325F00EE6264 /* KODialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogViewController.swift; sourceTree = "<group>"; };
 		05CCFDCD21256B4E00208BD5 /* KOScrollOffsetProgressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOScrollOffsetProgressController.swift; sourceTree = "<group>"; };
 		05CD3797217F53C200E8EEB4 /* KOPropertyObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPropertyObserver.swift; sourceTree = "<group>"; };
@@ -207,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				05E2B4D222D351BE00E7F75A /* Controls */,
+				05BBDE2422DC62B500841A3D /* KOPresentationQueuesServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -246,6 +251,7 @@
 			children = (
 				05E2B4D922D3648200E7F75A /* FirstResponderSimulatorView.swift */,
 				058E7E3A22D492ED00208252 /* WindowSimulator.swift */,
+				05BBDE2622DC82E500841A3D /* ViewControllerSimulator.swift */,
 				0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */,
 			);
 			path = Helpers;
@@ -396,7 +402,9 @@
 				058E7E3B22D492ED00208252 /* WindowSimulator.swift in Sources */,
 				05E2B4D522D351DF00E7F75A /* KOControlBorderFeatureTests.swift in Sources */,
 				05E2B4D722D35D0100E7F75A /* KOControlValidationFeatureTests.swift in Sources */,
+				05BBDE2722DC82E500841A3D /* ViewControllerSimulator.swift in Sources */,
 				0555086122D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift in Sources */,
+				05BBDE2522DC62B500841A3D /* KOPresentationQueuesServiceTests.swift in Sources */,
 				058E7E3922D48B3000208252 /* KOControlErrorFeatureTests.swift in Sources */,
 				0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */,
 				05E2B4DA22D3648200E7F75A /* FirstResponderSimulatorView.swift in Sources */,
