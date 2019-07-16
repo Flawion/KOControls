@@ -38,6 +38,13 @@ final class KOTextFieldTests: XCTestCase {
         viewController = UIViewController()
         windowSimulator = WindowSimulator(rootViewController: viewController)
         textFieldDelegateContainer = TextFieldDelegateContainer()
+        setUpTextField()
+        viewController.view.setNeedsLayout()
+        viewController.view.layoutIfNeeded()
+        super.setUp()
+    }
+
+    private func setUpTextField() {
         textField = KOTextField()
         textField.koDelegate = textFieldDelegateContainer
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -48,24 +55,20 @@ final class KOTextFieldTests: XCTestCase {
             textField.rightAnchor.constraint(equalTo: viewController.view.rightAnchor),
             textField.heightAnchor.constraint(equalToConstant: 50)
             ])
-        viewController.view.setNeedsLayout()
-        viewController.view.layoutIfNeeded()
 
         textField.errorInfo.showMode = .onFocus
         countValidator = KOFunctionTextValidator(function: { (text) -> Bool in
             return text.count >= 8 && text.count <= 20
         }, failureText: "text should contain from 8 to 20 chars")
         textField.validation.add(validator: countValidator)
-
-        super.setUp()
     }
 
     override func tearDown() {
         super.tearDown()
+        countValidator = nil
+        textField = nil
         windowSimulator = nil
         viewController = nil
-        textField = nil
-        countValidator = nil
     }
 
     func testShowingErrorWhenValidationOnLostFocusFailed() {

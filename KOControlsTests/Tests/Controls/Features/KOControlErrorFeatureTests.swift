@@ -50,9 +50,9 @@ final class KOControlErrorFeatureTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        windowSimulator = nil
-        viewController = nil
         featureContainer = nil
+        viewController = nil
+        windowSimulator = nil
     }
 
     func testDefaultIsShowing() {
