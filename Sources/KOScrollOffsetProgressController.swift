@@ -210,11 +210,7 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     }
 
     private func calculateContentOffsetFromScrollViewContentOffset(_ scrollView: UIScrollView) {
-        var offset: CGFloat = scrollView.contentOffset.y
-        if scrollOffsetAxis == .horizontal {
-            offset = scrollView.contentOffset.x
-        }
-        contentOffset = offset
+        contentOffset = scrollOffsetAxis == .horizontal ? scrollView.contentOffset.x : scrollView.contentOffset.y
     }
 
     private func calculateContentOffsetFromScrollViewTranslationOffset(_ scrollView: UIScrollView) {
@@ -224,8 +220,8 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
         }
         offset -= lastContentOffset
         contentOffset += offset
-        contentOffset = min(offsetRange, max(0, contentOffset))
-        lastContentOffset = scrollView.contentOffset.y
+        contentOffset = min(minOffset + offsetRange, max(0, contentOffset))
+        lastContentOffset = scrollOffsetAxis == .horizontal ? scrollView.contentOffset.x : scrollView.contentOffset.y
     }
 
     private func getContentOffsetIfNotBouncing(fromScrollView scrollView: UIScrollView) -> CGFloat? {
