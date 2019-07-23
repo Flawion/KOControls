@@ -248,15 +248,3 @@ extension CGFloat {
         return self + maxDifference > to && self - maxDifference < to
     }
 }
-
-final class PanGestureRecognizerSimulator: UIPanGestureRecognizer {
-    private var translation: CGPoint = CGPoint.zero
-
-    override func setTranslation(_ translation: CGPoint, in _: UIView?) {
-        self.translation = translation
-    }
-
-    override func translation(in _: UIView?) -> CGPoint {
-        return translation
-    }
-}
