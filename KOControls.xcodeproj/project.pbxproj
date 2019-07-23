@@ -39,6 +39,7 @@
 		05CDF65A227EDBF5005D82A0 /* KOControlBorderFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CDF659227EDBF5005D82A0 /* KOControlBorderFeature.swift */; };
 		05CE5527211DAF47003EDD66 /* KOPresentationQueuesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */; };
 		05DB455322E71DA000BC97AF /* PanGestureRecognizerSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DB455222E71DA000BC97AF /* PanGestureRecognizerSimulator.swift */; };
+		05DB455622E7270000BC97AF /* KODialogViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DB455522E7270000BC97AF /* KODialogViewControllerTests.swift */; };
 		05E2B4CC22D3518D00E7F75A /* KOControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 053ED24521162C2E0016ABC4 /* KOControls.framework */; };
 		05E2B4D522D351DF00E7F75A /* KOControlBorderFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E2B4D422D351DF00E7F75A /* KOControlBorderFeatureTests.swift */; };
 		05E2B4D722D35D0100E7F75A /* KOControlValidationFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E2B4D622D35D0100E7F75A /* KOControlValidationFeatureTests.swift */; };
@@ -94,6 +95,7 @@
 		05CDF659227EDBF5005D82A0 /* KOControlBorderFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlBorderFeature.swift; sourceTree = "<group>"; };
 		05CE5526211DAF47003EDD66 /* KOPresentationQueuesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPresentationQueuesService.swift; sourceTree = "<group>"; };
 		05DB455222E71DA000BC97AF /* PanGestureRecognizerSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanGestureRecognizerSimulator.swift; sourceTree = "<group>"; };
+		05DB455522E7270000BC97AF /* KODialogViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogViewControllerTests.swift; sourceTree = "<group>"; };
 		05E2B4C722D3518C00E7F75A /* KOControlsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KOControlsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05E2B4CB22D3518D00E7F75A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05E2B4D422D351DF00E7F75A /* KOControlBorderFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlBorderFeatureTests.swift; sourceTree = "<group>"; };
@@ -219,11 +221,20 @@
 			isa = PBXGroup;
 			children = (
 				05E2B4D222D351BE00E7F75A /* Controls */,
+				05DB455422E7269B00BC97AF /* DialogViewControllers */,
 				05BBDE2422DC62B500841A3D /* KOPresentationQueuesServiceTests.swift */,
 				0594562D22DE080B0082CCB7 /* KOPropertyObserverTests.swift */,
 				0594562F22DE0AE60082CCB7 /* KOScrollOffsetProgressControllerTests.swift */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		05DB455422E7269B00BC97AF /* DialogViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				05DB455522E7270000BC97AF /* KODialogViewControllerTests.swift */,
+			);
+			path = DialogViewControllers;
 			sourceTree = "<group>";
 		};
 		05E2B4C822D3518D00E7F75A /* KOControlsTests */ = {
@@ -420,6 +431,7 @@
 				05BBDE2722DC82E500841A3D /* ViewControllerSimulator.swift in Sources */,
 				0555086122D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift in Sources */,
 				05BBDE2522DC62B500841A3D /* KOPresentationQueuesServiceTests.swift in Sources */,
+				05DB455622E7270000BC97AF /* KODialogViewControllerTests.swift in Sources */,
 				058E7E3922D48B3000208252 /* KOControlErrorFeatureTests.swift in Sources */,
 				0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */,
 				0594563022DE0AE60082CCB7 /* KOScrollOffsetProgressControllerTests.swift in Sources */,
