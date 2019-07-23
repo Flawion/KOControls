@@ -85,21 +85,21 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     /// Indicates on which axis it will be doing a calculation
     public var scrollOffsetAxis: KOScrollOffsetAxis = .vertical {
         didSet {
-            calculateOffsetProgress()
+            refreshMode()
         }
     }
     
     /// Initial offset that must be reach to start the calculation
     public var minOffset: CGFloat = 0 {
         didSet {
-            calculateOffsetProgress()
+            refreshMode()
         }
     }
     
     /// End offset that must be reach to get maximum progress, must be greater than minOffset
     public var maxOffset: CGFloat = 0 {
         didSet {
-            calculateOffsetProgress()
+            refreshMode()
         }
     }
     
@@ -152,10 +152,19 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
         guard let scrollView = scrollView else {
             return
         }
+        removeCalculateOffsetGestureForCurrentScrollView()
         bindScrollView(scrollView)
         createCalculateOffsetGesture(forScrollView: scrollView)
         resetOffsetParameters()
         calculateContentOffsetAndProgress()
+    }
+
+    private func removeCalculateOffsetGestureForCurrentScrollView() {
+        guard let calculateOffsetGesture = self.calculateOffsetGesture, let scrollView = self.scrollView else {
+            return
+        }
+        scrollView.removeGestureRecognizer(calculateOffsetGesture)
+        self.calculateOffsetGesture = nil
     }
 
     private func bindScrollView(_ scrollView: UIScrollView) {
@@ -165,7 +174,11 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     }
 
     private func createCalculateOffsetGesture(forScrollView scrollView: UIScrollView) {
-        let calculateOffsetGesture = UIPanGestureRecognizer(target: self, action: #selector(calculateOffsetGestureAction(_:)))
+        let calculateOffsetGesture = UIPanGestureRecognizer(target: self, action: #selector(calculateOffsetGestureAction))
+        initializeCalculateOffsetGesture(calculateOffsetGesture, forScrollView: scrollView)
+    }
+
+    private func initializeCalculateOffsetGesture(_ calculateOffsetGesture: UIPanGestureRecognizer, forScrollView scrollView: UIScrollView) {
         calculateOffsetGesture.delegate = self
         calculateOffsetGesture.isEnabled = isScrollBlockedUntilProgressMax
         scrollView.addGestureRecognizer(calculateOffsetGesture)
@@ -173,7 +186,7 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     }
     
     // MARK: Gesture
-    @objc private func calculateOffsetGestureAction(_ panGesture: UIPanGestureRecognizer) {
+    @objc private func calculateOffsetGestureAction() {
         calculateContentOffsetAndProgress()
     }
     
@@ -260,7 +273,7 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
             calculateOffsetGesture.setTranslation(CGPoint.zero, in: scrollView)
         }
 
-        guard let translation = getTranslationOnAxisIfContentOffsetGreaterThanZero(fromGesture: calculateOffsetGesture, scrollView: scrollView) else {
+        guard let translation = getTranslationOnAxisIfContentOffsetLessThanOrEqualZero(fromGesture: calculateOffsetGesture, scrollView: scrollView) else {
             return
         }
 
@@ -270,20 +283,20 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
         contentOffset = offset
     }
 
-    private func  getTranslationOnAxisIfContentOffsetGreaterThanZero(fromGesture gesture: UIPanGestureRecognizer, scrollView: UIScrollView) -> CGFloat? {
+    private func getTranslationOnAxisIfContentOffsetLessThanOrEqualZero(fromGesture gesture: UIPanGestureRecognizer, scrollView: UIScrollView) -> CGFloat? {
         let translation = gesture.translation(in: scrollView)
-        return scrollOffsetAxis == .horizontal ? getTranslationVerticalIfContentOffsetGreaterThanZero(fromTranslation: translation, scrollView: scrollView) :
-        getTranslationVerticalIfContentOffsetGreaterThanZero(fromTranslation: translation, scrollView: scrollView)
+        return scrollOffsetAxis == .horizontal ? getTranslationHorizontalIfContentOffsetLessThanOrEqualZero(fromTranslation: translation, scrollView: scrollView) :
+        getTranslationVerticalIfContentOffsetLessThanOrEqualZero(fromTranslation: translation, scrollView: scrollView)
     }
 
-    private func  getTranslationHorizontalIfContentOffsetGreaterThanZero(fromTranslation translation: CGPoint, scrollView: UIScrollView) -> CGFloat? {
+    private func getTranslationHorizontalIfContentOffsetLessThanOrEqualZero(fromTranslation translation: CGPoint, scrollView: UIScrollView) -> CGFloat? {
         guard scrollView.contentOffset.x <= 0 else {
             return nil
         }
         return translation.x
     }
 
-    private func  getTranslationVerticalIfContentOffsetGreaterThanZero(fromTranslation translation: CGPoint, scrollView: UIScrollView) -> CGFloat? {
+    private func  getTranslationVerticalIfContentOffsetLessThanOrEqualZero(fromTranslation translation: CGPoint, scrollView: UIScrollView) -> CGFloat? {
         guard scrollView.contentOffset.y <= 0 else {
             return nil
         }
@@ -309,7 +322,6 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
     private func scrollView(_ scrollView: UIScrollView, newContentOffset contentOffset: CGPoint) {
         guard !isScrollBlockedUntilProgressMax else {
             preventFromScrollUntilProgressIsMax(scrollView, contentOffset: contentOffset)
-
             return
         }
         calculateContentOffsetAndProgress()
@@ -344,5 +356,20 @@ open class KOScrollOffsetProgressController: NSObject, UIGestureRecognizerDelega
             return
         }
         scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
+    }
+}
+
+// MARK: KOScrollOffsetProgressController + Tests
+extension KOScrollOffsetProgressController {
+    internal func testChangeCalculateOffsetGesture(toPanGestureRecognizerMock panGestureRecognizerMock: UIPanGestureRecognizer) {
+        guard let scrollView = scrollView else {
+            return
+        }
+        removeCalculateOffsetGestureForCurrentScrollView()
+        initializeCalculateOffsetGesture(panGestureRecognizerMock, forScrollView: scrollView)
+    }
+
+    @objc internal func testCalculateOffsetGestureAction() {
+        calculateOffsetGestureAction()
     }
 }

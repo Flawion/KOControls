@@ -31,6 +31,7 @@ final class KOScrollOffsetProgressControllerTests: XCTestCase {
     private var viewController: UIViewController!
     private var scrollView: UIScrollView!
     private var scrollOffsetProgressController: KOScrollOffsetProgressController!
+    private var offsetProgressFromDelegate: CGFloat = 0
 
     override func setUp() {
         viewController = UIViewController()
@@ -69,6 +70,7 @@ final class KOScrollOffsetProgressControllerTests: XCTestCase {
 
     private func setUpScrollOffsetProgressController() {
         scrollOffsetProgressController = KOScrollOffsetProgressController(scrollView: scrollView, minOffset: 200, maxOffset: 500)
+        scrollOffsetProgressController.delegate = self
     }
 
     override func tearDown() {
@@ -79,6 +81,7 @@ final class KOScrollOffsetProgressControllerTests: XCTestCase {
         windowSimulator = nil
     }
 
+    // MARK: Tests
     func testIsDefaultModeContentOffsetBased() {
         XCTAssertEqual(scrollOffsetProgressController.mode, KOScrollOffsetProgressModes.contentOffsetBased)
     }
@@ -149,9 +152,79 @@ final class KOScrollOffsetProgressControllerTests: XCTestCase {
         scrollTo(offset: currentOffset, andCheckProgress: 1.0)
     }
 
-    private func scrollTo(offset: CGFloat, andCheckProgress progress: CGFloat) {
-        scrollOffsetProgressController.scrollOffsetAxis == .vertical ? scrollVerticalTo(offset: offset) : scrollHorizontalTo(offset: offset)
+    func testVerticalCalculatingProgressWhenScrollingBlockedUntilProgressMax() {
+        scrollOffsetProgressController.scrollOffsetAxis = .vertical
+        checkCalculatingProgressWhenScrollingBlockedUntilProgressMax()
+    }
+
+    func testHorizontalCalculatingProgressWhenScrollingBlockedUntilProgressMax() {
+        scrollOffsetProgressController.scrollOffsetAxis = .horizontal
+        checkCalculatingProgressWhenScrollingBlockedUntilProgressMax()
+    }
+
+    func checkCalculatingProgressWhenScrollingBlockedUntilProgressMax() {
+        scrollOffsetProgressController.mode = .scrollingBlockedUntilProgressMax
+        let minOffset = scrollOffsetProgressController.minOffset
+        let range = scrollOffsetProgressController.offsetRange
+        let halfOffset = minOffset + range / 2
+        let panGestureRecognizerSimulator = PanGestureRecognizerSimulator()
+        scrollOffsetProgressController.testChangeCalculateOffsetGesture(toPanGestureRecognizerMock: panGestureRecognizerSimulator)
+
+        panTo(offset: -halfOffset, gestureRecognizerSimulator: panGestureRecognizerSimulator, andCheckProgress: 0.5)
+        scrollTo(offset: 300)
+        XCTAssertFalse(isScrollOffsetGreaterThanZero)
+
+        panTo(offset: -range / 2, gestureRecognizerSimulator: panGestureRecognizerSimulator, andCheckProgress: 1.0)
+        scrollTo(offset: 300)
+        XCTAssertTrue(isScrollOffsetGreaterThanZero)
+
+        panTo(offset: range / 2, gestureRecognizerSimulator: panGestureRecognizerSimulator, andCheckProgress: 1.0)
+        XCTAssertTrue(isScrollOffsetGreaterThanZero)
+
+        scrollTo(offset: 0)
+        panTo(offset: range / 2, gestureRecognizerSimulator: panGestureRecognizerSimulator, andCheckProgress: 0.5)
+        scrollTo(offset: 300)
+        XCTAssertFalse(isScrollOffsetGreaterThanZero)
+
+        panTo(offset: range / 2, gestureRecognizerSimulator: panGestureRecognizerSimulator, andCheckProgress: 0)
+        scrollTo(offset: 300)
+        XCTAssertFalse(isScrollOffsetGreaterThanZero)
+    }
+
+    // MARK: Helpers
+    private func panTo(offset: CGFloat, gestureRecognizerSimulator: PanGestureRecognizerSimulator, andCheckProgress progress: CGFloat) {
+        panTo(offset: offset, gestureRecognizerSimulator: gestureRecognizerSimulator)
+        XCTAssertTrue(scrollOffsetProgressController.progress.almostEqual(to: offsetProgressFromDelegate))
         XCTAssertTrue(scrollOffsetProgressController.progress.almostEqual(to: progress))
+    }
+
+    private func panTo(offset: CGFloat, gestureRecognizerSimulator: PanGestureRecognizerSimulator) {
+        scrollOffsetProgressController.scrollOffsetAxis == .vertical ? panVerticalTo(offset: offset, gestureRecognizerSimulator: gestureRecognizerSimulator) : panHorizontalTo(offset: offset, gestureRecognizerSimulator: gestureRecognizerSimulator)
+    }
+
+    private func panVerticalTo(offset: CGFloat, gestureRecognizerSimulator: PanGestureRecognizerSimulator) {
+        gestureRecognizerSimulator.setTranslation(CGPoint(x: 0, y: offset), in: scrollView)
+        scrollOffsetProgressController.testCalculateOffsetGestureAction()
+    }
+
+    private func panHorizontalTo(offset: CGFloat, gestureRecognizerSimulator: PanGestureRecognizerSimulator) {
+        gestureRecognizerSimulator.setTranslation(CGPoint(x: offset, y: 0), in: scrollView)
+        scrollOffsetProgressController.testCalculateOffsetGestureAction()
+    }
+
+    private var isScrollOffsetGreaterThanZero: Bool {
+        let offset = scrollOffsetProgressController.scrollOffsetAxis == .vertical ? scrollView.contentOffset.y : scrollView.contentOffset.x
+        return offset > 0
+    }
+
+    private func scrollTo(offset: CGFloat, andCheckProgress progress: CGFloat) {
+        scrollTo(offset: offset)
+        XCTAssertTrue(scrollOffsetProgressController.progress.almostEqual(to: offsetProgressFromDelegate))
+        XCTAssertTrue(scrollOffsetProgressController.progress.almostEqual(to: progress))
+    }
+
+    private func scrollTo(offset: CGFloat) {
+        scrollOffsetProgressController.scrollOffsetAxis == .vertical ? scrollVerticalTo(offset: offset) : scrollHorizontalTo(offset: offset)
     }
 
     private func scrollVerticalTo(offset: CGFloat) {
@@ -163,8 +236,27 @@ final class KOScrollOffsetProgressControllerTests: XCTestCase {
     }
 }
 
+extension KOScrollOffsetProgressControllerTests: KOScrollOffsetProgressControllerDelegate {
+    public func scrollOffsetProgressController(_ scrollOffsetProgressController: KOScrollOffsetProgressController, offsetProgress: CGFloat) {
+        offsetProgressFromDelegate = offsetProgress
+        XCTAssertEqual(self.scrollOffsetProgressController, scrollOffsetProgressController)
+    }
+}
+
 extension CGFloat {
     func almostEqual(to: CGFloat, maxDifference: CGFloat = 0.001) -> Bool {
         return self + maxDifference > to && self - maxDifference < to
+    }
+}
+
+final class PanGestureRecognizerSimulator: UIPanGestureRecognizer {
+    private var translation: CGPoint = CGPoint.zero
+
+    override func setTranslation(_ translation: CGPoint, in _: UIView?) {
+        self.translation = translation
+    }
+
+    override func translation(in _: UIView?) -> CGPoint {
+        return translation
     }
 }
