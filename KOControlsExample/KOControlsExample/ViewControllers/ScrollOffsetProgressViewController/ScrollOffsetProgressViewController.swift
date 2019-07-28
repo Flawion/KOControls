@@ -192,8 +192,8 @@ final class ScrollOffsetProgressViewController: UIViewController {
             optionsPickerViewController.optionsPicker.selectRow(self.selectedProgressModeIndex, inComponent: 0, animated: false)
             optionsPickerViewController.optionsPicker.selectRow(self.selectedProgressMaxOffsetIndex, inComponent: 1, animated: false)
             optionsPickerViewController.mainView.backgroundColor = UIColor.clear
-            optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction(withTitle: "Cancel")
-            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(withTitle: "Done", action: { [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
+            optionsPickerViewController.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
+            optionsPickerViewController.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: { [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
                 guard let self = self else {
                     return
                 }

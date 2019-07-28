@@ -64,8 +64,8 @@ extension PickerViewController {
     }
 
     private func initializeItemsCollectionPicker(_ itemsCollectionPicker: KOItemsCollectionPickerViewController, availableWidth: CGFloat, itemMaxWidth: Double) {
-        itemsCollectionPicker.leftBarButtonAction = KODialogActionModel.cancelAction()
-        itemsCollectionPicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](itemsCollectionPicker: KOItemsCollectionPickerViewController) in
+        itemsCollectionPicker.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
+        itemsCollectionPicker.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: { [weak self](itemsCollectionPicker: KOItemsCollectionPickerViewController) in
             guard let self = self else {
                 return
             }

@@ -13,6 +13,7 @@
 		053ED24A21162C2E0016ABC4 /* KOControls.h in Headers */ = {isa = PBXBuildFile; fileRef = 053ED24821162C2E0016ABC4 /* KOControls.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		053ED28C211638950016ABC4 /* KOErrorInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED28B211638950016ABC4 /* KOErrorInfoView.swift */; };
 		0546FCA622704A5000EE7236 /* KOAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0546FCA522704A5000EE7236 /* KOAnimator.swift */; };
+		055190B122EE3A2C00B745BC /* KOPickerViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055190B022EE3A2C00B745BC /* KOPickerViewControllerTests.swift */; };
 		0555086122D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */; };
 		0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */; };
 		0566A6AA213E75D900E87518 /* KOConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566A6A9213E75D900E87518 /* KOConstraints.swift */; };
@@ -69,6 +70,7 @@
 		053ED24921162C2E0016ABC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		053ED28B211638950016ABC4 /* KOErrorInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOErrorInfoView.swift; sourceTree = "<group>"; };
 		0546FCA522704A5000EE7236 /* KOAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOAnimator.swift; sourceTree = "<group>"; };
+		055190B022EE3A2C00B745BC /* KOPickerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPickerViewControllerTests.swift; sourceTree = "<group>"; };
 		0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlErrorInfoFeatureTests.swift; sourceTree = "<group>"; };
 		0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Extension.swift"; sourceTree = "<group>"; };
 		0566A6A9213E75D900E87518 /* KOConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOConstraints.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				05DB455522E7270000BC97AF /* KODialogViewControllerTests.swift */,
+				055190B022EE3A2C00B745BC /* KOPickerViewControllerTests.swift */,
 			);
 			path = DialogViewControllers;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 			files = (
 				058E7E3B22D492ED00208252 /* WindowSimulator.swift in Sources */,
 				05E2B4D522D351DF00E7F75A /* KOControlBorderFeatureTests.swift in Sources */,
+				055190B122EE3A2C00B745BC /* KOPickerViewControllerTests.swift in Sources */,
 				05DB455322E71DA000BC97AF /* PanGestureRecognizerSimulator.swift in Sources */,
 				0594562E22DE080B0082CCB7 /* KOPropertyObserverTests.swift in Sources */,
 				0594562A22DDFE9D0082CCB7 /* KOTouchForwardingViewTests.swift in Sources */,

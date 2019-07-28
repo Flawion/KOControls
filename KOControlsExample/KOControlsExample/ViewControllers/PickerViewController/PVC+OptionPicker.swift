@@ -57,8 +57,8 @@ extension PickerViewController {
 
     private func initializeOptionsPicker(_ optionsPicker: KOOptionsPickerViewController) {
         optionsPicker.optionsPicker.selectRow(favoriteFilmTypeIndex, inComponent: 0, animated: false)
-        optionsPicker.leftBarButtonAction = KODialogActionModel.cancelAction()
-        optionsPicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
+        optionsPicker.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
+        optionsPicker.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: { [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
             guard let self = self else {
                 return
             }

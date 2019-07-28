@@ -59,8 +59,8 @@ extension PickerViewController {
     }
 
     private func initializeItemsTablePicker(_ itemsTablePicker: KOItemsTablePickerViewController) {
-        itemsTablePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
-        itemsTablePicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](itemsTablePickerViewController: KOItemsTablePickerViewController) in
+        itemsTablePicker.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
+        itemsTablePicker.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: { [weak self](itemsTablePickerViewController: KOItemsTablePickerViewController) in
             guard let self = self else {
                 return
             }
@@ -141,8 +141,8 @@ extension PickerViewController {
     }
 
     private func initializeCustomItemsTablePicker(_ itemsTablePicker: SearchItemsTablePickerViewController) {
-        itemsTablePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
-        itemsTablePicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](itemsTablePickerViewController: KOItemsTablePickerViewController) in
+        itemsTablePicker.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
+        itemsTablePicker.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: { [weak self](itemsTablePickerViewController: KOItemsTablePickerViewController) in
             guard let self = self else {
                 return
             }

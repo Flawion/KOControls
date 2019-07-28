@@ -57,8 +57,8 @@ extension PickerViewController {
     }
 
     private func initializeDatePicker(_ datePicker: KODatePickerViewController) {
-        datePicker.leftBarButtonAction = KODialogActionModel.cancelAction()
-        datePicker.rightBarButtonAction = KODialogActionModel.doneAction(action: { [weak self](datePickerViewController: KODatePickerViewController) in
+        datePicker.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel", action: nil)
+        datePicker.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: { [weak self](datePickerViewController: KODatePickerViewController) in
             self?.birthdayDate = datePickerViewController.datePicker.date
         })
 

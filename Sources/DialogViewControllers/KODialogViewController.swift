@@ -42,23 +42,31 @@ public class KODialogActionModel: NSObject {
         super.init()
     }
     
+    /// Action that will invoke a function and then dismiss the dialog
+    ///
+    /// - Parameter title: title used for barView: left/right buttons or for titleLabel.text
+    public static func dismissAction<Parameter: KODialogViewController>(withTitle title: String, action: ((Parameter) -> Void)? = nil) -> KODialogActionModel {
+        return KODialogActionModel(title: title, action: { (dialog) in
+            action?(dialog as! Parameter)
+            dialog.dismiss(animated: true, completion: nil)
+        })
+    }
+    
     /// Action that will dismiss the dialog
     ///
     /// - Parameter title: title used for barView: left/right buttons or for titleLabel.text
+    @available(*, deprecated, message: "This func will be removed in the next version, please use dismissAction instead")
     public static func cancelAction(withTitle title: String = "Cancel") -> KODialogActionModel {
-        return KODialogActionModel(title: title, action: { (dialog) in
-            dialog.dismiss(animated: true, completion: nil)
+        return dismissAction(withTitle: title, action: { _ in
         })
     }
     
     /// Action that will invoke a function and then dismiss the dialog
     ///
     /// - Parameter title: title used for barView: left/right buttons or for titleLabel.text
+    @available(*, deprecated, message: "This func will be removed in the next version, please use dismissAction instead")
     public static func doneAction<Parameter: KODialogViewController>(withTitle title: String = "Done", action: @escaping (Parameter) -> Void) -> KODialogActionModel {
-        return KODialogActionModel(title: title, action: { (dialog) in
-            action(dialog as! Parameter)
-            dialog.dismiss(animated: true, completion: nil)
-        })
+        return dismissAction(withTitle: title, action: action)
     }
 }
 
@@ -426,7 +434,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
 
     private func createRightBarButton(fromAction action: KODialogActionModel) {
         let rightBarButton: UIButton = (delegate?.dialogViewControllerCreateRightButton?(self)) ?? createDefaultBarButton(withTitle: action.title)
-        rightBarButton.addTarget(self, action: #selector(rightBarButtonClick), for: .touchUpInside)
+        rightBarButton.addTarget(self, action: #selector(rightBarButtonClicked), for: .touchUpInside)
         pMainView.barView.rightView = rightBarButton
         pMainView.barView.rightViewEdgesConstraintsInset.insets = defaultBarButtonInsets
     }
@@ -445,7 +453,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
 
     private func createLeftBarButton(fromAction action: KODialogActionModel) {
         let leftBarButton: UIButton = (delegate?.dialogViewControllerCreateLeftButton?(self)) ?? createDefaultBarButton(withTitle: action.title)
-        leftBarButton.addTarget(self, action: #selector(leftBarButtonClick), for: .touchUpInside)
+        leftBarButton.addTarget(self, action: #selector(leftBarButtonClicked), for: .touchUpInside)
         pMainView.barView.leftView = leftBarButton
         pMainView.barView.leftViewEdgesConstraintsInset.insets = defaultBarButtonInsets
     }
@@ -456,13 +464,24 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
         return button
     }
 
-    @objc private func leftBarButtonClick() {
+    @objc private func leftBarButtonClicked() {
         leftBarButtonAction?.action(self)
         delegate?.dialogViewControllerLeftButtonClicked?(self)
     }
 
-    @objc private func rightBarButtonClick() {
+    @objc private func rightBarButtonClicked() {
         rightBarButtonAction?.action(self)
         delegate?.dialogViewControllerRightButtonClicked?(self)
+    }
+}
+
+// MARK: KODialogViewController + Tests
+extension KODialogViewController {
+    internal func testLeftBarButtonClicked() {
+        leftBarButtonClicked()
+    }
+    
+    internal func testRightBarButtonClicked() {
+        rightBarButtonClicked()
     }
 }

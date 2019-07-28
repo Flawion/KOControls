@@ -113,7 +113,45 @@ final class KODialogViewControllerTests: XCTestCase {
         XCTAssertEqual(contentDialogViewController.mainView.frame.origin.y, 0)
         XCTAssertEqual(contentDialogViewController.mainView.frame.maxY, contentDialogViewController.view.frame.height)
     }
-
+    
+    func testLeftBarButton() {
+        let contentDialogViewController = ContentDialogViewController()
+        let buttonTitle = "test"
+        let expection = expectation(description: "leftBarButtonClicked")
+        contentDialogViewController.leftBarButtonAction = KODialogActionModel(title: "test", action: { (dialogViewController) in
+            XCTAssertEqual(dialogViewController, contentDialogViewController)
+            expection.fulfill()
+        })
+        present(contentDialogViewController: contentDialogViewController)
+        
+        guard let leftBarButton = contentDialogViewController.mainView.barView.leftView as? UIButton else {
+            XCTAssertTrue(false)
+            return
+        }
+        XCTAssertEqual(leftBarButton.title(for: .normal), buttonTitle)
+        contentDialogViewController.testLeftBarButtonClicked()
+        waitForExpectations(timeout: 0, handler: nil)
+    }
+    
+    func testRightBarButton() {
+        let contentDialogViewController = ContentDialogViewController()
+        let buttonTitle = "test"
+        let expection = expectation(description: "rightBarButtonClicked")
+        contentDialogViewController.rightBarButtonAction = KODialogActionModel(title: "test", action: { (dialogViewController) in
+            XCTAssertEqual(dialogViewController, contentDialogViewController)
+            expection.fulfill()
+        })
+        present(contentDialogViewController: contentDialogViewController)
+        
+        guard let rightBarButton = contentDialogViewController.mainView.barView.rightView as? UIButton else {
+            XCTAssertTrue(false)
+            return
+        }
+        XCTAssertEqual(rightBarButton.title(for: .normal), buttonTitle)
+        contentDialogViewController.testRightBarButtonClicked()
+        waitForExpectations(timeout: 0, handler: nil)
+    }
+    
     private func present(contentDialogViewController: ContentDialogViewController) {
         presentingViewController.present(contentDialogViewController, animated: false)
         contentDialogViewController.view.layoutIfNeeded()
