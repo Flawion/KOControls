@@ -88,6 +88,81 @@ final class KOPickerViewControllerTests: XCTestCase {
             }
         }
     }
+
+    func testOptionsPicerViewControllerResizableDelegate() {
+        let options: [[String]] = [["test1-1", "test1-2"], ["test1-1", "test1-2"]]
+        var pickedWidthForOptions: [Int: Bool] = [:]
+        var pickedHeightForOptions: [Int: Bool] = [:]
+        let optionsPickerViewController = KOOptionsPickerViewController(options: options)
+        let optionsPickerResizableDelegate = KOOptionsPickerResizableDelegate(optionsPickerViewController: optionsPickerViewController, widthForComponent: { component -> CGFloat in
+            pickedWidthForOptions[component] = true
+            return 100
+        }, heightForComponent: { component -> CGFloat in
+            pickedHeightForOptions[component] = true
+            return 50
+        })
+        optionsPickerViewController.optionsPickerDelegateInstance = optionsPickerResizableDelegate
+
+        presentAndCheckFrame(ofDialogViewController: optionsPickerViewController, heightNeedToBeAbove: optionsPickerViewController.optionsPicker.intrinsicContentSize.height)
+        for index in 0..<options.count where !(pickedWidthForOptions[index] ?? false) || !(pickedHeightForOptions[index] ?? false) {
+            XCTAssertTrue(false, "size didn't pick for component (\(index))")
+        }
+    }
+
+    func testOptionsPicerViewControllerCustomViewDelegate() {
+        let options: [[String]] = [["test1-1", "test1-2"], ["test1-1", "test1-2"]]
+        var pickedWidthForOptions: [Int: Bool] = [:]
+        var pickedHeightForOptions: [Int: Bool] = [:]
+        let optionsPickerViewController = KOOptionsPickerViewController(options: options)
+        let optionsPickerCustomViewDelegate = KOOptionsPickerCustomViewDelegate(optionsPickerViewController: optionsPickerViewController, widthForComponent: { component -> CGFloat in
+            pickedWidthForOptions[component] = true
+            return 100
+        }, heightForComponent: { component -> CGFloat in
+            pickedHeightForOptions[component] = true
+            return 50
+        }, viewForRowInComponent: {(row, component, option, viewToReuse) -> UIView in
+            var customView: UILabel! = viewToReuse as? UILabel
+            if customView == nil {
+                customView = UILabel()
+            }
+            customView.text = options[component][row]
+            customView.sizeToFit()
+            return customView
+        })
+        optionsPickerViewController.optionsPickerDelegateInstance = optionsPickerCustomViewDelegate
+
+        presentAndCheckFrame(ofDialogViewController: optionsPickerViewController, heightNeedToBeAbove: optionsPickerViewController.optionsPicker.intrinsicContentSize.height)
+        for index in 0..<options.count where !(pickedWidthForOptions[index] ?? false) || !(pickedHeightForOptions[index] ?? false) {
+            XCTAssertTrue(false, "size didn't pick for component (\(index))")
+        }
+        for component in 0..<options.count {
+            for row in 0..<options[component].count{
+                guard let view = optionsPickerViewController.optionsPicker.view(forRow: row, forComponent: component) as? UILabel, view.text == options[component][row] else{
+                    XCTAssertTrue(false, "view wasn't returned correctly")
+                    return
+                }
+
+            }
+        }
+    }
+
+    func testItemsTablePickerViewController() {
+        let itemsTablePickerViewController = KOItemsTablePickerViewController()
+        let contentHeight: CGFloat = 200
+        itemsTablePickerViewController.mainView.contentHeight = contentHeight
+
+        presentAndCheckFrame(ofDialogViewController: itemsTablePickerViewController, heightNeedToBeAbove: contentHeight)
+        XCTAssertTrue(itemsTablePickerViewController.itemsTable.bounds.height >= contentHeight)
+    }
+
+    func testItemsCollectionPickerViewController() {
+        let itemsCollectionPickerViewController = KOItemsCollectionPickerViewController(itemsCollectionLayout: UICollectionViewFlowLayout())
+        let contentHeight: CGFloat = 200
+        itemsCollectionPickerViewController.mainView.contentHeight = contentHeight
+
+        presentAndCheckFrame(ofDialogViewController: itemsCollectionPickerViewController, heightNeedToBeAbove: contentHeight)
+        XCTAssertTrue(itemsCollectionPickerViewController.itemsCollection.bounds.height >= contentHeight)
+    }
     
     private func presentAndCheckFrame(ofDialogViewController dialogViewController: KODialogViewController, heightNeedToBeAbove height: CGFloat) {
         present(dialogViewController: dialogViewController)

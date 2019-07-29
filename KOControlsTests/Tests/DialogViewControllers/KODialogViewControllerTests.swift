@@ -29,10 +29,15 @@ import XCTest
 final class KODialogViewControllerTests: XCTestCase {
     private var windowSimulator: WindowSimulator!
     private var presentingViewController: ViewControllerSimulator!
+    private var contentDialogViewController: ContentDialogViewController!
+    private var contentDialogViewControllerDelegate: ContentDialogViewControllerDelegate!
 
     override func setUp() {
         presentingViewController = ViewControllerSimulator()
         windowSimulator = WindowSimulator(rootViewController: presentingViewController)
+        contentDialogViewController = ContentDialogViewController()
+        contentDialogViewControllerDelegate = ContentDialogViewControllerDelegate()
+        contentDialogViewController.delegate = contentDialogViewControllerDelegate
         super.setUp()
     }
 
@@ -40,89 +45,85 @@ final class KODialogViewControllerTests: XCTestCase {
         super.tearDown()
         presentingViewController = nil
         windowSimulator = nil
+        contentDialogViewController = nil
+        contentDialogViewControllerDelegate = nil
     }
 
     func testHorizontalAlignmentLeft() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewHorizontalAlignment = .left
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertEqual(contentDialogViewController.mainView.frame.origin.x, 0)
         XCTAssertTrue(contentDialogViewController.mainView.frame.maxX < contentDialogViewController.view.frame.width)
     }
 
     func testHorizontalAlignmentCenter() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewHorizontalAlignment = .center
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertTrue(contentDialogViewController.mainView.frame.origin.x > 0)
         XCTAssertTrue(contentDialogViewController.mainView.frame.maxX < contentDialogViewController.view.frame.width)
     }
 
     func testHorizontalAlignmentRight() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewHorizontalAlignment = .right
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertTrue(contentDialogViewController.mainView.frame.origin.x > 0)
         XCTAssertEqual(contentDialogViewController.mainView.frame.maxX, contentDialogViewController.view.frame.width)
     }
 
     func testHorizontalAlignmentFill() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewHorizontalAlignment = .fill
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertEqual(contentDialogViewController.mainView.frame.origin.x, 0)
         XCTAssertEqual(contentDialogViewController.mainView.frame.maxX, contentDialogViewController.view.frame.width)
     }
 
     func testVerticalAlignmentTop() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewVerticalAlignment = .top
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertEqual(contentDialogViewController.mainView.frame.origin.y, 0)
         XCTAssertTrue(contentDialogViewController.mainView.frame.maxY < contentDialogViewController.view.frame.height)
     }
 
     func testVerticalAlignmentCenter() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewVerticalAlignment = .center
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertTrue(contentDialogViewController.mainView.frame.origin.y > 0)
         XCTAssertTrue(contentDialogViewController.mainView.frame.maxY < contentDialogViewController.view.frame.height)
     }
 
     func testVerticalAlignmentBottom() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewVerticalAlignment = .bottom
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertTrue(contentDialogViewController.mainView.frame.origin.y > 0)
         XCTAssertEqual(contentDialogViewController.mainView.frame.maxY, contentDialogViewController.view.frame.height)
     }
 
     func testVerticalAlignmentFill() {
-        let contentDialogViewController = ContentDialogViewController()
         contentDialogViewController.mainViewVerticalAlignment = .fill
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertEqual(contentDialogViewController.mainView.frame.origin.y, 0)
         XCTAssertEqual(contentDialogViewController.mainView.frame.maxY, contentDialogViewController.view.frame.height)
     }
     
     func testLeftBarButton() {
-        let contentDialogViewController = ContentDialogViewController()
         let buttonTitle = "test"
         let expection = expectation(description: "leftBarButtonClicked")
-        contentDialogViewController.leftBarButtonAction = KODialogActionModel(title: "test", action: { (dialogViewController) in
-            XCTAssertEqual(dialogViewController, contentDialogViewController)
+        contentDialogViewController.leftBarButtonAction = KODialogActionModel(title: "test", action: { [weak self] (dialogViewController) in
+            guard let self = self else {
+                return
+            }
+            XCTAssertEqual(dialogViewController, self.contentDialogViewController)
             expection.fulfill()
         })
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
         
         guard let leftBarButton = contentDialogViewController.mainView.barView.leftView as? UIButton else {
             XCTAssertTrue(false)
@@ -130,18 +131,21 @@ final class KODialogViewControllerTests: XCTestCase {
         }
         XCTAssertEqual(leftBarButton.title(for: .normal), buttonTitle)
         contentDialogViewController.testLeftBarButtonClicked()
+        XCTAssertEqual(contentDialogViewControllerDelegate.leftButtonClickedCounter, 1)
         waitForExpectations(timeout: 0, handler: nil)
     }
     
     func testRightBarButton() {
-        let contentDialogViewController = ContentDialogViewController()
         let buttonTitle = "test"
         let expection = expectation(description: "rightBarButtonClicked")
-        contentDialogViewController.rightBarButtonAction = KODialogActionModel(title: "test", action: { (dialogViewController) in
-            XCTAssertEqual(dialogViewController, contentDialogViewController)
+        contentDialogViewController.rightBarButtonAction = KODialogActionModel(title: "test", action: {  [weak self] (dialogViewController) in
+            guard let self = self else {
+                return
+            }
+            XCTAssertEqual(dialogViewController, self.contentDialogViewController)
             expection.fulfill()
         })
-        present(contentDialogViewController: contentDialogViewController)
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
         
         guard let rightBarButton = contentDialogViewController.mainView.barView.rightView as? UIButton else {
             XCTAssertTrue(false)
@@ -149,10 +153,35 @@ final class KODialogViewControllerTests: XCTestCase {
         }
         XCTAssertEqual(rightBarButton.title(for: .normal), buttonTitle)
         contentDialogViewController.testRightBarButtonClicked()
+        XCTAssertEqual(contentDialogViewControllerDelegate.rightButtonClickedCounter, 1)
         waitForExpectations(timeout: 0, handler: nil)
     }
-    
-    private func present(contentDialogViewController: ContentDialogViewController) {
+
+    func testDisappear() {
+        presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
+        XCTAssertFalse(contentDialogViewControllerDelegate.willDisappear)
+        XCTAssertFalse(contentDialogViewControllerDelegate.didDisappear)
+        presentingViewController.dismiss(animated: false)
+        XCTAssertTrue(contentDialogViewControllerDelegate.willDisappear)
+        XCTAssertTrue(contentDialogViewControllerDelegate.didDisappear)
+    }
+
+    func testCreatingButtonsByDelegate() {
+        contentDialogViewControllerDelegate = ContentDialogViewControllerCreateButtonsDelegate()
+        contentDialogViewController.delegate = contentDialogViewControllerDelegate
+        contentDialogViewController.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "left")
+        contentDialogViewController.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "right")
+        present(contentDialogViewController: contentDialogViewController)
+        XCTAssertTrue(contentDialogViewController.mainView.barView.leftView is LeftButton)
+        XCTAssertTrue(contentDialogViewController.mainView.barView.rightView is RightButton)
+    }
+
+    private func presentAndCheckIsInitialized(contentDialogViewController: ContentDialogViewController) {
+        present(contentDialogViewController: contentDialogViewController)
+        XCTAssertTrue(contentDialogViewControllerDelegate.initialized)
+    }
+
+    private func present(contentDialogViewController: ContentDialogViewController)  {
         presentingViewController.present(contentDialogViewController, animated: false)
         contentDialogViewController.view.layoutIfNeeded()
     }
@@ -170,5 +199,49 @@ fileprivate final class ContentDialogViewController: KODialogViewController {
     override func createContentView() -> UIView {
         contentView = ContentView()
         return contentView
+    }
+}
+
+fileprivate class ContentDialogViewControllerDelegate: NSObject, KODialogViewControllerDelegate {
+    private(set) var initialized: Bool = false
+    private(set) var willDisappear: Bool = false
+    private(set) var didDisappear: Bool = false
+    private(set) var leftButtonClickedCounter: Int = 0
+    private(set) var rightButtonClickedCounter: Int = 0
+
+    func dialogViewControllerLeftButtonClicked(_ dialogViewController: KODialogViewController) {
+        leftButtonClickedCounter += 1
+    }
+
+    func dialogViewControllerRightButtonClicked(_ dialogViewController: KODialogViewController) {
+        rightButtonClickedCounter += 1
+    }
+
+    func dialogViewControllerInitialized(_ dialogViewController: KODialogViewController) {
+        initialized = true
+    }
+
+    func dialogViewControllerViewWillDisappear(_ dialogViewController: KODialogViewController) {
+        willDisappear = true
+    }
+
+    func dialogViewControllerViewDidDisappear(_ dialogViewController: KODialogViewController) {
+        didDisappear = true
+    }
+}
+
+fileprivate final class LeftButton: UIButton {
+}
+
+fileprivate final class RightButton: UIButton {
+}
+
+fileprivate class ContentDialogViewControllerCreateButtonsDelegate: ContentDialogViewControllerDelegate {
+    func dialogViewControllerCreateLeftButton(_ dialogViewController: KODialogViewController) -> UIButton {
+        return LeftButton()
+    }
+
+    func dialogViewControllerCreateRightButton(_ dialogViewController: KODialogViewController) -> UIButton {
+        return RightButton()
     }
 }

@@ -404,10 +404,10 @@ _ = presentDatePicker(viewLoadedAction: KODialogActionModel(title: "Select your 
     [weak self](dialogViewController) in
     let datePickerViewController = dialogViewController as! KODatePickerViewController
     //sets the cancel button
-    datePickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    datePickerViewController.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
     //sets the done button
-    datePickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
-        [weak self](datePickerViewController : KODatePickerViewController) in
+    datePickerViewController.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: {
+        [weak self](datePickerViewController: KODatePickerViewController) in
         //get the new date from the picker
         self?.birthdayDate = datePickerViewController.datePicker.date
     })
@@ -434,18 +434,18 @@ You can use predefined function to present option picker at the screen like belo
 
 ```swift
 
-fileprivate var filmTypes : [String] = [ "Action", "Adventure", "Biographical", "Comedy", "Crime", "Drama", "Family", "Horror", "Musical", "Romance", "Spy", "Thriller", "War", "Incorrect type"]
+fileprivate var filmTypes: [String] = [ "Action", "Adventure", "Biographical", "Comedy", "Crime", "Drama", "Family", "Horror", "Musical", "Romance", "Spy", "Thriller", "War", "Incorrect type"]
 
 //...
 
-_ = presentOptionsPicker(withOptions : [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: {
+_ = presentOptionsPicker(withOptions: [filmTypes], viewLoadedAction: KODialogActionModel(title: "Select your favorite film type", action: {
     [weak self](dialogViewController) in
     let optionsPickerViewController = dialogViewController as! KOOptionsPickerViewController
     //sets the cancel button
-    optionsPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    optionsPickerViewController.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
     //sets the done button
-    optionsPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
-        [weak self](optionsPickerViewController : KOOptionsPickerViewController) in
+    optionsPickerViewController.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: {
+        [weak self](optionsPickerViewController: KOOptionsPickerViewController) in
         //get the selected option
         self?.favoriteFilmTypeIndex = optionsPickerViewController.optionsPicker.selectedRow(inComponent: 0)
     })
@@ -477,9 +477,9 @@ _ = presentItemsTablePicker(viewLoadedAction: KODialogActionModel(title: "Select
     //sets contentHeight, because mainViewVerticalAlignment is other than .fill
     itemsTablePickerViewController.mainView.contentHeight = 300
     //sets the cancel button
-    itemsTablePickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    itemsTablePickerViewController.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
     //sets the done button
-    itemsTablePickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
+    itemsTablePickerViewController.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action: {
         [weak self](itemsTablePickerViewController : KOItemsTablePickerViewController) in
         if let countryIndex = itemsTablePickerViewController.itemsTable.indexPathForSelectedRow?.row{
             self?.countryIndex = countryIndex
@@ -515,9 +515,9 @@ _ = presentItemsCollectionPicker(itemsCollectionLayout : UICollectionViewFlowLay
     //sets contentHeight, because mainViewVerticalAlignment is other than .fill
     itemsCollectionPickerViewController.mainView.contentHeight = 300
     //sets the cancel button
-    itemsCollectionPickerViewController.leftBarButtonAction = KODialogActionModel.cancelAction()
+    itemsCollectionPickerViewController.leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")
     //sets the done button
-    itemsCollectionPickerViewController.rightBarButtonAction = KODialogActionModel.doneAction(action:{
+    itemsCollectionPickerViewController.rightBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Done", action:{
         [weak self](itemsCollectionPickerViewController : KOItemsCollectionPickerViewController) in
         if let countryIndex = itemsCollectionPickerViewController.itemsCollection.indexPathsForSelectedItems?.first?.row{
             self?.countryIndex = countryIndex
