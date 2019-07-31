@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		051CE6DE2282F639007C64CC /* KODialogMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051CE6DD2282F639007C64CC /* KODialogMainView.swift */; };
+		051D173022F22AB200F259C6 /* KODialogBarViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051D172F22F22AB200F259C6 /* KODialogBarViewTests.swift */; };
 		052099E4214FEC8600603A5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 052099E3214FEC8600603A5D /* Assets.xcassets */; };
 		05251CBD213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */; };
 		053ED24A21162C2E0016ABC4 /* KOControls.h in Headers */ = {isa = PBXBuildFile; fileRef = 053ED24821162C2E0016ABC4 /* KOControls.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -63,6 +64,7 @@
 
 /* Begin PBXFileReference section */
 		051CE6DD2282F639007C64CC /* KODialogMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogMainView.swift; sourceTree = "<group>"; };
+		051D172F22F22AB200F259C6 /* KODialogBarViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogBarViewTests.swift; sourceTree = "<group>"; };
 		052099E3214FEC8600603A5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		05251CBC213FEA5400CA9EF3 /* KOEdgesConstraintsInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOEdgesConstraintsInsets.swift; sourceTree = "<group>"; };
 		053ED24521162C2E0016ABC4 /* KOControls.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KOControls.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -235,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				05DB455522E7270000BC97AF /* KODialogViewControllerTests.swift */,
+				051D172F22F22AB200F259C6 /* KODialogBarViewTests.swift */,
 				055190B022EE3A2C00B745BC /* KOPickerViewControllerTests.swift */,
 			);
 			path = DialogViewControllers;
@@ -430,6 +433,7 @@
 				055190B122EE3A2C00B745BC /* KOPickerViewControllerTests.swift in Sources */,
 				05DB455322E71DA000BC97AF /* PanGestureRecognizerSimulator.swift in Sources */,
 				0594562E22DE080B0082CCB7 /* KOPropertyObserverTests.swift in Sources */,
+				051D173022F22AB200F259C6 /* KODialogBarViewTests.swift in Sources */,
 				0594562A22DDFE9D0082CCB7 /* KOTouchForwardingViewTests.swift in Sources */,
 				05E2B4D722D35D0100E7F75A /* KOControlValidationFeatureTests.swift in Sources */,
 				05BBDE2722DC82E500841A3D /* ViewControllerSimulator.swift in Sources */,

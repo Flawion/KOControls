@@ -199,7 +199,7 @@ open class KODialogBarView: UIView {
     }
 
     private func createTitleContainerEdgesConstraintsInsets() {
-        titleContainerEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewRightConst, rightConst: rightContainerForViewLeftConst, rightMultipler: 1.0), vertical: titleContainerVerticalConstraintsInsets)
+        titleContainerEdgesConstraintsInsets = KOEdgesConstraintsInsets(horizontal: KOHorizontalConstraintsInsets(leftConst: leftContainerForViewRightConst, rightConst: rightContainerForViewLeftConst, leftMultipler: -1.0, rightMultipler: 1.0), vertical: titleContainerVerticalConstraintsInsets)
         titleContainerEdgesConstraintsInsets.insets = defaultTitleInsets
     }
 
