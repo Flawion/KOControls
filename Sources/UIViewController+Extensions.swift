@@ -65,7 +65,7 @@ extension UIViewController {
             viewLoadedAction.action(dialogViewController)
         }
         if popoverSettings != nil {
-            //main view must fill all size
+            // main view must fill all size
             dialogViewControllerToPresent.mainViewVerticalAlignment = .fill
             dialogViewControllerToPresent.mainViewHorizontalAlignment = .fill
         }

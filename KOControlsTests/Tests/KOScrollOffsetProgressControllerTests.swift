@@ -45,7 +45,11 @@ final class KOScrollOffsetProgressControllerTests: XCTestCase {
 
     private func setUpScrollView() {
         scrollView = UIScrollView()
-        scrollView.contentInsetAdjustmentBehavior = .never
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            viewController.automaticallyAdjustsScrollViewInsets = false
+        }
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         viewController.view.addSubview(scrollView)
         viewController.view.addConstraints([

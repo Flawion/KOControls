@@ -50,8 +50,8 @@ final class KODialogBarViewTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         dialogBarView = nil
-        windowSimulator = nil
         viewController = nil
+        windowSimulator = nil
     }
     
     func testIsTitleLabelCenteredDefaultTrue() {
@@ -103,5 +103,63 @@ final class KODialogBarViewTests: XCTestCase {
         dialogBarView.layoutIfNeeded()
         XCTAssertEqual(customView.frame.origin.x, 0)
         XCTAssertEqual(customView.frame.maxX, dialogBarView.frame.width)
+    }
+
+    func testLeftView() {
+        dialogBarView.isTitleLabelCentered = false
+        dialogBarView.layoutIfNeeded()
+        let oldTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        let leftView = UIView()
+        let leftViewWidth: CGFloat = 40
+        leftView.addConstraints([
+            leftView.widthAnchor.constraint(equalToConstant: leftViewWidth)
+            ])
+        dialogBarView.leftView = leftView
+        let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        XCTAssertEqual(dialogBarView.leftView?.frame.width, leftViewWidth)
+        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - leftViewWidth)
+    }
+
+    func testDefaultLeftViewContainerWidth() {
+        dialogBarView.isTitleLabelCentered = false
+        dialogBarView.layoutIfNeeded()
+        let oldTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        let leftViewWidth: CGFloat = 40
+        dialogBarView.defaultLeftViewContainerWidth = leftViewWidth
+        let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - leftViewWidth)
+    }
+
+    func testRightView() {
+        dialogBarView.isTitleLabelCentered = false
+        dialogBarView.layoutIfNeeded()
+        let oldTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        let rightView = UIView()
+        let rightViewWidth: CGFloat = 40
+        rightView.addConstraints([
+            rightView.widthAnchor.constraint(equalToConstant: rightViewWidth)
+            ])
+        dialogBarView.rightView = rightView
+        let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        XCTAssertEqual(dialogBarView.rightView?.frame.width, rightViewWidth)
+        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - rightViewWidth)
+    }
+
+    func testDefaultRightViewContainerWidth() {
+        dialogBarView.isTitleLabelCentered = false
+        dialogBarView.layoutIfNeeded()
+        let oldTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        let rightViewWidth: CGFloat = 40
+        dialogBarView.defaultRightViewContainerWidth = rightViewWidth
+        let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
+
+        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - rightViewWidth)
     }
 }

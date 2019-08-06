@@ -197,8 +197,8 @@ public final class KODialogMainView: UIView {
 
     // MARK: Background visual effect
     private func refreshBackgroundVisualEffect() {
+        removeBackgroundVisualEffectView()
         guard let backgroundVisualEffect = backgroundVisualEffect else {
-            removeBackgroundVisualEffectView()
             return
         }
         addBackgroundVisualEffectView(forEffect: backgroundVisualEffect)
@@ -271,19 +271,27 @@ public final class KODialogMainView: UIView {
         case .top:
             contentViewConstraints.top = contentView.topAnchor.constraint(equalTo: pBarView.bottomAnchor, constant: defaultContentInsets.top)
             contentViewConstraints.bottom = contentView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!, constant: -defaultContentInsets.bottom)
-            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mainViewAnchors.left!), pBarView.rightAnchor.constraint(equalTo: mainViewAnchors.right!), pBarView.topAnchor.constraint(equalTo: mainViewAnchors.top!), contentViewConstraints.left!, contentViewConstraints.top!, contentViewConstraints.right!, contentViewConstraints.bottom!]
+            allConstraints = [
+                pBarView.leftAnchor.constraint(equalTo: mainViewAnchors.left!),
+                pBarView.topAnchor.constraint(equalTo: mainViewAnchors.top!),
+                pBarView.rightAnchor.constraint(equalTo: mainViewAnchors.right!)]
+            allConstraints.append(contentsOf: contentViewConstraints.list)
             addConstraints(allConstraints)
 
         case .bottom:
             contentViewConstraints.top = contentView.topAnchor.constraint(equalTo: mainViewAnchors.top!, constant: defaultContentInsets.top)
             contentViewConstraints.bottom = contentView.bottomAnchor.constraint(equalTo: pBarView.topAnchor, constant: -defaultContentInsets.bottom)
-            allConstraints = [pBarView.leftAnchor.constraint(equalTo: mainViewAnchors.left!), pBarView.rightAnchor.constraint(equalTo: mainViewAnchors.right!), pBarView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!), contentViewConstraints.left!, contentViewConstraints.top!, contentViewConstraints.right!, contentViewConstraints.bottom!]
+            allConstraints = [
+                pBarView.leftAnchor.constraint(equalTo: mainViewAnchors.left!),
+                pBarView.rightAnchor.constraint(equalTo: mainViewAnchors.right!),
+                pBarView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!)]
+            allConstraints.append(contentsOf: contentViewConstraints.list)
             addConstraints(allConstraints)
 
         case .hidden:
             contentViewConstraints.top = contentView.topAnchor.constraint(equalTo: mainViewAnchors.top!, constant: defaultContentInsets.top)
             contentViewConstraints.bottom = contentView.bottomAnchor.constraint(equalTo: mainViewAnchors.bottom!, constant: -defaultContentInsets.bottom)
-            allConstraints = [contentViewConstraints.left!, contentViewConstraints.top!, contentViewConstraints.right!, contentViewConstraints.bottom!]
+            allConstraints = contentViewConstraints.list
             addConstraints(allConstraints)
         }
         refreshContentEdgesConstraintsInsets(constraints: contentViewConstraints)

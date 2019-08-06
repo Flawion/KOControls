@@ -194,7 +194,8 @@ public class KOControlErrorInfoFeature {
         guard let delegate = delegate, let showInView = self.showInView ?? delegate.featureContainer.superview else {
             return
         }
-        
+
+        setViewMarkerHiddenIfCan(false)
         if isShowed {
             //if is showed in the other superview than needs, it will have removed from old parent before add
             isNeedToCompleteHideAnimation = false
@@ -204,8 +205,6 @@ public class KOControlErrorInfoFeature {
             }
             hide()
         }
-        
-        setViewMarkerHiddenIfCan(false)
         addContainerForView(toView: showInView)
         addCustomViewMarkerCenterXConst()
         delegate.errorInfoDidShow?()

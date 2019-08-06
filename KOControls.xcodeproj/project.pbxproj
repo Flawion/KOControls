@@ -18,6 +18,7 @@
 		0555086122D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */; };
 		0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */; };
 		0566A6AA213E75D900E87518 /* KOConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566A6A9213E75D900E87518 /* KOConstraints.swift */; };
+		056DBB7622F967EF0003223B /* KODialogMainViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056DBB7522F967EF0003223B /* KODialogMainViewTests.swift */; };
 		058529592151161100FA36DE /* KOPopoverSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058529582151161100FA36DE /* KOPopoverSettings.swift */; };
 		0585295B2151164000FA36DE /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585295A2151164000FA36DE /* UIViewController+Extensions.swift */; };
 		058E7E3922D48B3000208252 /* KOControlErrorFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058E7E3822D48B3000208252 /* KOControlErrorFeatureTests.swift */; };
@@ -76,6 +77,7 @@
 		0555086022D61C2D0061B4E9 /* KOControlErrorInfoFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlErrorInfoFeatureTests.swift; sourceTree = "<group>"; };
 		0555086222D6289F0061B4E9 /* XCTestCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Extension.swift"; sourceTree = "<group>"; };
 		0566A6A9213E75D900E87518 /* KOConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOConstraints.swift; sourceTree = "<group>"; };
+		056DBB7522F967EF0003223B /* KODialogMainViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KODialogMainViewTests.swift; sourceTree = "<group>"; };
 		058529582151161100FA36DE /* KOPopoverSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOPopoverSettings.swift; sourceTree = "<group>"; };
 		0585295A2151164000FA36DE /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		058E7E3822D48B3000208252 /* KOControlErrorFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KOControlErrorFeatureTests.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				05DB455522E7270000BC97AF /* KODialogViewControllerTests.swift */,
+				056DBB7522F967EF0003223B /* KODialogMainViewTests.swift */,
 				051D172F22F22AB200F259C6 /* KODialogBarViewTests.swift */,
 				055190B022EE3A2C00B745BC /* KOPickerViewControllerTests.swift */,
 			);
@@ -441,6 +444,7 @@
 				05BBDE2522DC62B500841A3D /* KOPresentationQueuesServiceTests.swift in Sources */,
 				05DB455622E7270000BC97AF /* KODialogViewControllerTests.swift in Sources */,
 				058E7E3922D48B3000208252 /* KOControlErrorFeatureTests.swift in Sources */,
+				056DBB7622F967EF0003223B /* KODialogMainViewTests.swift in Sources */,
 				0555086322D6289F0061B4E9 /* XCTestCase+Extension.swift in Sources */,
 				0594563022DE0AE60082CCB7 /* KOScrollOffsetProgressControllerTests.swift in Sources */,
 				05E2B4DA22D3648200E7F75A /* FirstResponderSimulatorView.swift in Sources */,
@@ -642,7 +646,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = KOControlsTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -664,7 +668,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = KOControlsTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

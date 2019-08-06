@@ -132,7 +132,7 @@ final class KOTextFieldTests: XCTestCase {
         XCTAssertEqual(textFieldDelegateContainer.startingErrorInfoHideAnimationCounter, 0)
         _ = textField.resignFirstResponder()
         XCTAssertEqual(textFieldDelegateContainer.startingErrorInfoHideAnimationCounter, 1)
-        wait(timeout: textField.errorInfo.hideAnimation?.duration ?? 0)
+        wait(timeout: (textField.errorInfo?.showAnimation?.duration ?? 0) + (textField.errorInfo.hideAnimation?.duration ?? 0))
         XCTAssertEqual(textFieldDelegateContainer.didHideErrorInfoCounter, 1)
         XCTAssertFalse(textField.errorInfo.isShowing)
     }

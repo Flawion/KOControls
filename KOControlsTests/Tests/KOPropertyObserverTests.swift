@@ -37,8 +37,8 @@ final class KOPropertyObserverTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        view = nil
         propertyObserver = nil
+        view = nil
     }
 
     func testViewHidding() {
@@ -47,6 +47,6 @@ final class KOPropertyObserverTests: XCTestCase {
             promise.fulfill()
         })
         view.isHidden = false
-        waitForExpectations(timeout: 0.1, handler: nil)
+        waitForExpectations(timeout: 0.5, handler: nil)
     }
 }
