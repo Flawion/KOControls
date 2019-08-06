@@ -154,8 +154,8 @@ final class KOControlErrorInfoFeatureTests: XCTestCase {
         featureContainer.errorInfoFeature.isShowing = true
         viewController.view.setNeedsLayout()
         viewController.view.layoutIfNeeded()
-        XCTAssert(customErrorInfoView.bounds.size.width > 0)
-        XCTAssert(customErrorInfoView.bounds.size.height > 0)
+        XCTAssertTrue(customErrorInfoView.bounds.size.width > 0)
+        XCTAssertTrue(customErrorInfoView.bounds.size.height > 0)
         XCTAssertEqual(customErrorInfoView.markerCenterXConst?.isActive, true)
     }
 
@@ -182,8 +182,8 @@ final class KOControlErrorInfoFeatureTests: XCTestCase {
     private func checkIsDefaultViewShowed() {
         viewController.view.setNeedsLayout()
         viewController.view.layoutIfNeeded()
-        XCTAssert(featureContainer.errorInfoFeature.view.bounds.size.width > 0)
-        XCTAssert(featureContainer.errorInfoFeature.view.bounds.size.height > 0)
+        XCTAssertTrue(featureContainer.errorInfoFeature.view.bounds.size.width > 0)
+        XCTAssertTrue(featureContainer.errorInfoFeature.view.bounds.size.height > 0)
     }
 
     private func hideErrorInfo(operation: () -> Void) {

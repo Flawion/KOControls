@@ -58,16 +58,16 @@ final class KOControlErrorFeatureTests: XCTestCase {
     func testDefaultIsShowing() {
         XCTAssertEqual(featureContainer.errorDidShowCounter, 0)
         XCTAssertEqual(featureContainer.errorDidHideCounter, 0)
-        XCTAssertEqual(featureContainer.errorFeature.iconView.bounds.size.width, 0)
-        XCTAssertEqual(featureContainer.errorFeature.currentViewWidth, 0)
+        XCTAssertTrue(featureContainer.errorFeature.iconView.bounds.size.width.almostEqualUI(to: 0))
+        XCTAssertTrue(featureContainer.errorFeature.currentViewWidth?.almostEqualUI(to: 0) ?? false)
     }
 
     func testSettingTrueValueToIsShowing() {
         featureContainer.errorFeature.isShowing = true
         XCTAssertEqual(featureContainer.errorDidShowCounter, 1)
         XCTAssertEqual(featureContainer.errorDidHideCounter, 0)
-        XCTAssertEqual(featureContainer.errorFeature.iconView.bounds.size.width, featureContainer.errorFeature.viewWidth)
-        XCTAssertEqual(featureContainer.errorFeature.currentViewWidth, featureContainer.errorFeature.viewWidth)
+        XCTAssertTrue(featureContainer.errorFeature.iconView.bounds.size.width.almostEqualUI(to: featureContainer.errorFeature.viewWidth))
+        XCTAssertTrue(featureContainer.errorFeature.currentViewWidth?.almostEqualUI(to: featureContainer.errorFeature.viewWidth) ?? false)
     }
 
     func testSettingFalseValueToIsShowing() {
@@ -75,8 +75,8 @@ final class KOControlErrorFeatureTests: XCTestCase {
         featureContainer.errorFeature.isShowing = false
         XCTAssertEqual(featureContainer.errorDidShowCounter, 1)
         XCTAssertEqual(featureContainer.errorDidHideCounter, 1)
-        XCTAssertEqual(featureContainer.errorFeature.iconView.bounds.size.width, 0)
-        XCTAssertEqual(featureContainer.errorFeature.currentViewWidth, 0)
+        XCTAssertTrue(featureContainer.errorFeature.iconView.bounds.size.width.almostEqualUI(to: 0))
+        XCTAssertTrue(featureContainer.errorFeature.currentViewWidth?.almostEqualUI(to: 0) ?? false)
     }
 
     func testSettingTrueValueToIsShowingWithCustomView() {
@@ -85,8 +85,8 @@ final class KOControlErrorFeatureTests: XCTestCase {
         featureContainer.errorFeature.isShowing = true
         XCTAssertEqual(featureContainer.errorDidShowCounter, 1)
         XCTAssertEqual(featureContainer.errorDidHideCounter, 0)
-        XCTAssertEqual(customView.bounds.size.width, featureContainer.errorFeature.viewWidth)
-        XCTAssertEqual(featureContainer.errorFeature.currentViewWidth, featureContainer.errorFeature.viewWidth)
+        XCTAssertTrue(customView.bounds.size.width.almostEqualUI(to: featureContainer.errorFeature.viewWidth))
+        XCTAssertTrue(featureContainer.errorFeature.currentViewWidth?.almostEqualUI(to: featureContainer.errorFeature.viewWidth) ?? false)
     }
 
     func testSettingFalseValueToIsShowingWithCustomView() {
@@ -94,8 +94,8 @@ final class KOControlErrorFeatureTests: XCTestCase {
         featureContainer.errorFeature.isShowing = false
         XCTAssertEqual(featureContainer.errorDidShowCounter, 1)
         XCTAssertEqual(featureContainer.errorDidHideCounter, 1)
-        XCTAssertEqual(featureContainer.errorFeature.customView?.bounds.size.width, 0)
-        XCTAssertEqual(featureContainer.errorFeature.currentViewWidth, 0)
+        XCTAssertTrue(featureContainer.errorFeature.customView?.bounds.size.width.almostEqualUI(to: 0) ?? false)
+        XCTAssertTrue(featureContainer.errorFeature.currentViewWidth?.almostEqualUI(to: 0) ?? false)
     }
 }
 

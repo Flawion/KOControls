@@ -168,7 +168,7 @@ final class KOPickerViewControllerTests: XCTestCase {
         present(dialogViewController: dialogViewController)
         XCTAssertTrue(dialogViewController.mainView.frame.origin.y > 0)
         XCTAssertTrue(dialogViewController.mainView.frame.height > height)
-        XCTAssertEqual(dialogViewController.mainView.frame.maxX, presentingViewController.view.frame.width)
+        XCTAssertTrue(dialogViewController.mainView.frame.maxX.almostEqualUI(to: presentingViewController.view.frame.width))
     }
     
     private func present(dialogViewController: KODialogViewController) {

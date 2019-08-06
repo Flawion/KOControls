@@ -246,9 +246,3 @@ extension KOScrollOffsetProgressControllerTests: KOScrollOffsetProgressControlle
         XCTAssertEqual(self.scrollOffsetProgressController, scrollOffsetProgressController)
     }
 }
-
-extension CGFloat {
-    func almostEqual(to: CGFloat, maxDifference: CGFloat = 0.001) -> Bool {
-        return self + maxDifference > to && self - maxDifference < to
-    }
-}

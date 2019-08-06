@@ -64,7 +64,7 @@ final class KODialogBarViewTests: XCTestCase {
         dialogBarView.layoutIfNeeded()
         
         let titleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
-        XCTAssertEqual(titleBoundsConvertedToDialogBar.midX, dialogBarView.frame.midX)
+        XCTAssertTrue(titleBoundsConvertedToDialogBar.midX.almostEqualUI(to: dialogBarView.frame.midX))
         XCTAssertTrue(titleBoundsConvertedToDialogBar.width < dialogBarView.frame.width)
     }
     
@@ -75,8 +75,8 @@ final class KODialogBarViewTests: XCTestCase {
         
         let titleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
         let titleInsets = dialogBarView.titleContainerEdgesConstraintsInsets.left + dialogBarView.titleContainerEdgesConstraintsInsets.right
-        XCTAssertEqual(titleBoundsConvertedToDialogBar.origin.x, dialogBarView.titleContainerEdgesConstraintsInsets.left)
-        XCTAssertEqual(titleBoundsConvertedToDialogBar.width, dialogBarView.frame.width - titleInsets)
+        XCTAssertTrue(titleBoundsConvertedToDialogBar.origin.x.almostEqualUI(to: dialogBarView.titleContainerEdgesConstraintsInsets.left))
+        XCTAssertTrue(titleBoundsConvertedToDialogBar.width.almostEqualUI(to: dialogBarView.frame.width - titleInsets))
     }
     
     func testTitleContainerEdgesConstraintsInsets() {
@@ -92,17 +92,17 @@ final class KODialogBarViewTests: XCTestCase {
         let newDialogBarHeight = dialogBarView.frame.height
         let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
         
-        XCTAssertEqual(oldDialogBarHeight + dialogBarView.defaultTitleInsets.top + dialogBarView.defaultTitleInsets.bottom, newDialogBarHeight)
-        XCTAssertEqual(oldTitleBoundsConvertedToDialogBar.origin.x + dialogBarView.defaultTitleInsets.left,  newTitleBoundsConvertedToDialogBar.origin.x)
-        XCTAssertEqual(oldTitleBoundsConvertedToDialogBar.width - (dialogBarView.defaultTitleInsets.left + dialogBarView.defaultTitleInsets.right), newTitleBoundsConvertedToDialogBar.width)
+        XCTAssertTrue((oldDialogBarHeight + dialogBarView.defaultTitleInsets.top + dialogBarView.defaultTitleInsets.bottom).almostEqualUI(to: newDialogBarHeight))
+        XCTAssertTrue((oldTitleBoundsConvertedToDialogBar.origin.x + dialogBarView.defaultTitleInsets.left).almostEqualUI(to:  newTitleBoundsConvertedToDialogBar.origin.x))
+        XCTAssertTrue((oldTitleBoundsConvertedToDialogBar.width - (dialogBarView.defaultTitleInsets.left + dialogBarView.defaultTitleInsets.right)).almostEqualUI(to: newTitleBoundsConvertedToDialogBar.width))
     }
     
     func testCustomView() {
         let customView = UIView()
         dialogBarView.customView = customView
         dialogBarView.layoutIfNeeded()
-        XCTAssertEqual(customView.frame.origin.x, 0)
-        XCTAssertEqual(customView.frame.maxX, dialogBarView.frame.width)
+        XCTAssertTrue(customView.frame.origin.x.almostEqualUI(to: 0))
+        XCTAssertTrue(customView.frame.maxX.almostEqualUI(to: dialogBarView.frame.width))
     }
 
     func testLeftView() {
@@ -118,8 +118,8 @@ final class KODialogBarViewTests: XCTestCase {
         dialogBarView.leftView = leftView
         let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
 
-        XCTAssertEqual(dialogBarView.leftView?.frame.width, leftViewWidth)
-        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - leftViewWidth)
+        XCTAssertTrue((dialogBarView.leftView?.frame.width ?? -1).almostEqualUI(to: leftViewWidth))
+        XCTAssertTrue(newTitleBoundsConvertedToDialogBar.width.almostEqualUI(to: oldTitleBoundsConvertedToDialogBar.width - leftViewWidth))
     }
 
     func testDefaultLeftViewContainerWidth() {
@@ -131,7 +131,7 @@ final class KODialogBarViewTests: XCTestCase {
         dialogBarView.defaultLeftViewContainerWidth = leftViewWidth
         let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
 
-        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - leftViewWidth)
+        XCTAssertTrue(newTitleBoundsConvertedToDialogBar.width.almostEqualUI(to: oldTitleBoundsConvertedToDialogBar.width - leftViewWidth))
     }
 
     func testRightView() {
@@ -147,8 +147,8 @@ final class KODialogBarViewTests: XCTestCase {
         dialogBarView.rightView = rightView
         let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
 
-        XCTAssertEqual(dialogBarView.rightView?.frame.width, rightViewWidth)
-        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - rightViewWidth)
+        XCTAssertTrue((dialogBarView.rightView?.frame.width ?? -1).almostEqualUI(to: rightViewWidth))
+        XCTAssertTrue(newTitleBoundsConvertedToDialogBar.width.almostEqualUI(to: oldTitleBoundsConvertedToDialogBar.width - rightViewWidth))
     }
 
     func testDefaultRightViewContainerWidth() {
@@ -160,6 +160,6 @@ final class KODialogBarViewTests: XCTestCase {
         dialogBarView.defaultRightViewContainerWidth = rightViewWidth
         let newTitleBoundsConvertedToDialogBar = dialogBarView.convert(dialogBarView.titleLabel.bounds, from: dialogBarView.titleLabel)
 
-        XCTAssertEqual(newTitleBoundsConvertedToDialogBar.width, oldTitleBoundsConvertedToDialogBar.width - rightViewWidth)
+        XCTAssertTrue(newTitleBoundsConvertedToDialogBar.width.almostEqualUI(to: oldTitleBoundsConvertedToDialogBar.width - rightViewWidth))
     }
 }

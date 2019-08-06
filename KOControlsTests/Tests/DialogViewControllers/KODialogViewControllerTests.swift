@@ -53,7 +53,7 @@ final class KODialogViewControllerTests: XCTestCase {
         contentDialogViewController.mainViewHorizontalAlignment = .left
         presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
-        XCTAssertEqual(contentDialogViewController.mainView.frame.origin.x, 0)
+        XCTAssertTrue(contentDialogViewController.mainView.frame.origin.x.almostEqualUI(to: 0))
         XCTAssertTrue(contentDialogViewController.mainView.frame.maxX < contentDialogViewController.view.frame.width)
     }
 
@@ -70,22 +70,22 @@ final class KODialogViewControllerTests: XCTestCase {
         presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertTrue(contentDialogViewController.mainView.frame.origin.x > 0)
-        XCTAssertEqual(contentDialogViewController.mainView.frame.maxX, contentDialogViewController.view.frame.width)
+        XCTAssertTrue(contentDialogViewController.mainView.frame.maxX.almostEqualUI(to: contentDialogViewController.view.frame.width))
     }
 
     func testHorizontalAlignmentFill() {
         contentDialogViewController.mainViewHorizontalAlignment = .fill
         presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
-        XCTAssertEqual(contentDialogViewController.mainView.frame.origin.x, 0)
-        XCTAssertEqual(contentDialogViewController.mainView.frame.maxX, contentDialogViewController.view.frame.width)
+        XCTAssertTrue(contentDialogViewController.mainView.frame.origin.x.almostEqualUI(to: 0))
+        XCTAssertTrue(contentDialogViewController.mainView.frame.maxX.almostEqualUI(to: contentDialogViewController.view.frame.width))
     }
 
     func testVerticalAlignmentTop() {
         contentDialogViewController.mainViewVerticalAlignment = .top
         presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
-        XCTAssertEqual(contentDialogViewController.mainView.frame.origin.y, 0)
+        XCTAssertTrue(contentDialogViewController.mainView.frame.origin.y.almostEqualUI(to: 0))
         XCTAssertTrue(contentDialogViewController.mainView.frame.maxY < contentDialogViewController.view.frame.height)
     }
 
@@ -102,15 +102,15 @@ final class KODialogViewControllerTests: XCTestCase {
         presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
         XCTAssertTrue(contentDialogViewController.mainView.frame.origin.y > 0)
-        XCTAssertEqual(contentDialogViewController.mainView.frame.maxY, contentDialogViewController.view.frame.height)
+        XCTAssertTrue(contentDialogViewController.mainView.frame.maxY.almostEqualUI(to:  contentDialogViewController.view.frame.height))
     }
 
     func testVerticalAlignmentFill() {
         contentDialogViewController.mainViewVerticalAlignment = .fill
         presentAndCheckIsInitialized(contentDialogViewController: contentDialogViewController)
 
-        XCTAssertEqual(contentDialogViewController.mainView.frame.origin.y, 0)
-        XCTAssertEqual(contentDialogViewController.mainView.frame.maxY, contentDialogViewController.view.frame.height)
+        XCTAssertTrue(contentDialogViewController.mainView.frame.origin.y.almostEqualUI(to: 0))
+        XCTAssertTrue(contentDialogViewController.mainView.frame.maxY.almostEqualUI(to: contentDialogViewController.view.frame.height))
     }
     
     func testLeftBarButton() {

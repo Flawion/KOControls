@@ -44,7 +44,7 @@ final class KOControlBorderFeatureTests: XCTestCase {
     }
 
     func testBorderWidthNormal() {
-        XCTAssertEqual(featureContainer.layer.borderWidth, featureContainer.borderSettings.width)
+        XCTAssertTrue(featureContainer.layer.borderWidth.almostEqualUI(to: featureContainer.borderSettings.width))
     }
 
     func testBorderColorError() {
@@ -54,7 +54,7 @@ final class KOControlBorderFeatureTests: XCTestCase {
 
     func testBorderWidthError() {
         featureContainer.errorIsShowing = true
-        XCTAssertEqual(featureContainer.layer.borderWidth, featureContainer.borderSettings.errorWidth)
+        XCTAssertTrue(featureContainer.layer.borderWidth.almostEqualUI(to: featureContainer.borderSettings.errorWidth ?? -1))
     }
 
     func testBorderColorFocused() {
@@ -64,7 +64,7 @@ final class KOControlBorderFeatureTests: XCTestCase {
 
     func testBorderWidthFocused() {
         _ = featureContainer.becomeFirstResponder()
-        XCTAssertEqual(featureContainer.layer.borderWidth, featureContainer.borderSettings.focusedWidth)
+        XCTAssertTrue(featureContainer.layer.borderWidth.almostEqualUI(to: featureContainer.borderSettings.focusedWidth ?? -1))
     }
 
     func testBorderColorErrorFocused() {
@@ -76,11 +76,11 @@ final class KOControlBorderFeatureTests: XCTestCase {
     func testBorderWidthErrorFocused() {
         featureContainer.errorIsShowing = true
         _ = featureContainer.becomeFirstResponder()
-        XCTAssertEqual(featureContainer.layer.borderWidth, featureContainer.borderSettings.errorFocusedWidth)
+        XCTAssertTrue(featureContainer.layer.borderWidth.almostEqualUI(to: featureContainer.borderSettings.errorFocusedWidth ?? -1))
     }
 
     func testChangingBorderSettings() {
-        let newBorderSettings = KOControlBorderSettings(color: UIColor.purple.cgColor, errorColor: UIColor.blue.cgColor, focusedColor: UIColor.green.cgColor, errorFocusedColor: UIColor.red.cgColor, width: 4, errorWidth: 3, focusedWidth: 2, errorFocusedWidth: 1)
+        let newBorderSettings = KOControlBorderSettings(color: UIColor.purple.cgColor, errorColor: UIColor.blue.cgColor, focusedColor: UIColor.green.cgColor, errorFocusedColor: UIColor.red.cgColor, width: 8, errorWidth: 6, focusedWidth: 4, errorFocusedWidth: 2)
         featureContainer.borderSettings = newBorderSettings
 
         testBorderColorNormal()
@@ -97,7 +97,7 @@ final class KOControlBorderFeatureTests: XCTestCase {
 fileprivate final class FeatureContainerView: FirstResponderSimulatorView {
     private(set) var borderFeature: KOControlBorderFeature!
 
-    var borderSettings: KOControlBorderSettings = KOControlBorderSettings(color: UIColor.gray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.green.cgColor, errorFocusedColor: UIColor.blue.cgColor, width: 1, errorWidth: 2, focusedWidth: 3, errorFocusedWidth: 4) {
+    var borderSettings: KOControlBorderSettings = KOControlBorderSettings(color: UIColor.gray.cgColor, errorColor: UIColor.red.cgColor, focusedColor: UIColor.green.cgColor, errorFocusedColor: UIColor.blue.cgColor, width: 2, errorWidth: 4, focusedWidth: 6, errorFocusedWidth: 8) {
         didSet {
             borderFeature.settings = borderSettings
         }

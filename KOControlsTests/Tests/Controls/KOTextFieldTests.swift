@@ -80,7 +80,7 @@ final class KOTextFieldTests: XCTestCase {
         _ = textField.resignFirstResponder()
         XCTAssertTrue(textField.error.isShowing)
         XCTAssertEqual(textFieldDelegateContainer.didShowErrorCounter, 1)
-        XCTAssertEqual(textField.error.currentViewWidth, textField.error.viewWidth)
+        XCTAssertTrue(textField.error.currentViewWidth?.almostEqualUI(to: textField.error.viewWidth) ?? false)
     }
 
     func testHidingErrorWhenValidationOnLostFocusSuccess() {
@@ -89,7 +89,7 @@ final class KOTextFieldTests: XCTestCase {
         textField.text = "12345678"
         XCTAssertFalse(textField.error.isShowing)
         XCTAssertEqual(textFieldDelegateContainer.didHideErrorCounter, 1)
-        XCTAssertEqual(textField.error.currentViewWidth ?? 0, 0)
+        XCTAssertTrue(textField.error.currentViewWidth?.almostEqualUI(to: 0) ?? false)
     }
 
     func testShowingErrorWhenValidationOnTextChangedFailed() {
@@ -99,7 +99,7 @@ final class KOTextFieldTests: XCTestCase {
         textField.text = "1234567"
         XCTAssertTrue(textField.error.isShowing)
         XCTAssertEqual(textFieldDelegateContainer.didShowErrorCounter, 1)
-        XCTAssertEqual(textField.error.currentViewWidth, textField.error.viewWidth)
+        XCTAssertTrue(textField.error.currentViewWidth?.almostEqualUI(to: textField.error.viewWidth) ?? false)
     }
 
     func testShowingErrorWhenValidationOnTextChangedSuccess() {
@@ -108,7 +108,7 @@ final class KOTextFieldTests: XCTestCase {
         textField.text = "12345678"
         XCTAssertFalse(textField.error.isShowing)
         XCTAssertEqual(textFieldDelegateContainer.didHideErrorCounter, 1)
-        XCTAssertEqual(textField.error.currentViewWidth ?? 0, 0)
+        XCTAssertTrue(textField.error.currentViewWidth?.almostEqualUI(to: 0) ?? false)
     }
 
     func testShowingErrorInfoOnFocus() {
@@ -159,10 +159,10 @@ final class KOTextFieldTests: XCTestCase {
         let editingRectOnError = textField.editingRect(forBounds: bounds)
         let placeholderRectOnError = textField.placeholderRect(forBounds: bounds)
 
-        XCTAssertEqual(rightViewRectOnError, rightViewRect.offsetBy(dx: -textField.error.viewWidth, dy: 0))
-        XCTAssertEqual(clearButtonRectOnError, clearButtonRect.offsetBy(dx: -textField.error.viewWidth, dy: 0))
-        XCTAssertEqual(textRectOnError.width, textRect.width - textField.error.viewWidth)
-        XCTAssertEqual(editingRectOnError.width, editingRect.width - textField.error.viewWidth)
+        XCTAssertTrue(rightViewRectOnError.almostEqualUI(to: rightViewRect.offsetBy(dx: -textField.error.viewWidth, dy: 0)))
+        XCTAssertTrue(clearButtonRectOnError.almostEqualUI(to: clearButtonRect.offsetBy(dx: -textField.error.viewWidth, dy: 0)))
+        XCTAssertTrue(textRectOnError.width.almostEqualUI(to: textRect.width - textField.error.viewWidth))
+        XCTAssertTrue(editingRectOnError.width.almostEqualUI(to: editingRect.width - textField.error.viewWidth))
         XCTAssert(placeholderRect.width > placeholderRectOnError.width)
     }
 

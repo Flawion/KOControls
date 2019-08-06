@@ -1,5 +1,5 @@
 //
-//  XCTestCase+Extension.swift
+//  Measurement+Extension.swift
 //  KOControlsTests
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -23,15 +23,22 @@
 //  SOFTWARE.
 //
 
-import XCTest
+import UIKit
 
-extension XCTestCase {
-    func wait(timeout: TimeInterval) {
-        let expection = expectation(description: "wait expection")
-        let timeout = timeout + 0.1
-        DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-            expection.fulfill()
-        }
-        waitForExpectations(timeout: timeout + 0.1, handler: nil)
+extension CGFloat {
+    func almostEqual(to: CGFloat, maxDifference: CGFloat = 0.001) -> Bool {
+        return self + maxDifference > to && self - maxDifference < to
+    }
+    
+    func almostEqualUI(to: CGFloat) -> Bool {
+        return almostEqual(to: to, maxDifference: 0.999)
+    }
+}
+
+extension CGRect {
+    func almostEqualUI(to: CGRect) -> Bool {
+        let intersectionRect = to.intersection(to)
+        return minX.almostEqualUI(to: intersectionRect.minX) && minY.almostEqualUI(to: intersectionRect.minY)
+        && maxX.almostEqualUI(to: intersectionRect.maxX) && maxY.almostEqualUI(to: intersectionRect.maxY)
     }
 }

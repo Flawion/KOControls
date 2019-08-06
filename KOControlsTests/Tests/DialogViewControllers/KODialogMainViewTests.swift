@@ -64,10 +64,10 @@ final class KODialogMainViewTests: XCTestCase {
     }
 
     func testContentViewWithSizeAndInsets() {
-        XCTAssertEqual(dialogMainView.bounds.width, contentPreferredSize.width + contentInsets.left + contentInsets.right)
-        XCTAssertEqual(dialogMainView.bounds.height, contentPreferredSize.height + contentInsets.top + contentInsets.bottom + dialogMainView.barView.frame.height)
-        XCTAssertEqual(dialogMainView.contentView.bounds.width, contentPreferredSize.width)
-        XCTAssertEqual(dialogMainView.contentView.bounds.height, contentPreferredSize.height)
+        XCTAssertTrue(dialogMainView.bounds.width.almostEqualUI(to: contentPreferredSize.width + contentInsets.left + contentInsets.right))
+        XCTAssertTrue(dialogMainView.bounds.height.almostEqualUI(to: contentPreferredSize.height + contentInsets.top + contentInsets.bottom + dialogMainView.barView.frame.height))
+        XCTAssertTrue(dialogMainView.contentView.bounds.width.almostEqualUI(to: contentPreferredSize.width))
+        XCTAssertTrue(dialogMainView.contentView.bounds.height.almostEqualUI(to: contentPreferredSize.height))
     }
 
     func testIsDefaultBarModeTop() {
@@ -78,25 +78,25 @@ final class KODialogMainViewTests: XCTestCase {
         dialogMainView.barMode = .top
         dialogMainView.layoutIfNeeded()
 
-        XCTAssertEqual(dialogMainView.barView.frame.origin.y, 0)
-        XCTAssertEqual(dialogMainView.barView.frame.origin.x, 0)
-        XCTAssertEqual(dialogMainView.barView.frame.width, dialogMainView.frame.width)
+        XCTAssertTrue(dialogMainView.barView.frame.origin.y.almostEqualUI(to: 0))
+        XCTAssertTrue(dialogMainView.barView.frame.origin.x.almostEqualUI(to: 0))
+        XCTAssertTrue(dialogMainView.barView.frame.width.almostEqualUI(to: dialogMainView.frame.width))
     }
 
     func testBarModeBottom() {
         dialogMainView.barMode = .bottom
         dialogMainView.layoutIfNeeded()
 
-        XCTAssertEqual(dialogMainView.barView.frame.origin.y + dialogMainView.barView.frame.height, dialogMainView.frame.height)
-        XCTAssertEqual(dialogMainView.barView.frame.origin.x, 0)
-        XCTAssertEqual(dialogMainView.barView.frame.width, dialogMainView.frame.width)
+        XCTAssertTrue((dialogMainView.barView.frame.origin.y + dialogMainView.barView.frame.height).almostEqualUI(to:  dialogMainView.frame.height))
+        XCTAssertTrue(dialogMainView.barView.frame.origin.x.almostEqualUI(to: 0))
+        XCTAssertTrue(dialogMainView.barView.frame.width.almostEqualUI(to: dialogMainView.frame.width))
     }
 
     func testBarModeHidden() {
         dialogMainView.barMode = .hidden
         dialogMainView.layoutIfNeeded()
 
-        XCTAssertEqual(dialogMainView.bounds.height, contentPreferredSize.height + contentInsets.top + contentInsets.bottom)
+        XCTAssertTrue(dialogMainView.bounds.height.almostEqualUI(to: contentPreferredSize.height + contentInsets.top + contentInsets.bottom))
     }
 
     func testBackgroundVisualEffect() {
@@ -106,7 +106,7 @@ final class KODialogMainViewTests: XCTestCase {
 
         XCTAssertEqual(dialogMainView.backgroundColor, UIColor.clear)
         XCTAssertNotNil(backgroundVisualEffectView)
-        XCTAssertEqual(backgroundVisualEffectView?.frame.width, dialogMainView.frame.width)
-        XCTAssertEqual(backgroundVisualEffectView?.frame.height, dialogMainView.frame.height)
+        XCTAssertTrue((backgroundVisualEffectView?.frame.width ?? -1).almostEqualUI(to: dialogMainView.frame.width))
+        XCTAssertTrue((backgroundVisualEffectView?.frame.height ?? -1).almostEqualUI(to: dialogMainView.frame.height))
     }
 }
