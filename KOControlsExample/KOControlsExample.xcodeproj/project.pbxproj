@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		05191DC1215A237000C45D14 /* CountryCollectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05191DC0215A237000C45D14 /* CountryCollectionsController.swift */; };
+		052842942396F1BD00ECE23E /* UIColor+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052842932396F1BD00ECE23E /* UIColor+Theme.swift */; };
 		052BCFD221873E5A005578D4 /* KOControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052BCFD121873E5A005578D4 /* KOControls.framework */; };
 		052BCFD321873E5A005578D4 /* KOControls.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 052BCFD121873E5A005578D4 /* KOControls.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		053ED26121162FAB0016ABC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053ED26021162FAB0016ABC4 /* AppDelegate.swift */; };
@@ -54,6 +55,7 @@
 
 /* Begin PBXFileReference section */
 		05191DC0215A237000C45D14 /* CountryCollectionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCollectionsController.swift; sourceTree = "<group>"; };
+		052842932396F1BD00ECE23E /* UIColor+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Theme.swift"; sourceTree = "<group>"; };
 		052BCFD121873E5A005578D4 /* KOControls.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = KOControls.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		053ED25D21162FAB0016ABC4 /* KOControlsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KOControlsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		053ED26021162FAB0016ABC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				05191DC0215A237000C45D14 /* CountryCollectionsController.swift */,
 				053ED26021162FAB0016ABC4 /* AppDelegate.swift */,
 				058529552150DD7400FA36DE /* AppSettings.swift */,
+				052842932396F1BD00ECE23E /* UIColor+Theme.swift */,
 				053ED26721162FAC0016ABC4 /* Assets.xcassets */,
 				056705BD21527C6000805BD1 /* CountriesList.txt */,
 				053ED26921162FAC0016ABC4 /* LaunchScreen.storyboard */,
@@ -380,6 +383,7 @@
 				053ED281211631B10016ABC4 /* MenuViewController.swift in Sources */,
 				05DC48AE2124AEBF00D0E7F6 /* PresentationQueueViewController.swift in Sources */,
 				05CBB2BC213D311F00EE6264 /* PickerViewController.swift in Sources */,
+				052842942396F1BD00ECE23E /* UIColor+Theme.swift in Sources */,
 				058529562150DD7400FA36DE /* AppSettings.swift in Sources */,
 				05C0CFF222520EED00F49E11 /* PVC+OptionPicker.swift in Sources */,
 				053ED28A211632EA0016ABC4 /* MenuItemTypes.swift in Sources */,
@@ -529,6 +533,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.KO.KOControlsExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -549,6 +554,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.KO.KOControlsExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
