@@ -17,27 +17,27 @@
                 <rect key="frame" x="0.0" y="0.0" width="373" height="52"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4k4-UR-7vq">
-                        <rect key="frame" x="12" y="4" width="64" height="40"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ad" translatesAutoresizingMaskIntoConstraints="NO" id="4k4-UR-7vq">
+                        <rect key="frame" x="12" y="4" width="64" height="44"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="64" id="4Fk-OP-lXu"/>
-                            <constraint firstAttribute="height" constant="40" id="kwr-q6-U2q"/>
+                            <constraint firstAttribute="width" priority="999" constant="64" id="4Fk-OP-lXu"/>
+                            <constraint firstAttribute="height" priority="999" constant="40" id="kwr-q6-U2q"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RAc-OI-7z8">
-                        <rect key="frame" x="88" y="8" width="273" height="20.5"/>
+                        <rect key="frame" x="88" y="8" width="273" height="36"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="RAc-OI-7z8" secondAttribute="bottom" constant="8" id="2Mp-RM-Atw"/>
-                    <constraint firstItem="RAc-OI-7z8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="RCg-a1-00c"/>
-                    <constraint firstAttribute="bottom" secondItem="4k4-UR-7vq" secondAttribute="bottom" constant="4" id="Wbh-7c-c38"/>
-                    <constraint firstItem="4k4-UR-7vq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="Xmh-ji-Bwe"/>
-                    <constraint firstItem="RAc-OI-7z8" firstAttribute="leading" secondItem="4k4-UR-7vq" secondAttribute="trailing" constant="12" id="g5u-LT-Y8l"/>
-                    <constraint firstAttribute="trailing" secondItem="RAc-OI-7z8" secondAttribute="trailing" constant="12" id="srd-ce-gfI"/>
-                    <constraint firstItem="4k4-UR-7vq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="tgS-1e-L7h"/>
+                    <constraint firstAttribute="bottom" secondItem="RAc-OI-7z8" secondAttribute="bottom" priority="999" constant="8" id="2Mp-RM-Atw"/>
+                    <constraint firstItem="RAc-OI-7z8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" priority="999" constant="8" id="RCg-a1-00c"/>
+                    <constraint firstAttribute="bottom" secondItem="4k4-UR-7vq" secondAttribute="bottom" priority="999" constant="4" id="Wbh-7c-c38"/>
+                    <constraint firstItem="4k4-UR-7vq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="999" constant="12" id="Xmh-ji-Bwe"/>
+                    <constraint firstItem="RAc-OI-7z8" firstAttribute="leading" secondItem="4k4-UR-7vq" secondAttribute="trailing" priority="999" constant="12" id="g5u-LT-Y8l"/>
+                    <constraint firstAttribute="trailing" secondItem="RAc-OI-7z8" secondAttribute="trailing" priority="999" constant="12" id="srd-ce-gfI"/>
+                    <constraint firstItem="4k4-UR-7vq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" priority="999" constant="4" id="tgS-1e-L7h"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -48,4 +48,7 @@
             <point key="canvasLocation" x="176.80000000000001" y="153.82308845577214"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="ad" width="550" height="385"/>
+    </resources>
 </document>

@@ -59,7 +59,7 @@ final class PresentationQueueViewController: UIViewController, UITextFieldDelega
     private func initializePresentingContainerViewController() {
         let presentingContainerViewController = UIViewController()
         presentingContainerViewController.definesPresentationContext = true
-        presentingContainerViewController.view.backgroundColor = UIColor.Theme.presentingBackground
+        presentingContainerViewController.view.backgroundColor = UIColor.Theme.presentationQueuePresentingBackground
         presentingContainerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addChild(presentingContainerViewController)
         presentingView.addSubview(presentingContainerViewController.view)

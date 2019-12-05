@@ -1,8 +1,8 @@
 //
-//  UIViewController+Extension.swift
+//  UIColor+Theme.swift
 //  KOControls
 //
-//  Copyright (c) 2018 Kuba Ostrowski
+//  Copyright (c) 2019 Kuba Ostrowski
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal

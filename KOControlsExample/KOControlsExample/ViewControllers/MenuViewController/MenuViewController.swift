@@ -51,7 +51,7 @@ final class MenuViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = menuTableView.dequeueReusableCell(withIdentifier: menuItemReuseIdentifier, for: indexPath)
         cell.accessoryType = .disclosureIndicator
-        cell.backgroundColor = UIColor.Theme.cellBackground
+        cell.backgroundColor = UIColor.Theme.menuCellBackground
         cell.textLabel?.text = menuItemTypes[indexPath.row].rawValue
         return cell
     }

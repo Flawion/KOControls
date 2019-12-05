@@ -95,8 +95,6 @@ extension PickerViewController {
         guard isStyleCustomize else {
             return
         }
-        itemsCollectionPickerViewController.itemsCollection.backgroundColor = UIColor.clear
-
         /* If custom style horizontal alignment isn't equal to fill,
          picker must has to set contentWidth, to properly calculate sizes of view.
          We only need to do it in normal presentation mode because in popover presentation mode

@@ -1,5 +1,5 @@
 //
-//  AppSettings.swift
+//  UIColor+Theme.swift
 //  KOControlsExample
 //
 //  Copyright (c) 2019 Kuba Ostrowski
@@ -27,7 +27,7 @@ import UIKit
 
 extension UIColor {
     struct Theme {
-        static var cellBackground: UIColor {
+        static var menuCellBackground: UIColor {
             if #available(iOS 13.0, *) {
                 return UIColor.tertiarySystemBackground
             } else {
@@ -35,7 +35,7 @@ extension UIColor {
             }
         }
         
-        static var presentingBackground: UIColor {
+        static var presentationQueuePresentingBackground: UIColor {
             if #available(iOS 13.0, *) {
                 return UIColor.secondarySystemBackground
             } else {
@@ -46,6 +46,38 @@ extension UIColor {
         static var customDialogBackground: UIColor {
             if #available(iOS 13.0, *) {
                 return UIColor.tertiarySystemBackground
+            } else {
+                return UIColor.white
+            }
+        }
+        
+        static var customPickerMainViewBackground: UIColor {
+            if #available(iOS 13.0, *) {
+                return UIColor.label
+            } else {
+                return UIColor.black.withAlphaComponent(0.75)
+            }
+        }
+        
+        static var customPickerBarViewForeground: UIColor {
+            if #available(iOS 13.0, *) {
+                return UIColor.systemGray6
+            } else {
+                return UIColor.white
+            }
+        }
+        
+        static var customPopoverPresentationControllerBackground: UIColor {
+            if #available(iOS 13.0, *) {
+                return UIColor.label
+            } else {
+                return UIColor.black.withAlphaComponent(0.70)
+            }
+        }
+        
+        static var customItemsTableSeparator: UIColor {
+            if #available(iOS 13.0, *) {
+                return UIColor.systemGray
             } else {
                 return UIColor.white
             }

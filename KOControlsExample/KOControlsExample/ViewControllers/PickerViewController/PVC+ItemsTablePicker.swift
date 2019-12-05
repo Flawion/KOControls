@@ -87,7 +87,7 @@ extension PickerViewController {
         guard isStyleCustomize else {
             return
         }
-        itemsTablePicker.itemsTable.separatorColor = UIColor.white
+        itemsTablePicker.itemsTable.separatorColor = UIColor.Theme.customItemsTableSeparator
         itemsTablePicker.itemsTable.backgroundColor = UIColor.clear
         /* If custom style horizontal alignment isn't equal to fill,
          picker must has to set contentWidth, to properly calculate sizes of view.
@@ -168,7 +168,7 @@ final class SearchItemsTablePickerViewController: KOItemsTablePickerViewControll
 
     override func createContentView() -> UIView {
         let contentView = UIView()
-
+        
         let itemsTable = super.createContentView()
         contentView.addSubview(itemsTable)
         itemsTable.translatesAutoresizingMaskIntoConstraints = false
@@ -190,7 +190,6 @@ final class SearchItemsTablePickerViewController: KOItemsTablePickerViewControll
             itemsTable.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             itemsTable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
-
         return contentView
     }
 }

@@ -48,7 +48,7 @@ final class PickerViewController: UIViewController {
     var isStyleCustomize: Bool {
         return styleMode.selectedSegmentIndex == 1
     }
-   
+    
     //birthday
     @IBOutlet weak var birthdayField: KOTextField!
     var birthdayDate: Date = Date() {
@@ -63,20 +63,20 @@ final class PickerViewController: UIViewController {
     //film type
     @IBOutlet weak var filmTypeField: KOTextField!
     private(set) var filmTypes: [String] = [
-            "Action",
-            "Adventure",
-            "Biographical",
-            "Comedy",
-            "Crime",
-            "Drama",
-            "Family",
-            "Horror",
-            "Musical",
-            "Romance",
-            "Spy",
-            "Thriller",
-            "War",
-            "Incorrect type"
+        "Action",
+        "Adventure",
+        "Biographical",
+        "Comedy",
+        "Crime",
+        "Drama",
+        "Family",
+        "Horror",
+        "Musical",
+        "Romance",
+        "Spy",
+        "Thriller",
+        "War",
+        "Incorrect type"
     ]
     var favoriteFilmTypeIndex: Int = 0 {
         didSet {
@@ -103,13 +103,13 @@ final class PickerViewController: UIViewController {
             customCountryField.text = customCountryCollectionsController.currentVisibleCountries[customCountryIndex].name
         }
     }
-
+    
     // MARK: Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         intialize()
     }
-
+    
     private func intialize() {
         initializeView()
         initializeFields()
@@ -179,7 +179,7 @@ final class PickerViewController: UIViewController {
             return true
         }
     }
-
+    
     private func showItemsPicker() {
         if isItemsTableSelected {
             showItemsTablePicker()
@@ -195,14 +195,14 @@ final class PickerViewController: UIViewController {
         }
         popoverSettings.setupPopoverPresentationControllerEvent = {
             popoverPresentationController in
-            popoverPresentationController.backgroundColor = UIColor.black.withAlphaComponent(0.70)
+            popoverPresentationController.backgroundColor = UIColor.Theme.customPopoverPresentationControllerBackground
         }
     }
     
     func customize(dialogViewController: KODialogViewController) {
         if !isPresentPopover {
             dialogViewController.modalPresentationCapturesStatusBarAppearance = true
-            dialogViewController.mainView.backgroundVisualEffect = UIBlurEffect(style: .dark)
+            dialogViewController.mainView.backgroundColor = UIColor.Theme.customPickerMainViewBackground
             dialogViewController.mainViewHorizontalAlignment = .center
             dialogViewController.mainViewVerticalAlignment = .center
         }
@@ -210,9 +210,9 @@ final class PickerViewController: UIViewController {
         dialogViewController.mainView.clipsToBounds = true
         dialogViewController.mainView.barMode = .bottom
         dialogViewController.mainView.barView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
-        dialogViewController.mainView.barView.titleLabel.textColor = UIColor.white
-        (dialogViewController.mainView.barView.leftView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
-        (dialogViewController.mainView.barView.rightView as? UIButton)?.setTitleColor(UIColor.white, for: .normal)
+        dialogViewController.mainView.barView.titleLabel.textColor = UIColor.Theme.customPickerBarViewForeground
+        (dialogViewController.mainView.barView.leftView as? UIButton)?.setTitleColor(UIColor.Theme.customPickerBarViewForeground, for: .normal)
+        (dialogViewController.mainView.barView.rightView as? UIButton)?.setTitleColor(UIColor.Theme.customPickerBarViewForeground, for: .normal)
     }
     
     func customizeTransitionIfNeed(dialogViewController: KODialogViewController) {
@@ -222,8 +222,12 @@ final class PickerViewController: UIViewController {
         
         let animationControllerPresenting = createCustomizedAnimationControllerPresenting()
         let animationControllerDismissing = createCustomizedAnimationControllerDismissing()
-
-        dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+        
+        if #available(iOS 13.0, *) {
+            dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .systemUltraThinMaterial), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+        } else {
+            dialogViewController.customTransition = KOVisualEffectDimmingTransition(effect: UIBlurEffect(style: .dark), animationControllerPresenting: animationControllerPresenting, animationControllerDismissing: animationControllerDismissing)
+        }
     }
     
     private func createCustomizedAnimationControllerPresenting() -> KOAnimatedTransitioningController {
@@ -238,7 +242,7 @@ final class PickerViewController: UIViewController {
         let viewFromAnimation = KOAnimationGroup(animations: [
             KOFadeOutAnimation(),
             KOScaleAnimation(toValue: CGPoint(x: 0.5, y: 0.5))
-            ], duration: viewFromAnimationDuration)
+        ], duration: viewFromAnimationDuration)
         return KOAnimatedTransitioningController(duration: viewFromAnimationDuration, viewToAnimation: nil, viewFromAnimation: viewFromAnimation)
     }
 }
