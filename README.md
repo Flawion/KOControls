@@ -36,7 +36,7 @@ KOControls doesn't contains any external dependencies. If you want to stay updat
 
 Add below entry to the target in Podfile
 ```
-pod 'KOControls', '~> 1.2.2'
+pod 'KOControls', '~> 1.2.3'
 ```
 
 For example
@@ -47,7 +47,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'Target Name' do
-pod 'KOControls', '~> 1.2.2'
+pod 'KOControls', '~> 1.2.3'
 end
 ```
 Install the pods by running
