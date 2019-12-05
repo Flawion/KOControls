@@ -209,7 +209,6 @@ final class ScrollOffsetProgressViewController: UIViewController {
             }, viewForRowInComponent: { (_, component, title, reusableView : UIView?) in
                 guard let reusableLabel = reusableView as? UILabel else {
                     let label = UILabel()
-                    label.textColor = UIColor.black
                     label.font = UIFont.systemFont(ofSize: component == 0 ? 14 : 17)
                     label.text = title
                     return label

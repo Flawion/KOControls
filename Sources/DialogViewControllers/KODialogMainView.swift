@@ -211,7 +211,7 @@ public final class KODialogMainView: UIView {
         backgroundVisualEffectView.removeFromSuperview()
         removeConstraints(backgroundVisualEffectConsts)
         backgroundVisualEffectConsts = []
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.Theme.dialogMainViewBackground
     }
 
     private func addBackgroundVisualEffectView(forEffect backgroundVisualEffect: UIVisualEffect) {

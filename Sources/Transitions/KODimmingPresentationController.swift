@@ -89,7 +89,7 @@ open class KODimmingPresentationController: UIPresentationController {
         createDimmingAnimations()
 
         let dimmingView = UIView()
-        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        dimmingView.backgroundColor = UIColor.Theme.dimmingViewBackground
         return dimmingView
     }
 

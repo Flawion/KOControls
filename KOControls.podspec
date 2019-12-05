@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'KOControls'
-  s.version = '1.2.2'
+  s.version = '1.2.3'
 
   s.summary = 'Package of useful controls: pickers, presenting queue, textfield thats supports validation, showing the errors etc.'
   s.homepage = 'https://github.com/Flawion/KOControls'

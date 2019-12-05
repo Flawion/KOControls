@@ -38,7 +38,6 @@ final class PresentationQueueViewController: UIViewController, UITextFieldDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         initialize()
     }
     
@@ -60,7 +59,7 @@ final class PresentationQueueViewController: UIViewController, UITextFieldDelega
     private func initializePresentingContainerViewController() {
         let presentingContainerViewController = UIViewController()
         presentingContainerViewController.definesPresentationContext = true
-        presentingContainerViewController.view.backgroundColor = UIColor.clear
+        presentingContainerViewController.view.backgroundColor = UIColor.Theme.presentationQueuePresentingBackground
         presentingContainerViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addChild(presentingContainerViewController)
         presentingView.addSubview(presentingContainerViewController.view)
@@ -188,10 +187,10 @@ final class CustomDialogViewController: KODialogViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         mainViewHorizontalAlignment = .center
         mainViewVerticalAlignment = .center
         mainView.contentWidth = 300
+        mainView.backgroundColor = UIColor.Theme.customDialogBackground
         mainView.layer.cornerRadius = 5
         mainView.barView.titleLabel.text = "Dialog number \(index)"
         leftBarButtonAction = KODialogActionModel.dismissAction(withTitle: "Cancel")

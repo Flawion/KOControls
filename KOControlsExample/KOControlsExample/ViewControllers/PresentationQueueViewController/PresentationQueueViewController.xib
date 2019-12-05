@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,14 +24,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k33-M1-YCd">
-                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ovp-tm-UGj" userLabel="PresentingView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="479.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="499.5"/>
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6P0-wt-Vnv" userLabel="BottomView">
-                            <rect key="frame" x="0.0" y="479.5" width="375" height="167.5"/>
+                            <rect key="frame" x="0.0" y="499.5" width="375" height="167.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVL-ws-XsA">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
@@ -53,17 +51,17 @@
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zsk-Q3-qHP">
                                             <rect key="frame" x="0.0" y="0.0" width="158" height="40"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Present views in queue"/>
                                             <connections>
                                                 <action selector="presentViewsBttClick:" destination="-1" eventType="touchUpInside" id="qfa-dh-HzO"/>
                                             </connections>
                                         </button>
                                         <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="4" borderStyle="roundedRect" placeholder="count" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vzT-pc-CMX">
-                                            <rect key="frame" x="162" y="5" width="50" height="30"/>
+                                            <rect key="frame" x="162" y="3" width="50" height="34"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="cSc-xX-7mw"/>
                                             </constraints>
-                                            <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                             <connections>
@@ -71,7 +69,7 @@
                                             </connections>
                                         </textField>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="vzT-pc-CMX" secondAttribute="trailing" id="CPj-h3-Hnd"/>
                                         <constraint firstAttribute="height" constant="40" id="E7F-fR-5a6"/>
@@ -87,17 +85,17 @@
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2O8-5E-0J2">
                                             <rect key="frame" x="0.0" y="0.0" width="173" height="40"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <state key="normal" title="Remove view from queue"/>
                                             <connections>
                                                 <action selector="removeViewBttClick:" destination="-1" eventType="touchUpInside" id="G0p-rC-86M"/>
                                             </connections>
                                         </button>
                                         <textField opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" placeholder="index" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ry-DJ-zEg">
-                                            <rect key="frame" x="177" y="5" width="50" height="30"/>
+                                            <rect key="frame" x="177" y="3" width="50" height="34"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="lY8-Th-Y9S"/>
                                             </constraints>
-                                            <nil key="textColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                             <connections>
@@ -105,7 +103,7 @@
                                             </connections>
                                         </textField>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="L3u-kf-tfd"/>
                                         <constraint firstItem="8Ry-DJ-zEg" firstAttribute="leading" secondItem="2O8-5E-0J2" secondAttribute="trailing" constant="4" id="SXB-7U-Zr2"/>
@@ -118,6 +116,7 @@
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WcC-eA-jB7">
                                     <rect key="frame" x="88" y="129.5" width="199" height="30"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" title="Remove all views from queue"/>
                                     <connections>
                                         <action selector="removeAllViewsBttClick:" destination="-1" eventType="touchUpInside" id="fyQ-My-EqZ"/>
@@ -125,7 +124,7 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="WcC-eA-jB7" firstAttribute="centerX" secondItem="6P0-wt-Vnv" secondAttribute="centerX" id="2bi-ea-og2"/>
                                 <constraint firstItem="WcC-eA-jB7" firstAttribute="top" secondItem="ZZK-IT-3Cp" secondAttribute="bottom" constant="8" id="6Vp-EL-92v"/>
@@ -142,7 +141,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     <constraints>
                         <constraint firstItem="ovp-tm-UGj" firstAttribute="leading" secondItem="k33-M1-YCd" secondAttribute="leading" id="0W3-Bf-K0h"/>
                         <constraint firstItem="ovp-tm-UGj" firstAttribute="bottom" secondItem="6P0-wt-Vnv" secondAttribute="top" id="OcC-Zp-V6q"/>
@@ -154,7 +153,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="k33-M1-YCd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3BR-8w-xIh"/>
                 <constraint firstAttribute="bottom" secondItem="k33-M1-YCd" secondAttribute="bottom" id="46s-PW-mxD"/>

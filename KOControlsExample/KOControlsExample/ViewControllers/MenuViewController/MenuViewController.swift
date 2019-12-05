@@ -39,7 +39,6 @@ final class MenuViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         navigationItem.title = "Menu"
         menuTableView.register(UITableViewCell.self, forCellReuseIdentifier: menuItemReuseIdentifier)
         menuTableView.tableFooterView = UIView()
@@ -51,6 +50,8 @@ final class MenuViewController: UIViewController, UITableViewDataSource, UITable
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = menuTableView.dequeueReusableCell(withIdentifier: menuItemReuseIdentifier, for: indexPath)
+        cell.accessoryType = .disclosureIndicator
+        cell.backgroundColor = UIColor.Theme.menuCellBackground
         cell.textLabel?.text = menuItemTypes[indexPath.row].rawValue
         return cell
     }

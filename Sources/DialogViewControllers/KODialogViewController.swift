@@ -274,7 +274,7 @@ open class KODialogViewController: UIViewController, UIGestureRecognizerDelegate
     }
 
     open func initializeAppearance() {
-        pMainView.backgroundColor = UIColor.white
+        pMainView.backgroundColor = UIColor.Theme.dialogMainViewBackground
     }
     
     // MARK: Main view

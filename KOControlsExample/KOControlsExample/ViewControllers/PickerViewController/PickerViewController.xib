@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,10 +34,10 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VsM-mN-tL7">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="459.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="484.5"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F8r-3s-BRi" userLabel="PresentModePanel">
-                                            <rect key="frame" x="0.0" y="12" width="414" height="52.5"/>
+                                            <rect key="frame" x="0.0" y="12" width="414" height="55.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Present mode" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5sy-zg-Erc">
                                                     <rect key="frame" x="12" y="0.0" width="390" height="20.5"/>
@@ -48,14 +46,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="IAC-MB-UrX">
-                                                    <rect key="frame" x="12" y="24.5" width="390" height="29"/>
+                                                    <rect key="frame" x="12" y="24.5" width="390" height="32"/>
                                                     <segments>
                                                         <segment title="Normal"/>
                                                         <segment title="Popover"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="IAC-MB-UrX" secondAttribute="bottom" id="Aqc-6F-zPo"/>
                                                 <constraint firstItem="IAC-MB-UrX" firstAttribute="top" secondItem="5sy-zg-Erc" secondAttribute="bottom" constant="4" id="Nac-c2-b77"/>
@@ -67,7 +65,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8IT-So-0PC" userLabel="StyleModePanel">
-                                            <rect key="frame" x="0.0" y="76.5" width="414" height="52.5"/>
+                                            <rect key="frame" x="0.0" y="79.5" width="414" height="55.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Style" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKU-uw-ce2">
                                                     <rect key="frame" x="12" y="0.0" width="390" height="20.5"/>
@@ -76,14 +74,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zM4-7P-xqg">
-                                                    <rect key="frame" x="12" y="24.5" width="390" height="29"/>
+                                                    <rect key="frame" x="12" y="24.5" width="390" height="32"/>
                                                     <segments>
                                                         <segment title="Default"/>
                                                         <segment title="Custom"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="zM4-7P-xqg" secondAttribute="trailing" constant="12" id="89P-fW-xQX"/>
                                                 <constraint firstItem="cKU-uw-ce2" firstAttribute="leading" secondItem="8IT-So-0PC" secondAttribute="leading" constant="12" id="FuA-ia-sLT"/>
@@ -95,7 +93,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vxw-8o-B7H" userLabel="DatePickerPanel">
-                                            <rect key="frame" x="0.0" y="141" width="414" height="54.5"/>
+                                            <rect key="frame" x="0.0" y="147" width="414" height="58.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date picker - click to insert date" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBp-cQ-V8Z">
                                                     <rect key="frame" x="12" y="0.0" width="390" height="20.5"/>
@@ -104,8 +102,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Birthday" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u42-GP-AJK" customClass="KOTextField" customModule="KOControls">
-                                                    <rect key="frame" x="12" y="24.5" width="390" height="30"/>
-                                                    <nil key="textColor"/>
+                                                    <rect key="frame" x="12" y="24.5" width="390" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -114,7 +111,7 @@
                                                     </connections>
                                                 </textField>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="yBp-cQ-V8Z" secondAttribute="trailing" constant="12" id="IfS-9U-aht"/>
                                                 <constraint firstItem="yBp-cQ-V8Z" firstAttribute="top" secondItem="vxw-8o-B7H" secondAttribute="top" id="Qam-y0-bVK"/>
@@ -126,7 +123,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BY6-Yn-ozQ" userLabel="OptionsPickerPanel">
-                                            <rect key="frame" x="0.0" y="207.5" width="414" height="54.5"/>
+                                            <rect key="frame" x="0.0" y="217.5" width="414" height="58.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Options picker - click to select the option" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4q-yP-qLX">
                                                     <rect key="frame" x="12" y="0.0" width="390" height="20.5"/>
@@ -135,8 +132,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your favorite film type" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CU1-KT-t8n" customClass="KOTextField" customModule="KOControls">
-                                                    <rect key="frame" x="12" y="24.5" width="390" height="30"/>
-                                                    <nil key="textColor"/>
+                                                    <rect key="frame" x="12" y="24.5" width="390" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -144,7 +140,7 @@
                                                     </connections>
                                                 </textField>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="g4q-yP-qLX" secondAttribute="trailing" constant="12" id="CxJ-oz-r0N"/>
                                                 <constraint firstItem="g4q-yP-qLX" firstAttribute="top" secondItem="BY6-Yn-ozQ" secondAttribute="top" id="PuE-g2-29s"/>
@@ -156,7 +152,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHO-Fi-MWG" userLabel="ItemsPicker">
-                                            <rect key="frame" x="0.0" y="274" width="414" height="107"/>
+                                            <rect key="frame" x="0.0" y="288" width="414" height="114"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Items picker - click to select the items from table or collection" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z7d-Sj-rPl">
                                                     <rect key="frame" x="12" y="0.0" width="390" height="41"/>
@@ -165,8 +161,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Select your country" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dmQ-7e-1sW" customClass="KOTextField" customModule="KOControls">
-                                                    <rect key="frame" x="12" y="77" width="390" height="30"/>
-                                                    <nil key="textColor"/>
+                                                    <rect key="frame" x="12" y="80" width="390" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -174,14 +169,14 @@
                                                     </connections>
                                                 </textField>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X32-t7-UsJ">
-                                                    <rect key="frame" x="12" y="45" width="390" height="29"/>
+                                                    <rect key="frame" x="12" y="45" width="390" height="32"/>
                                                     <segments>
                                                         <segment title="Table"/>
                                                         <segment title="Collection"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstItem="X32-t7-UsJ" firstAttribute="leading" secondItem="zHO-Fi-MWG" secondAttribute="leading" constant="12" id="2cY-kq-tRh"/>
                                                 <constraint firstAttribute="bottom" secondItem="dmQ-7e-1sW" secondAttribute="bottom" id="DoS-F5-gVn"/>
@@ -196,7 +191,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LbS-ir-zr9" userLabel="CustomPickerPanel">
-                                            <rect key="frame" x="0.0" y="393" width="414" height="54.5"/>
+                                            <rect key="frame" x="0.0" y="414" width="414" height="58.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom picker - items table with search field" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Cz-Br-6E3">
                                                     <rect key="frame" x="12" y="0.0" width="390" height="20.5"/>
@@ -205,8 +200,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Select your country" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vD5-j5-1vE" customClass="KOTextField" customModule="KOControls">
-                                                    <rect key="frame" x="12" y="24.5" width="390" height="30"/>
-                                                    <nil key="textColor"/>
+                                                    <rect key="frame" x="12" y="24.5" width="390" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -214,7 +208,7 @@
                                                     </connections>
                                                 </textField>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="vD5-j5-1vE" secondAttribute="trailing" constant="12" id="0KC-ge-158"/>
                                                 <constraint firstAttribute="trailing" secondItem="5Cz-Br-6E3" secondAttribute="trailing" constant="12" id="KL8-jm-exh"/>
@@ -226,7 +220,7 @@
                                             </constraints>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     <constraints>
                                         <constraint firstItem="LbS-ir-zr9" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" id="3Ki-g5-Vql"/>
                                         <constraint firstItem="vxw-8o-B7H" firstAttribute="leading" secondItem="VsM-mN-tL7" secondAttribute="leading" id="3uG-C9-taC"/>
@@ -258,7 +252,7 @@
                             </constraints>
                         </scrollView>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     <constraints>
                         <constraint firstItem="wk2-pc-1VG" firstAttribute="top" secondItem="kCA-6U-Xd3" secondAttribute="top" id="0Jv-1f-AOZ"/>
                         <constraint firstAttribute="trailing" secondItem="wk2-pc-1VG" secondAttribute="trailing" id="PSI-xs-KpW"/>
@@ -268,7 +262,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="kCA-6U-Xd3" secondAttribute="trailing" id="u8g-tA-mkw"/>
                 <constraint firstItem="kCA-6U-Xd3" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="xKd-H4-FZj"/>

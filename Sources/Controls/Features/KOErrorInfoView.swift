@@ -102,7 +102,7 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
         }
     }
     
-    public var markerColor: UIColor = UIColor.red {
+    public var markerColor: UIColor = UIColor.Theme.errorInfoViewMarker {
         didSet {
             markerShapeLayer.fillColor = markerColor.cgColor
             markerLineView.backgroundColor = markerColor
@@ -139,8 +139,8 @@ open class KOErrorInfoView: UIView, KOErrorInfoProtocol {
         backgroundColor = UIColor.clear
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 4
-        contentView.backgroundColor = UIColor.gray
-        descriptionLabel.textColor = UIColor.white
+        contentView.backgroundColor = UIColor.Theme.errorInfoViewContentBackground
+        descriptionLabel.textColor = UIColor.Theme.errorInfoViewDescription
         markerLineView.backgroundColor = markerColor
     }
 
