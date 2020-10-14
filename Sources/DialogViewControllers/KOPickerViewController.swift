@@ -53,6 +53,9 @@ open class KODatePickerViewController: KODialogViewController {
     // MARK: Methods
     override open func createContentView() -> UIView {
         let datePicker = UIDatePicker()
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         self.pDatePicker = datePicker
         return datePicker
