@@ -313,9 +313,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 053ED24D21162C2E0016ABC4 /* Build configuration list for PBXNativeTarget "KOControls" */;
 			buildPhases = (
+				053ED24221162C2E0016ABC4 /* Headers */,
 				053ED24021162C2E0016ABC4 /* Sources */,
 				053ED24121162C2E0016ABC4 /* Frameworks */,
-				053ED24221162C2E0016ABC4 /* Headers */,
 				053ED24321162C2E0016ABC4 /* Resources */,
 			);
 			buildRules = (
