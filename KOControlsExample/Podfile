@@ -6,7 +6,7 @@ target 'KOControlsExample' do
   use_frameworks!
 
   # Pods for KOControlsExample
-  pod 'SwiftLint', '~> 0.35'
+  pod 'SwiftLint', '~> 0.50'
   pod 'IQKeyboardManagerSwift', '~> 6.5.0'
 
 end
